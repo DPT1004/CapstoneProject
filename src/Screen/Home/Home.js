@@ -1,134 +1,134 @@
-import React from 'react'
-import { Button, Text, View, ActivityIndicator, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native'
-import { screenName } from '../../navigator/screens-name'
-import { useNavigation } from "@react-navigation/native"
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../../redux/Slice/counterSlice'
-import ImagePicker from 'react-native-image-crop-picker';
-import storage from '@react-native-firebase/storage';
+import React, { useState, useEffect } from 'react';
+import {
+    View,
+    Text,
+    SafeAreaView,
+    StatusBar,
+    FlatList,
+    TouchableOpacity,
+} from 'react-native';
+import { signOut } from '../../utils/auth';
+import FormButton from '../../components/FormButton';
+import { COLORS } from '../../constants/theme';
+import { getQuizzes } from '../../utils/database';
+import { screenName } from '../../navigator/screens-name';
 
-const Home = () => {
+const HomeScreen = ({ navigation }) => {
+    const [allQuizzes, setAllQuizzes] = useState([]);
+    const [refreshing, setRefreshing] = useState(false);
 
-    const navigation = useNavigation()
-    const [imgPath, setImgPath] = React.useState(null)
-    const [uploading, setUploading] = React.useState(false)
-    const count = useSelector((state) => state.counter.value)
-    const text = useSelector((state) => state.text.value)
-    const dispatch = useDispatch()
+    const getAllQuizzes = async () => {
 
-    const openLibraryIMG = async () => {
-        await ImagePicker.openPicker({
-            width: 300,
-            height: 400,
-            cropping: true
-        }).then(image => {
-            console.log(image);
-            setImgPath(image)
+        setRefreshing(true);
+        const quizzes = await getQuizzes();
+
+        // Transform quiz data
+        let tempQuizzes = [];
+        quizzes.docs.forEach(async quiz => {
+            tempQuizzes.push({ id: quiz.id, ...quiz.data() });
         });
-    }
+        setAllQuizzes([...tempQuizzes]);
 
-    const uploadIMG = async () => {
+        setRefreshing(false);
+    };
 
-        setUploading(true)
-        try {
-            await storage().ref("IMG1").putFile(imgPath.path)
-            setUploading(false)
-            Alert.alert("Upload done")
-        } catch (e) {
-            console.log(e);
-        }
-        setImgPath(null)
-    }
+    useEffect(() => {
+        getAllQuizzes();
+    }, []);
 
     return (
-        <View>
-            <Text>This is Home</Text>
-            <Button
-                title='Go to SignIn'
-                color={"green"}
-                onPress={() => navigation.navigate(screenName.SignIn)}
-            />
-            <Text>Text from Redux a: {text}</Text>
-            <Button
-                title='Go to Test'
-                color={"pink"}
-                onPress={() => navigation.navigate(screenName.Test)}
-            />
-            <View style={styles.containerBtn}>
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => dispatch(increment())}
-                >
-                    <Text>Increase</Text>
-                </TouchableOpacity>
-                <Text style={styles.txt}>{count}</Text>
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => dispatch(decrement())}
-                >
-                    <Text>Decrease</Text>
-                </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-                style={styles.btnChooseIMG}
-                disabled={uploading}
-                onPress={() => openLibraryIMG()}
-            >
-                {
-                    imgPath !== undefined ?
+        <SafeAreaView
+            style={{
+                flex: 1,
+                backgroundColor: COLORS.background,
+                position: 'relative',
+            }}>
+            <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
 
-                        <Image
-                            style={styles.img}
-                            source={{
-                                uri: imgPath !== null ? imgPath.path : 'https://upload.wikimedia.org/wikipedia/vi/thumb/2/26/Paul_Rudish_Mickey_Mouse.png/220px-Paul_Rudish_Mickey_Mouse.png',
+            <View
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: COLORS.white,
+                    elevation: 4,
+                    paddingHorizontal: 20,
+                }}>
+                <Text style={{ fontSize: 20, color: COLORS.black }}>Quiz App</Text>
+                <Text
+                    style={{
+                        fontSize: 20,
+                        padding: 10,
+                        color: COLORS.error,
+                    }}
+                    disabled={true}
+                    onPress={() => signOut()}>
+                    Logout
+                </Text>
+            </View>
+
+            {/* Quiz list */}
+            <FlatList
+                data={allQuizzes}
+                onRefresh={getAllQuizzes}
+                refreshing={refreshing}
+                showsVerticalScrollIndicator={false}
+                style={{
+                    paddingVertical: 20,
+                }}
+                renderItem={({ item: quiz }) => (
+                    <View
+                        style={{
+                            padding: 20,
+                            borderRadius: 5,
+                            marginVertical: 5,
+                            marginHorizontal: 10,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            backgroundColor: COLORS.white,
+                            elevation: 2,
+                        }}>
+                        <View style={{ flex: 1, paddingRight: 10 }}>
+                            <Text style={{ fontSize: 18, color: COLORS.black }}>
+                                {quiz.title}
+                            </Text>
+                            {quiz.description != '' ? (
+                                <Text style={{ opacity: 0.5 }}>{quiz.description}</Text>
+                            ) : null}
+                        </View>
+                        <TouchableOpacity
+                            style={{
+                                paddingVertical: 10,
+                                paddingHorizontal: 30,
+                                borderRadius: 50,
+                                backgroundColor: COLORS.primary + '20',
                             }}
-                        />
-                        :
-                        <Text>Choose Image</Text>
-                }
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.btn}
-                onPress={() => uploadIMG()}
-            >
-                <Text>Post IMG</Text>
-            </TouchableOpacity>
-        </View>
+                            onPress={() => {
+                                navigation.navigate(screenName.PlayQuiz, {
+                                    quizId: quiz.id,
+                                });
+                            }}>
+                            <Text style={{ color: COLORS.primary }}>Play</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            />
+
+            {/* Button */}
+            <FormButton
+                labelText="Create Quiz"
+                style={{
+                    position: 'absolute',
+                    bottom: 20,
+                    right: 20,
+                    borderRadius: 50,
+                    paddingHorizontal: 30,
+                }}
+                handleOnPress={() => navigation.navigate('CreateQuizScreen')}
+            />
+        </SafeAreaView>
     );
 };
 
-const styles = StyleSheet.create({
-    containerBtn: {
-        height: 80,
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        marginVertical: 25
-    },
-    btnChooseIMG: {
-        backgroundColor: "orange",
-        height: 120,
-        width: 120,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    btn: {
-        backgroundColor: "orange",
-        padding: 10,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    txt: {
-        fontWeight: "bold",
-        fontSize: 30,
-        marginHorizontal: 40
-    },
-    img: {
-
-        height: 120,
-        width: 120
-    }
-
-})
-
-export default Home;
+export default HomeScreen;
