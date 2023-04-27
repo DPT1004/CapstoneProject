@@ -1,29 +1,28 @@
 import React from 'react'
-import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import FormButton from '../../components/FormButton';
+import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import FormButton from './FormButton';
 import {
     BottomSheetModal,
     BottomSheetModalProvider,
 } from '@gorhom/bottom-sheet';
 import ImagePicker from 'react-native-image-crop-picker';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { COLORS } from '../../constants/theme'
+import { COLORS } from '../constants/theme'
 
-const SignUp = ({
-    handleChooseImg = null,
+const ChooseImgBtn = ({
+    setImageUri = null,
     imageUri = ""
 }) => {
 
     // ref
     const bottomSheetModalRef = React.useRef(null);
-
     const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], []);
 
     const selectImage = async () => {
         await ImagePicker.openPicker({
             cropping: false
         }).then(image => {
-            handleChooseImg(image.path)
+            setImageUri(image.path)
         });
     };
 
@@ -31,7 +30,6 @@ const SignUp = ({
         <GestureHandlerRootView style={{ flex: 1 }}>
             <BottomSheetModalProvider>
                 <View style={styles.container}>
-                    {/* Image upload */}
                     {imageUri == '' ? (
                         <TouchableOpacity
                             style={styles.btnChooseIMG}
@@ -82,6 +80,8 @@ const SignUp = ({
     );
 };
 
+export default ChooseImgBtn
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -107,4 +107,3 @@ const styles = StyleSheet.create({
     }
 });
 
-export default SignUp;

@@ -3,5 +3,11 @@ export const screenName = {
     SignUp: "SignUp",
     Home: "Home",
     BottomTab: "BottomTab",
-    Test: "Test"
+    Test: "Test",
+    CreateQuiz: "CreateQuiz",
+    PlayQuiz: "PlayQuiz",
+    MultipleChoice: "MultipleChoice",
+    CheckBox: "CheckBox",
+    AnswerMultiChoice: "AnswerMultiChoice",
+    AnswerCheckBox: "AnswerCheckBox"
 }

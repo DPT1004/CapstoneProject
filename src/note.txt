@@ -1,0 +1,4 @@
+typeQuestion
++ 1: câu hỏi MultiChoice
++ 2: câu hỏi CheckBox
+Với cách tính điểm theo Kahoot thì điểm chạy từ 500-1000, trong đó 1000 là điểm cao nhất còn 500 thì tương đương 0 điểm

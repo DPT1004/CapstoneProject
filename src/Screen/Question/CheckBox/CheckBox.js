@@ -9,14 +9,15 @@ import {
     StyleSheet
 } from 'react-native';
 import { COLORS } from '../../../constants/theme';
-import FormInput from '../../../components/FormInput';
+import FormInputCheckBox from '../../../components/FormInputCheckBox';
 import FormButton from '../../../components/FormButton';
+import FormInput from '../../../components/FormInput'
 import { createQuestion } from '../../../utils/database';
 import ImagePicker from 'react-native-image-crop-picker';
 import storage from '@react-native-firebase/storage';
 import { screenName } from '../../../navigator/screens-name';
 
-const MultipleChoice = ({ navigation, route }) => {
+const CheckBox = ({ navigation, route }) => {
     const [currentQuizId, setCurrentQuizId] = useState(
         route.params.currentQuizId,
     );
@@ -27,10 +28,22 @@ const MultipleChoice = ({ navigation, route }) => {
     const [question, setQuestion] = useState('');
     const [imageUri, setImageUri] = useState('');
 
-    const [correctAnswer, setCorrectAnswer] = useState('');
-    const [optionTwo, setOptionTwo] = useState('');
-    const [optionThree, setOptionThree] = useState('');
-    const [optionFour, setOptionFour] = useState('');
+    const [optionOne, setOptionOne] = useState({
+        choosen: false,
+        txt: ""
+    });
+    const [optionTwo, setOptionTwo] = useState({
+        choosen: false,
+        txt: ""
+    });
+    const [optionThree, setOptionThree] = useState({
+        choosen: false,
+        txt: ""
+    });
+    const [optionFour, setOptionFour] = useState({
+        choosen: false,
+        txt: ""
+    });
 
     const handleQuestionSave = async () => {
         if (
@@ -60,22 +73,45 @@ const MultipleChoice = ({ navigation, route }) => {
             imageUrl = await reference.getDownloadURL();
         }
 
+        const arrOption = [optionOne, optionTwo, optionThree, optionFour]
+        const correctAnswer = []
+        const incorrectAnswer = []
+        arrOption.forEach(element => {
+            element.choosen ? correctAnswer.push(element.txt) : incorrectAnswer.push(element.txt)
+
+        });
+
         // Add question to db
         await createQuestion(currentQuizId, currentQuestionId, {
             question: question,
             correct_answer: correctAnswer,
-            incorrect_answers: [optionTwo, optionThree, optionFour],
+            incorrect_answers: incorrectAnswer,
             imageUrl: imageUrl,
         });
         ToastAndroid.show('Question saved', ToastAndroid.SHORT);
 
         // Reset
-        setQuestion('');
-        setCorrectAnswer('');
-        setOptionTwo('');
-        setOptionThree('');
-        setOptionFour('');
-        setImageUri('');
+        setQuestion({
+            choosen: false,
+            txt: ""
+        });
+        setOptionOne({
+            choosen: false,
+            txt: ""
+        });
+        setOptionTwo({
+            choosen: false,
+            txt: ""
+        });
+        setOptionThree({
+            choosen: false,
+            txt: ""
+        });
+        setOptionFour({
+            choosen: false,
+            txt: ""
+        });
+        setImageUri("");
     };
 
     const selectImage = async () => {
@@ -91,8 +127,13 @@ const MultipleChoice = ({ navigation, route }) => {
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 style={styles.scrollView}>
-                <Text style={styles.txtTypeQuestion}> Multiple Choice Question</Text>
-                <Text style={styles.txtNameQuiz}>For {currentQuizTitle}</Text>
+                <Text
+                    style={styles.txtTypeQuestion}>
+                    CheckBox Question
+                </Text>
+                <Text style={styles.txtNameQuiz}>
+                    For {currentQuizTitle}
+                </Text>
                 <FormInput
                     labelText="Question"
                     placeholderText="enter question"
@@ -110,45 +151,71 @@ const MultipleChoice = ({ navigation, route }) => {
                         </Text>
                     </TouchableOpacity>
                 ) : (
-                    <TouchableOpacity
-                        onPress={selectImage}>
-                        <Image
-                            source={{ uri: imageUri }}
-                            resizeMode={'cover'}
-                            style={styles.img}
-                        />
-                    </TouchableOpacity>
+                    <Image
+                        source={{ uri: imageUri }}
+                        resizeMode={'cover'}
+                        style={styles.img}
+                    />
                 )}
 
                 {/* Options */}
                 <View style={styles.viewOptionAndAnswer}>
-                    <FormInput
-                        labelText="Correct Answer"
-                        onChangeText={val => setCorrectAnswer(val)}
-                        value={correctAnswer}
+                    <FormInputCheckBox
+                        labelText="Option 1"
+                        onChangeText={val => setOptionOne({
+                            choosen: optionOne.choosen,
+                            txt: val
+                        })}
+                        onPress={() => setOptionOne({
+                            choosen: !optionOne.choosen,
+                            txt: optionOne.txt
+                        })
+                        }
                         showCharCount={true}
                         maxLength={255}
+                        value={optionOne}
                     />
-                    <FormInput
+                    <FormInputCheckBox
                         labelText="Option 2"
-                        onChangeText={val => setOptionTwo(val)}
+                        onChangeText={val => setOptionTwo({
+                            choosen: optionTwo.choosen,
+                            txt: val
+                        })}
+                        onPress={() => setOptionTwo({
+                            choosen: !optionTwo.choosen,
+                            txt: optionTwo.txt
+                        })}
+                        showCharCount={true}
+                        maxLength={255}
                         value={optionTwo}
-                        showCharCount={true}
-                        maxLength={255}
                     />
-                    <FormInput
+                    <FormInputCheckBox
                         labelText="Option 3"
-                        onChangeText={val => setOptionThree(val)}
+                        onChangeText={val => setOptionThree({
+                            choosen: optionThree.choosen,
+                            txt: val
+                        })}
+                        onPress={() => setOptionThree({
+                            choosen: !optionThree.choosen,
+                            txt: optionThree.txt
+                        })}
+                        showCharCount={true}
+                        maxLength={255}
                         value={optionThree}
-                        showCharCount={true}
-                        maxLength={255}
                     />
-                    <FormInput
+                    <FormInputCheckBox
                         labelText="Option 4"
-                        onChangeText={val => setOptionFour(val)}
-                        value={optionFour}
+                        onChangeText={val => setOptionFour({
+                            choosen: optionFour.choosen,
+                            txt: val
+                        })}
+                        onPress={() => setOptionFour({
+                            choosen: !optionFour.choosen,
+                            txt: optionFour.txt
+                        })}
                         showCharCount={true}
                         maxLength={255}
+                        value={optionFour}
                     />
                 </View>
                 <FormButton
@@ -209,4 +276,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MultipleChoice;
+export default CheckBox;
