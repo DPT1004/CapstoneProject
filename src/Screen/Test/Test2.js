@@ -8,17 +8,17 @@ import {
     StyleSheet,
     Animated
 } from 'react-native';
-import { COLORS } from '../../constants/theme';
+import { COLORS } from '../../common/theme';
 import { useNavigation } from "@react-navigation/native"
 import { useRoute } from '@react-navigation/native'
 import { screenName } from '../../navigator/screens-name'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import FormButton from '../../components/FormButton';
-import ResultModal from '../../components/playQuizScreen/ResultModal';
+import ResultModal from '../PlayQuiz/components/ResultModal';
 import arrQuestions from '../../questions.json'
 import AnswerCheckBox from '../Answer/AnswerCheckBox/AnswerCheckBox'
 import AnswerMultiChoice from '../Answer/AnswerMultiChoice/AnswerMultiChoice'
-import CustomViewScore from '../../components/playQuizScreen/CustomViewScore'
+import CustomViewScore from '../PlayQuiz/components/CustomViewScore'
 
 const Test2 = () => {
 

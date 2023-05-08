@@ -1,27 +1,31 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
-import { COLORS } from '../../../constants/theme'
-import { timeWaitToNextQuestion } from '../../../constants/shareVarible'
+import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { COLORS } from '../../../common/theme'
+import { timeWaitToNextQuestion } from '../../../common/shareVarible'
 import Icon from "react-native-vector-icons/FontAwesome"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import TopBar from '../../../components/playQuizScreen/TopBar'
-import CustomViewScore from '../../../components/playQuizScreen/CustomViewScore'
+import TopBar from '../../PlayQuiz/components/TopBar'
+import CustomViewScore from '../../PlayQuiz/components/CustomViewScore'
 import { useDispatch } from 'react-redux'
 import { moreCorrect, moreIncorrect } from '../../../redux/Slice/userCompetitiveSlice'
 
 const AnswerMultiChoice = ({ quest, indexQuestion, handleNextQuestion }) => {
 
-    question = {
-        ...quest,
-        arrOption: [...quest.incorrect_answers, quest.correct_answer]
-    }
+    var question = quest
+
     const [userAnswer, setUserAnswer] = React.useState(null)
     const score = React.useRef()
     const [showViewScore, setShowViewScore] = React.useState(false)
+    const [sizeContainerOption, setSizeContainerOption] = React.useState({
+        width: 0,
+        height: 0
+    })
     const dispatch = useDispatch()
 
     const isUserAnswerTrue = () => {
-        if (userAnswer == question.correct_answer) {
+        const correctAnswerList = []
+
+        if (userAnswer == correctAnswerList) {
             return true
         }
         return false
@@ -41,25 +45,25 @@ const AnswerMultiChoice = ({ quest, indexQuestion, handleNextQuestion }) => {
     }
 
     const getOptionBgColor = (option, indexOption) => {
-        if (userAnswer !== null) {
-            if (option == question.correct_answer) {
-                return COLORS.success
-            } else {
-                return COLORS.error
-            }
+        // if (userAnswer !== null) {
+        // if (option == question.correct_answer) {
+        //     return COLORS.success
+        // } else {
+        //     return COLORS.error
+        // }
+        // }
+        // else {
+        switch (indexOption) {
+            case 0:
+                return COLORS.answerA
+            case 1:
+                return COLORS.answerB
+            case 2:
+                return COLORS.answerC
+            case 3:
+                return COLORS.answerD
         }
-        else {
-            switch (indexOption) {
-                case 0:
-                    return COLORS.answerA
-                case 1:
-                    return COLORS.answerB
-                case 2:
-                    return COLORS.answerC
-                case 3:
-                    return COLORS.answerD
-            }
-        }
+        // }
     };
 
     const getOptionIcon = (indexOption) => {
@@ -75,11 +79,11 @@ const AnswerMultiChoice = ({ quest, indexQuestion, handleNextQuestion }) => {
         }
     }
 
-    React.useEffect(() => {
-        if (userAnswer !== null) {
-            handleAfterDone()
-        }
-    }, [userAnswer])
+    // React.useEffect(() => {
+    //     if (userAnswer !== null) {
+    //         handleAfterDone()
+    //     }
+    // }, [userAnswer])
 
 
     return (
@@ -105,35 +109,65 @@ const AnswerMultiChoice = ({ quest, indexQuestion, handleNextQuestion }) => {
                         {({ remainingTime, color }) => <Text style={{ fontSize: 20, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
                     </CountdownCircleTimer>
                 } />
-                <View style={styles.containerQuestion}>
+                <View style={styles.containerQuestion}
+                    onLayout={(event) => {
+                        var { x, y, width, height } = event.nativeEvent.layout
+                        setSizeContainerOption({
+                            width: width,
+                            height: height
+                        })
+                    }}>
                     <Text style={styles.txtQuestion}> {indexQuestion + 1}. {question.question} </Text>
                     {question.imageUrl != '' ? (
                         <Image
-                            source={{
-                                uri: question.imageUrl,
-                            }}
-                            resizeMode={'contain'}
+                            source={{ uri: question.backgroundImage }}
+                            resizeMode={"stretch"}
                             style={styles.img}
                         />
                     ) : <></>}
                 </View>
                 <View style={styles.containerOption}>
-                    {question.arrOption.map((option, indexOption) => {
+                    {question.answerList.map((option, indexOption) => {
                         return (
-                            <TouchableOpacity
-                                key={indexOption}
-                                disabled={userAnswer !== null ? true : false}
-                                style={[styles.btnOption, { backgroundColor: getOptionBgColor(option, indexOption) }]}
-                                onPress={() => {
-                                    setUserAnswer(option)
-                                }}>
-                                <Icon
-                                    name={getOptionIcon(indexOption)}
-                                    size={25}
-                                    color={COLORS.white}
-                                />
-                                <Text style={styles.txtOption}>{option}</Text>
-                            </TouchableOpacity>
+                            <>
+                                {
+                                    // question.answerList.some(item => item.img !== "") ?
+                                    //     <TouchableOpacity
+                                    //         key={indexOption}
+                                    //         style={[styles.btnOptionImage]}
+                                    //     >
+                                    //         <Icon
+                                    //             name={getOptionIcon(indexOption)}
+                                    //             size={25}
+                                    //             color={COLORS.white}
+                                    //         />
+                                    //     </TouchableOpacity>
+                                    //     :
+                                    <TouchableOpacity
+                                        key={indexOption}
+                                        disabled={userAnswer !== null ? true : false}
+                                        style={[styles.btnOptionTxt, { backgroundColor: getOptionBgColor(option, indexOption) }]}
+                                        onPress={() => {
+                                            setUserAnswer(option)
+                                        }}>
+                                        <Icon
+                                            name={getOptionIcon(indexOption)}
+                                            size={25}
+                                            color={COLORS.white}
+                                        />
+                                        {
+                                            option.answer !== "" ?
+                                                <Image
+                                                    style={styles.imgAnswer}
+                                                    source={{ uri: option.img }}
+                                                />
+                                                :
+                                                <Text style={styles.txtOptionTxt}>{option.answer}</Text>
+                                        }
+                                    </TouchableOpacity>
+                                }
+                            </>
+
                         );
                     })}
                 </View>
@@ -168,13 +202,30 @@ const styles = StyleSheet.create({
         marginLeft: '10%',
         borderRadius: 5,
     },
-    btnOption: {
+    imgAnswer: {
+
+        height: 90,
+        width: 90,
+        alignSelf: "center",
+        borderRadius: 5
+
+    },
+    btnOptionTxt: {
         flex: 1,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderTopWidth: 1,
         borderRadius: 10,
         marginBottom: 5,
+        borderColor: COLORS.border,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+    },
+    btnOptionTxt: {
+        flex: 1,
+        paddingVertical: 10,
+        paddingHorizontal: 15,
+        borderRadius: 10,
         borderColor: COLORS.border,
         flexDirection: 'row',
         alignItems: 'center',
@@ -185,7 +236,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: COLORS.black,
     },
-    txtOption: {
+    txtOptionTxt: {
         fontWeight: "bold",
         fontSize: 18,
         color: COLORS.white,

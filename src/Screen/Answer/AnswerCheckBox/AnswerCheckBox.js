@@ -1,11 +1,11 @@
 import React from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
-import { COLORS } from '../../../constants/theme'
-import { timeWaitToNextQuestion } from '../../../constants/shareVarible'
+import { COLORS } from '../../../common/theme'
+import { timeWaitToNextQuestion } from '../../../common/shareVarible'
 import Icon from "react-native-vector-icons/FontAwesome"
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import CustomViewScore from '../../../components/playQuizScreen/CustomViewScore'
-import TopBar from '../../../components/playQuizScreen/TopBar'
+import CustomViewScore from '../../PlayQuiz/components/CustomViewScore'
+import TopBar from '../../PlayQuiz/components/TopBar'
 import { useDispatch } from 'react-redux'
 import { moreCorrect, moreIncorrect } from '../../../redux/Slice/userCompetitiveSlice'
 

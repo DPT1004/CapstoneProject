@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-40:/values-ky/values-ky.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-ky/values-ky.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\b8aa19f2757a2926a18a0e722b31b6fe\\transformed\\jetified-play-services-basement-18.1.0\\res\\values-ky\\values.xml",

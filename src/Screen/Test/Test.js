@@ -1,79 +1,110 @@
 import React from 'react'
-import { Text, View, Button, TouchableOpacity, StyleSheet, TextInput } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { screenName } from '../../navigator/screens-name'
-import { useNavigation } from "@react-navigation/native"
-import { useSelector, useDispatch } from 'react-redux'
-import { decrement, increment } from '../../redux/Slice/counterSlice'
-import { updateText } from '../../redux/Slice/textSlice'
+import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
+import FormButton from '../../components/FormButton';
+import {
+    BottomSheetModal,
+    BottomSheetModalProvider,
+} from '@gorhom/bottom-sheet';
+import ImagePicker from 'react-native-image-crop-picker';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { COLORS } from '../../common/theme'
 
-const Test = () => {
+const Test = ({
+    handleChooseImg = null,
+    imageUri = ""
+}) => {
 
-    const [txtInput, setTxtInput] = React.useState("")
-    const navigation = useNavigation()
-    const count = useSelector((state) => state.counter.value)
-    const text = useSelector((state) => state.text.value)
-    const dispatch = useDispatch()
+    // ref
+    const bottomSheetModalRef = React.useRef(null);
+
+    const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], []);
+
+    const selectImage = async () => {
+        await ImagePicker.openPicker({
+            cropping: false
+        }).then(image => {
+            handleChooseImg(image.path)
+        });
+    };
+
     return (
-        <View>
-            <Text>This is Test <Icon name="comments" size={30} color="pink" /></Text>
-            <Button
-                title='Go to Home'
-                color={"pink"}
-                onPress={() => navigation.navigate(screenName.BottomTab, { screenName: screenName.Home })}
-            />
-            <View style={styles.container}>
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => dispatch(increment())}
-                >
-                    <Text>Increase</Text>
-                </TouchableOpacity>
-                <Text style={styles.txt}>{count}</Text>
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => dispatch(decrement())}
-                >
-                    <Text>Decrease</Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.container}>
-                <TextInput
-                    placeholder='fill me'
-                    defaultValue={text}
-                    style={{ borderWidth: 1, width: "80%" }}
-                    onChangeText={(txt) => setTxtInput(txt)} />
-                <TouchableOpacity
-                    style={styles.btn}
-                    onPress={() => dispatch(updateText(txtInput))}
-                >
-                    <Text>Update</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+        <GestureHandlerRootView style={{ flex: 1 }}>
+            <BottomSheetModalProvider>
+                <View style={styles.container}>
+                    {/* Image upload */}
+                    {imageUri == '' ? (
+                        <TouchableOpacity
+                            style={styles.btnChooseIMG}
+                            onPress={() => bottomSheetModalRef.current?.present()}>
+                            <Text style={styles.txtChooseIMG}>
+                                + choose image
+                            </Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <TouchableOpacity
+                            onPress={() => bottomSheetModalRef.current?.present()}>
+                            <Image
+                                source={{ uri: imageUri }}
+                                resizeMode={'cover'}
+                                style={styles.img}
+                            />
+                        </TouchableOpacity>
+                    )}
+                    <BottomSheetModal
+                        ref={bottomSheetModalRef}
+                        index={1}
+                        snapPoints={snapPoints}
+                    >
+                        <View style={styles.contentContainer}>
+                            <FormButton
+                                labelText="Take Photo"
+                                isPrimary={true}
+                                style={{ marginBottom: 20 }}
+                                handleOnPress={() => selectImage()}
+                            />
+                            <FormButton
+                                labelText="Choose From Library"
+                                isPrimary={true}
+                                style={{ marginBottom: 20 }}
+                                handleOnPress={() => selectImage()}
+                            />
+                            <FormButton
+                                labelText="Cancel"
+                                isPrimary={true}
+                                style={{ marginBottom: 20 }}
+                                handleOnPress={() => bottomSheetModalRef.current?.close()}
+                            />
+                        </View>
+                    </BottomSheetModal>
+                </View>
+            </BottomSheetModalProvider>
+        </GestureHandlerRootView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        height: 80,
-        width: "100%",
-        flexDirection: "row",
-        justifyContent: "center",
-        marginVertical: 25
+        flex: 1,
     },
-    btn: {
-        backgroundColor: "orange",
-        padding: 10,
-        justifyContent: "center",
-        alignItems: "center"
+    contentContainer: {
+        flex: 1,
+        padding: 20,
     },
-    txt: {
-        fontWeight: "bold",
-        fontSize: 30,
-        marginHorizontal: 40
+    txtChooseIMG: {
+        opacity: 0.5,
+        color: COLORS.primary
+    },
+    btnChooseIMG: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 28,
+        backgroundColor: COLORS.primary + '20',
+    },
+    img: {
+        width: '100%',
+        height: 200,
+        borderRadius: 5,
     }
-
-})
+});
 
 export default Test;

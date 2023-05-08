@@ -1,29 +1,30 @@
 import React from "react"
-import { BackHandler, Text } from "react-native"
+import { BackHandler } from "react-native"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import CustomTabBTN from '../components/CustomTabBTN'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { store } from '../redux/store'
+import { Provider } from 'react-redux'
 import { screenName } from './screens-name'
+import { COLORS } from '../common/theme'
+import CustomTabBTN from '../components/CustomTabBTN'
 import SignIn from '../Screen/SignIn/SignIn'
 import SignUp from '../Screen/SignUp/SignUp'
 import Home from '../Screen/Home/Home'
-import CreateQuiz from "../Screen/CreateQuiz/CreateQuiz";
+import ManageQuiz from '../Screen/ManageQuiz/ManageQuiz'
+import ManageQuestion from '../Screen/CreateQuiz/components/ManageQuestion/ManageQuestion'
+import CreateQuiz from "../Screen/CreateQuiz/CreateQuiz"
 import PlayQuiz from '../Screen/PlayQuiz/PlayQuiz'
 import MultipleChoice from '../Screen/Question/MultipleChoice/MultipleChoice'
 import CheckBox from '../Screen/Question/CheckBox/CheckBox'
 import AnswerMultiChoice from '../Screen/Answer/AnswerMultiChoice/AnswerMultiChoice'
-import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox";
+import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
 import Test4 from '../Screen/Test/Test4'
-import { store } from '../redux/store'
-import { Provider } from 'react-redux'
 
 
 const arrTab = [
-  { icon: "heart", label: "Sign In", activeColorBG: "green", inActiveColorBG: "white", activeColorIcon: "white", inActiveColorIcon: "gray", screen: screenName.SignIn, component: SignIn },
-  { icon: "forward", label: "Sign Up", activeColorBG: "green", inActiveColorBG: "white", activeColorIcon: "white", inActiveColorIcon: "gray", screen: screenName.SignUp, component: SignUp },
-  { icon: "home", label: "Home", activeColorBG: "green", inActiveColorBG: "white", activeColorIcon: "white", inActiveColorIcon: "gray", screen: screenName.Home, component: Home },
-  { icon: "pluscircle", label: "Create Quiz", activeColorBG: "green", inActiveColorBG: "white", activeColorIcon: "white", inActiveColorIcon: "gray", screen: screenName.CreateQuiz, component: CreateQuiz },
+  { icon: "save", label: "Manage Quiz", activeColorBG: COLORS.primary, inActiveColorBG: "transparent", activeColorIcon: "white", inActiveColorIcon: COLORS.primary, screen: screenName.ManageQuiz, component: ManageQuiz },
+  { icon: "home", label: "Home", activeColorBG: COLORS.primary, inActiveColorBG: "transparent", activeColorIcon: "white", inActiveColorIcon: COLORS.primary, screen: screenName.Home, component: Home },
 ]
 
 const Tab = createBottomTabNavigator();
@@ -40,7 +41,9 @@ function BottomTab() {
           bottom: 16,
           left: 15,
           right: 15,
-          borderRadius: 30
+          borderRadius: 30,
+          backgroundColor: "transparent",
+          elevation: 1
         }
       }}
     >
@@ -69,10 +72,14 @@ const MainStack = () => {
       }}
     >
       {/* <Stack.Screen name={screenName.Test} component={Test4} /> */}
+      <Stack.Screen name={screenName.SignIn} component={SignIn} />
+      <Stack.Screen name={screenName.SignUp} component={SignUp} />
       <Stack.Screen name={screenName.BottomTab} component={BottomTab} />
+      <Stack.Screen name={screenName.PlayQuiz} component={PlayQuiz} />
+      <Stack.Screen name={screenName.CreateQuiz} component={CreateQuiz} />
+      <Stack.Screen name={screenName.ManageQuestion} component={ManageQuestion} />
       <Stack.Screen name={screenName.MultipleChoice} component={MultipleChoice} />
       <Stack.Screen name={screenName.CheckBox} component={CheckBox} />
-      <Stack.Screen name={screenName.PlayQuiz} component={PlayQuiz} />
       <Stack.Screen name={screenName.AnswerCheckBox} component={AnswerCheckBox} />
       <Stack.Screen name={screenName.AnswerMultiChoice} component={AnswerMultiChoice} />
     </Stack.Navigator>

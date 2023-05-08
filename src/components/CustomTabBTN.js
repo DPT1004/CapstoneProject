@@ -55,8 +55,6 @@ const styles = StyleSheet.create({
     },
     touch: {
         padding: 5,
-        borderWidth: 2.2,
-        borderColor: "white",
         borderRadius: 20,
     }
 })

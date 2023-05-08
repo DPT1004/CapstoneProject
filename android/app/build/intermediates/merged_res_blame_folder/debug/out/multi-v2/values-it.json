@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-40:/values-it/values-it.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-it/values-it.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\8a8afe83b99382a8549acca907837e3a\\transformed\\jetified-ucrop-2.2.6-native\\res\\values-it\\values-it.xml",

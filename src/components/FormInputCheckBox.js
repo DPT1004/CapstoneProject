@@ -1,15 +1,19 @@
 import React from 'react';
 import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
-import { COLORS } from '../constants/theme';
-import Icon from 'react-native-vector-icons/AntDesign'
+import { COLORS } from '../common/theme';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const FormInputCheckBox = ({
     labelText = '',
     placeholderText = '',
     onChangeText = null,
-    value = null,
-    onPress = null,
-    maxLength = 90,
+    value = {
+        isCorrect: false,
+        answer: "",
+        img: ""
+    },
+    onPress = () => { },
+    maxLength = 65,
     showCharCount = false,
     ...props
 }) => {
@@ -22,7 +26,7 @@ const FormInputCheckBox = ({
                 <View style={styles.viewFlex1} />
                 {
                     showCharCount ?
-                        <Text>{value.txt.length + "/" + maxLength}</Text>
+                        <Text>{value.answer.length + "/" + maxLength}</Text>
                         :
                         <></>
                 }
@@ -37,7 +41,7 @@ const FormInputCheckBox = ({
                     multiline={true}
                     placeholder={placeholderText}
                     onChangeText={onChangeText}
-                    value={value.txt}
+                    value={value.answer}
                     maxLength={maxLength}
                     {...props}
                 />
@@ -46,9 +50,9 @@ const FormInputCheckBox = ({
                     onPress={onPress}
                 >
                     <Icon
-                        name="checkcircle"
+                        name="checkbox-marked"
                         size={30}
-                        color={value.choosen ? "lightgreen" : COLORS.gray}
+                        color={value.isCorrect ? "lightgreen" : COLORS.gray}
                     />
                 </TouchableOpacity>
             </View>

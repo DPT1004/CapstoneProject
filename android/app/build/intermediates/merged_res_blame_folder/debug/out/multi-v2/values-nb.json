@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-40:/values-nb/values-nb.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-nb/values-nb.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\bb86c31b21a8196eb241818c0ec91b9b\\transformed\\core-1.7.0\\res\\values-nb\\values-nb.xml",

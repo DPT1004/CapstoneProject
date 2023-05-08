@@ -2,7 +2,6 @@ import React from 'react'
 import { Text, View, Button, TouchableOpacity, StyleSheet, TextInput, Animated, ScrollView } from 'react-native'
 import DraggableFlatList, {
     ScaleDecorator,
-    RenderItemParams,
 } from "react-native-draggable-flatlist";
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
@@ -60,14 +59,14 @@ const Test5 = () => {
             <ScaleDecorator>
                 <TouchableOpacity
                     activeOpacity={1}
-                    onLongPress={drag}
+                    onPressIn={drag}
                     disabled={isActive}
                     style={[
                         styles.rowItem,
                         { backgroundColor: isActive ? "red" : item.backgroundColor },
                     ]}
                 >
-                    <Text style={styles.text}>{item.text}</Text>
+                    <Text style={styles.text}>{item.name}</Text>
                 </TouchableOpacity>
             </ScaleDecorator>
         );
@@ -75,29 +74,10 @@ const Test5 = () => {
 
 
     return (
-        // <View style={{ flex: 1 }}>
-        //     <View style={{ flex: 1, flexWrap: "wrap", flexDirection: "row" }}>
-        //         {
-        //             arr.map((item, index) => (
-        //                 <View key={index} style={{ height: 80, width: 80, backgroundColor: "pink", margin: 10, alignItems: "center", justifyContent: "center" }}>
-        //                     <Text>{item.name}</Text>
-        //                 </View>
-        //             )
-        //             )
-        //         }
-        //     </View>
-        // <Button
-        //     title='Shuffle'
-        //     onPress={() => {
-        //         setReRender(Math.random())
-        //         setArr(shuffleArray(arr))
-        //     }}
-        // />
-        // </View>
         <GestureHandlerRootView style={{ flex: 1, backgroundColor: 'white' }}>
             <DraggableFlatList
                 data={arr}
-                // onDragEnd={({ data }) => setArr(data)}
+                onDragEnd={({ data }) => setArr(data)}
                 keyExtractor={(item) => item.id}
                 renderItem={renderItem}
             />
@@ -117,6 +97,7 @@ const styles = StyleSheet.create({
         height: 100,
         alignItems: "center",
         justifyContent: "center",
+        marginBottom: 20
     },
     text: {
         color: "white",

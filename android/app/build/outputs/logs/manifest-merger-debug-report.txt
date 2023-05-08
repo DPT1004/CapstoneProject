@@ -13,6 +13,7 @@ MERGED from [:react-native-firebase_firestore] I:\Source code\CapstoneProject\Mo
 MERGED from [:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-13:12
 MERGED from [:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-32:12
 MERGED from [com.google.firebase:firebase-analytics-ktx:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\5cc2c9a3174b5a779a835cdf514c146b\transformed\jetified-firebase-analytics-ktx-21.2.2\AndroidManifest.xml:2:1-17:12
+MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:1-28:12
 MERGED from [:react-native-gesture-handler] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-33:12
@@ -58,6 +59,7 @@ MERGED from [com.facebook.fresco:imagepipeline:2.6.0] C:\Users\USER\.gradle\cach
 MERGED from [com.facebook.fresco:nativeimagetranscoder:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\83d0b63a68d27ce7d0fef78e77e8769d\transformed\jetified-nativeimagetranscoder-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [com.facebook.fresco:imagepipeline-base:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\b2cca349fa348adb9aff51ddfde5401f\transformed\jetified-imagepipeline-base-2.6.0\AndroidManifest.xml:2:1-9:12
 MERGED from [io.grpc:grpc-android:1.52.1] C:\Users\USER\.gradle\caches\transforms-3\56ad8e9e4d52232c21645f21006323dc\transformed\jetified-grpc-android-1.52.1\AndroidManifest.xml:2:1-11:12
+MERGED from [com.airbnb.android:lottie:5.1.1] C:\Users\USER\.gradle\caches\transforms-3\cc0dd112bdd275d78cd79cbc3913d0e7\transformed\jetified-lottie-5.1.1\AndroidManifest.xml:2:1-11:12
 MERGED from [com.github.yalantis:ucrop:2.2.6-native] C:\Users\USER\.gradle\caches\transforms-3\8a8afe83b99382a8549acca907837e3a\transformed\jetified-ucrop-2.2.6-native\AndroidManifest.xml:2:1-11:12
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\5052cbf42be4cdd4e62c2464874b50a2\transformed\material-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.appcompat:appcompat:1.4.1] C:\Users\USER\.gradle\caches\transforms-3\8827605e5074db442956ed453adb476c\transformed\appcompat-1.4.1\AndroidManifest.xml:17:1-24:12
@@ -162,6 +164,8 @@ MERGED from [:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileC
 MERGED from [:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-67
 MERGED from [:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-67
 MERGED from [:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-67
+MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-67
+MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-67
 MERGED from [com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:25:5-67
 MERGED from [com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:25:5-67
 MERGED from [com.google.firebase:firebase-firestore:24.5.0] C:\Users\USER\.gradle\caches\transforms-3\c55b1d30b7cd5c5ed8ec6ec518330ffc\transformed\jetified-firebase-firestore-24.5.0\AndroidManifest.xml:13:5-67
@@ -240,6 +244,8 @@ MERGED from [com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\c
 MERGED from [com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:24:5-37:19
 MERGED from [com.facebook.soloader:soloader:0.10.4] C:\Users\USER\.gradle\caches\transforms-3\5e3a1fb3b5ee766861fb5f3ecf5959f9\transformed\jetified-soloader-0.10.4\AndroidManifest.xml:11:5-20
 MERGED from [com.facebook.soloader:soloader:0.10.4] C:\Users\USER\.gradle\caches\transforms-3\5e3a1fb3b5ee766861fb5f3ecf5959f9\transformed\jetified-soloader-0.10.4\AndroidManifest.xml:11:5-20
+MERGED from [com.airbnb.android:lottie:5.1.1] C:\Users\USER\.gradle\caches\transforms-3\cc0dd112bdd275d78cd79cbc3913d0e7\transformed\jetified-lottie-5.1.1\AndroidManifest.xml:9:5-20
+MERGED from [com.airbnb.android:lottie:5.1.1] C:\Users\USER\.gradle\caches\transforms-3\cc0dd112bdd275d78cd79cbc3913d0e7\transformed\jetified-lottie-5.1.1\AndroidManifest.xml:9:5-20
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\5052cbf42be4cdd4e62c2464874b50a2\transformed\material-1.1.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\5052cbf42be4cdd4e62c2464874b50a2\transformed\material-1.1.0\AndroidManifest.xml:22:5-20
 MERGED from [com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:22:5-38:19
@@ -355,7 +361,7 @@ MERGED from [com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\
 	android:label
 		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:34:9-41
 	android:configChanges
-		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:9-109
+		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:9-110
 	android:theme
 		ADDED from [com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:25:13-63
 	android:name
@@ -414,6 +420,8 @@ MERGED from [:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCa
 MERGED from [:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:6:5-8:41
 MERGED from [com.google.firebase:firebase-analytics-ktx:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\5cc2c9a3174b5a779a835cdf514c146b\transformed\jetified-firebase-analytics-ktx-21.2.2\AndroidManifest.xml:5:5-44
 MERGED from [com.google.firebase:firebase-analytics-ktx:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\5cc2c9a3174b5a779a835cdf514c146b\transformed\jetified-firebase-analytics-ktx-21.2.2\AndroidManifest.xml:5:5-44
+MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:5-26:41
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:5-26:41
 MERGED from [:react-native-gesture-handler] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
@@ -504,6 +512,8 @@ MERGED from [com.facebook.fresco:imagepipeline-base:2.6.0] C:\Users\USER\.gradle
 MERGED from [com.facebook.fresco:imagepipeline-base:2.6.0] C:\Users\USER\.gradle\caches\transforms-3\b2cca349fa348adb9aff51ddfde5401f\transformed\jetified-imagepipeline-base-2.6.0\AndroidManifest.xml:5:5-7:41
 MERGED from [io.grpc:grpc-android:1.52.1] C:\Users\USER\.gradle\caches\transforms-3\56ad8e9e4d52232c21645f21006323dc\transformed\jetified-grpc-android-1.52.1\AndroidManifest.xml:5:5-7:41
 MERGED from [io.grpc:grpc-android:1.52.1] C:\Users\USER\.gradle\caches\transforms-3\56ad8e9e4d52232c21645f21006323dc\transformed\jetified-grpc-android-1.52.1\AndroidManifest.xml:5:5-7:41
+MERGED from [com.airbnb.android:lottie:5.1.1] C:\Users\USER\.gradle\caches\transforms-3\cc0dd112bdd275d78cd79cbc3913d0e7\transformed\jetified-lottie-5.1.1\AndroidManifest.xml:5:5-7:41
+MERGED from [com.airbnb.android:lottie:5.1.1] C:\Users\USER\.gradle\caches\transforms-3\cc0dd112bdd275d78cd79cbc3913d0e7\transformed\jetified-lottie-5.1.1\AndroidManifest.xml:5:5-7:41
 MERGED from [com.github.yalantis:ucrop:2.2.6-native] C:\Users\USER\.gradle\caches\transforms-3\8a8afe83b99382a8549acca907837e3a\transformed\jetified-ucrop-2.2.6-native\AndroidManifest.xml:7:5-9:41
 MERGED from [com.github.yalantis:ucrop:2.2.6-native] C:\Users\USER\.gradle\caches\transforms-3\8a8afe83b99382a8549acca907837e3a\transformed\jetified-ucrop-2.2.6-native\AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.material:material:1.1.0] C:\Users\USER\.gradle\caches\transforms-3\5052cbf42be4cdd4e62c2464874b50a2\transformed\material-1.1.0\AndroidManifest.xml:20:5-44

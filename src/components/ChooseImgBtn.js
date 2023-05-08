@@ -1,95 +1,56 @@
 import React from 'react'
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
-import FormButton from './FormButton';
-import {
-    BottomSheetModal,
-    BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
+import { Text, StyleSheet, TouchableOpacity, Image, LayoutAnimation } from 'react-native'
 import ImagePicker from 'react-native-image-crop-picker';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { COLORS } from '../constants/theme'
+import { COLORS } from '../common/theme'
 
-const ChooseImgBtn = ({
-    setImageUri = null,
-    imageUri = ""
-}) => {
-
-    // ref
-    const bottomSheetModalRef = React.useRef(null);
-    const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], []);
+const ChooseImgBTN = ({ setImageUri, imageUri }) => {
 
     const selectImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(image => {
-            setImageUri(image.path)
-        });
+        try {
+            await ImagePicker.openPicker({
+                cropping: false
+            }).then(image => {
+                setImageUri(image.path)
+            });
+        } catch (error) {
+            if (error.code === 'E_PICKER_CANCELLED') {
+                return false;
+            }
+        }
     };
 
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-                <View style={styles.container}>
-                    {imageUri == '' ? (
-                        <TouchableOpacity
-                            style={styles.btnChooseIMG}
-                            onPress={() => bottomSheetModalRef.current?.present()}>
-                            <Text style={styles.txtChooseIMG}>
-                                + choose image
-                            </Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity
-                            onPress={() => bottomSheetModalRef.current?.present()}>
-                            <Image
-                                source={{ uri: imageUri }}
-                                resizeMode={'cover'}
-                                style={styles.img}
-                            />
-                        </TouchableOpacity>
-                    )}
-                    <BottomSheetModal
-                        ref={bottomSheetModalRef}
-                        index={1}
-                        snapPoints={snapPoints}
-                    >
-                        <View style={styles.contentContainer}>
-                            <FormButton
-                                labelText="Take Photo"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => selectImage()}
-                            />
-                            <FormButton
-                                labelText="Choose From Library"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => selectImage()}
-                            />
-                            <FormButton
-                                labelText="Cancel"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => bottomSheetModalRef.current?.close()}
-                            />
-                        </View>
-                    </BottomSheetModal>
-                </View>
-            </BottomSheetModalProvider>
-        </GestureHandlerRootView>
+
+        <>
+            {imageUri == '' ? (
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    style={styles.btnChooseIMG}
+                    onLongPress={() => selectImage()}>
+                    <Text style={styles.txtChooseIMG}>
+                        + choose image
+                    </Text>
+                </TouchableOpacity>
+            ) : (
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                        setImageUri("")
+                    }}
+                    onLongPress={() => selectImage()}>
+                    <Image
+                        source={{ uri: imageUri }}
+                        resizeMode={"stretch"}
+                        style={styles.img}
+                    />
+                </TouchableOpacity>
+            )}
+        </>
     );
 };
 
-export default ChooseImgBtn
-
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-    contentContainer: {
-        flex: 1,
-        padding: 20,
-    },
     txtChooseIMG: {
         opacity: 0.5,
         color: COLORS.primary
@@ -105,5 +66,7 @@ const styles = StyleSheet.create({
         height: 200,
         borderRadius: 5,
     }
-});
+})
+
+export default React.memo(ChooseImgBTN)
 

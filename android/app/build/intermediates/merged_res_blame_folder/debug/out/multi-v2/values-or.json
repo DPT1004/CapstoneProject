@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-40:/values-or/values-or.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-or/values-or.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\c3a452db882980c691e32f82e0694f66\\transformed\\browser-1.4.0\\res\\values-or\\values-or.xml",

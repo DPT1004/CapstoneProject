@@ -1,118 +1,215 @@
 import React from 'react'
-import { Text, View, StyleSheet, Image } from 'react-native'
+import { Text, ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { LoginButton, AccessToken, Profile } from 'react-native-fbsdk-next'
+import { COLORS, SIZES } from '../../common/theme'
+import { BASE_URL } from '../../common/shareVarible'
+import { img } from '../../assets/index'
+import { useDispatch } from 'react-redux'
+import { handleUserLogin } from '../../redux/Slice/userSlice'
+import Icon from "react-native-vector-icons/Entypo"
 import FormButton from '../../components/FormButton'
 import FormInput from '../../components/FormInput'
-import { COLORS } from '../../constants/theme'
-import { signIn } from '../../utils/auth'
+
+const listIcon = ["facebook", "twitter", "google-"]
 
 
 const SignIn = () => {
 
     const navigation = useNavigation()
-    const [user, setUser] = React.useState(null)
-    const [email, setEmail] = React.useState('');
-    const [password, setPassword] = React.useState('')
+    const dispatch = useDispatch()
 
-    const handleOnSubmit = () => {
-        if (email != '' && password != '') {
-            signIn(email, password);
+    const [email, setEmail] = React.useState('teacher1@gmail.com');
+    const [password, setPassword] = React.useState('12345678')
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const handleLogin = () => {
+        if (email == '' || password == '') {
+            ToastAndroid.show("Empty Email or Password", ToastAndroid.SHORT)
         }
-    };
+        else {
+            Post_Login()
+        }
+    }
+
+    const handleDispatchAsync = async (data) => {
+        dispatch(handleUserLogin(data))
+    }
+
+    const Post_Login = async () => {
+        setIsLoading(true)
+        var url = BASE_URL + "/user/login"
+
+        try {
+            await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.status == 200) {
+                            Promise.resolve(response.json())
+                                .then((data) => {
+                                    handleDispatchAsync(data)
+                                })
+                            navigation.navigate(screenName.BottomTab)
+                        }
+                    } else {
+                        Promise.resolve(response.json())
+                            .then((data) => {
+                                ToastAndroid.show(data.message, ToastAndroid.SHORT)
+                            })
+                    }
+
+                }).finally(() => setIsLoading(false))
+        } catch (error) {
+            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+        }
+    }
 
     return (
-        <View
-            style={{
-                backgroundColor: COLORS.white,
-                flex: 1,
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                padding: 20,
-            }}>
-            {/* Header */}
-            <Text
-                style={{
-                    fontSize: 24,
-                    color: COLORS.black,
-                    fontWeight: 'bold',
-                    marginVertical: 32,
-                }}>
-                Sign In
-            </Text>
-
-            {/* Email */}
-            <FormInput
-                labelText="Email"
-                placeholderText="enter your email"
-                onChangeText={value => setEmail(value)}
-                value={email}
-                keyboardType={'email-address'}
-            />
-
-            {/* Password */}
-            <FormInput
-                labelText="Password"
-                placeholderText="enter your password"
-                onChangeText={value => setPassword(value)}
-                value={password}
-                secureTextEntry={true}
-            />
-
-            {/* Submit button */}
-            <FormButton
-                labelText="Submit"
-                handleOnPress={handleOnSubmit}
-                style={{ width: '100%', marginBottom: 20 }}
-            />
-
-            {/* Login facebook */}
-            <LoginButton
-
-                onLoginFinished={
-                    (error, result) => {
-                        if (error) {
-                            console.log("login has error: " + result.error);
-                        } else if (result.isCancelled) {
-                            console.log("login is cancelled.");
-                            setUser(null)
-                        } else {
-                            AccessToken.getCurrentAccessToken().then(
-                                (data) => {
-                                    console.log(data.accessToken.toString())
+        <TouchableWithoutFeedback
+            onPress={() => { Keyboard.dismiss() }}
+            accessible={false}>
+            <View style={styles.container}>
+                <StatusBar backgroundColor={COLORS.primary} barStyle={"light-content"} />
+                <ScrollView
+                    style={{ width: "100%" }}
+                    showsVerticalScrollIndicator={false}
+                >
+                    <Image
+                        style={styles.quizLogo}
+                        source={img.quizLogo}
+                    />
+                    <FormInput
+                        labelText="Email"
+                        multiline={false}
+                        onChangeText={txt => setEmail(txt)}
+                        value={email}
+                        keyboardType={'email-address'}
+                    />
+                    <FormInput
+                        labelText="Password"
+                        multiline={false}
+                        onChangeText={txt => setPassword(txt)}
+                        value={password}
+                        secureTextEntry={true}
+                    />
+                    <FormButton
+                        labelText="Login"
+                        disable={isLoading}
+                        handleOnPress={handleLogin}
+                        isLoading={isLoading}
+                        style={{ width: '100%', marginVertical: 27 }}
+                    />
+                    {/* login facebook */}
+                    {/* <LoginButton
+                        onLoginFinished={
+                            (error, result) => {
+                                if (error) {
+                                    console.log("login has error: " + result.error);
+                                } else if (result.isCancelled) {
+                                    console.log("login is cancelled.");
+                                    setUser(null)
+                                } else {
+                                    AccessToken.getCurrentAccessToken().then(
+                                        (data) => {
+                                            console.log(data.accessToken.toString())
+                                        }
+                                    )
                                 }
-                            )
-                        }
-                        const currentProfile = Profile.getCurrentProfile().then(
-                            function (currentProfile) {
-                                if (currentProfile) {
-                                    setUser(currentProfile)
-                                }
+                                const currentProfile = Profile.getCurrentProfile().then(
+                                    function (currentProfile) {
+                                        if (currentProfile) {
+                                            console.log(currentProfile);
+                                        }
+                                    }
+                                );
                             }
-                        );
-                    }
-                }
-                onLogoutFinished={() => console.log("logout.")} />
-
-            {/* Footer */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 20 }}>
-                <Text>Don't have an account?</Text>
-                <Text
-                    style={{ marginLeft: 4, color: COLORS.primary }}
-                    onPress={() => navigation.navigate('SignUpScreen')}>
-                    Create account
-                </Text>
+                        }
+                        onLogoutFinished={() => console.log("logout.")} /> */}
+                    <View style={styles.containerBottom}>
+                        <Text style={styles.txt}>---You can login with---</Text>
+                        <View style={styles.viewSocial}>
+                            {
+                                listIcon.map((item, index) =>
+                                    <TouchableOpacity
+                                        activeOpacity={0.8}
+                                        key={index}
+                                        style={styles.btnIcon}>
+                                        <Icon
+                                            name={item}
+                                            size={28}
+                                            color={COLORS.white}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            }
+                        </View>
+                        <Text style={styles.txt}>
+                            Dont you have an account?
+                            <Text style={styles.txtRegister} onPress={() => navigation.navigate(screenName.SignUp)}>
+                                {"  Register"}
+                            </Text>
+                        </Text>
+                    </View>
+                </ScrollView>
             </View>
-        </View>
+        </TouchableWithoutFeedback >
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: COLORS.white,
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        padding: 20,
+    },
+    containerBottom: {
+        alignItems: "center",
+        marginVertical: 10
+    },
+    viewSocial: {
+        flexDirection: "row",
+        justifyContent: "center",
+        marginVertical: 20,
+        width: "100%"
+    },
+    quizLogo: {
+        height: SIZES.windowWidth * 0.3,
+        width: SIZES.windowWidth * 0.6,
+        alignSelf: "center"
+    },
+    txtRegister: {
+        color: COLORS.primary,
+        fontStyle: "italic",
+        fontWeight: "bold",
+        fontSize: 15,
+        marginLeft: 10
+    },
+    txt: {
+        fontSize: 15,
+    },
     img: {
-
         height: 120,
         width: 120
+    },
+    btnIcon: {
+        backgroundColor: COLORS.primary,
+        marginHorizontal: 30,
+        borderRadius: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10,
     }
 
 })

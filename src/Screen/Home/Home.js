@@ -1,40 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import {
-    View,
-    Text,
-    SafeAreaView,
-    StatusBar,
-    FlatList,
-    TouchableOpacity,
-} from 'react-native';
-import { signOut } from '../../utils/auth';
-import FormButton from '../../components/FormButton';
-import { COLORS } from '../../constants/theme';
-import { getQuizzes } from '../../utils/database';
-import { screenName } from '../../navigator/screens-name';
+import React from 'react'
+import { View, Text, SafeAreaView, StatusBar, FlatList, TouchableOpacity, Alert } from 'react-native'
+import { COLORS } from '../../common/theme'
+import { screenName } from '../../navigator/screens-name'
+import { useNavigation } from "@react-navigation/native"
+import { useDispatch, useSelector } from 'react-redux'
+import { handleUserLogOut } from '../../redux/Slice/userSlice'
 
-const HomeScreen = ({ navigation }) => {
-    const [allQuizzes, setAllQuizzes] = useState([]);
-    const [refreshing, setRefreshing] = useState(false);
+const HomeScreen = () => {
 
-    const getAllQuizzes = async () => {
+    const navigation = useNavigation()
+    const dispatch = useDispatch()
 
-        setRefreshing(true);
-        const quizzes = await getQuizzes();
-
-        // Transform quiz data
-        let tempQuizzes = [];
-        quizzes.docs.forEach(async quiz => {
-            tempQuizzes.push({ id: quiz.id, ...quiz.data() });
-        });
-        setAllQuizzes([...tempQuizzes]);
-
-        setRefreshing(false);
-    };
-
-    useEffect(() => {
-        getAllQuizzes();
-    }, []);
+    const user = useSelector((state) => state.user)
 
     return (
         <SafeAreaView
@@ -54,79 +31,39 @@ const HomeScreen = ({ navigation }) => {
                     elevation: 4,
                     paddingHorizontal: 20,
                 }}>
-                <Text style={{ fontSize: 20, color: COLORS.black }}>Quiz App</Text>
-                <Text
-                    style={{
-                        fontSize: 20,
-                        padding: 10,
-                        color: COLORS.error,
-                    }}
-                    disabled={true}
-                    onPress={() => signOut()}>
-                    Logout
-                </Text>
+                <Text style={{ fontSize: 20, color: COLORS.black }}>{user.email}</Text>
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    onPress={() => Alert.alert(
+                        "OOPS !!!",
+                        "You really want to log out ?",
+                        [
+                            {
+                                text: "Yes",
+                                onPress: () => {
+                                    dispatch(handleUserLogOut())
+                                    navigation.navigate(screenName.SignIn)
+                                }
+                            },
+                            {
+                                text: "No"
+                            }
+                        ],
+                    )}>
+                    <Text
+                        style={{
+                            fontSize: 20,
+                            padding: 10,
+                            color: COLORS.error,
+                        }}
+                    >
+                        Logout
+                    </Text>
+                </TouchableOpacity>
+
             </View>
 
-            {/* Quiz list */}
-            <FlatList
-                data={allQuizzes}
-                onRefresh={getAllQuizzes}
-                refreshing={refreshing}
-                showsVerticalScrollIndicator={false}
-                style={{
-                    paddingVertical: 20,
-                }}
-                renderItem={({ item: quiz }) => (
-                    <View
-                        style={{
-                            padding: 20,
-                            borderRadius: 5,
-                            marginVertical: 5,
-                            marginHorizontal: 10,
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            backgroundColor: COLORS.white,
-                            elevation: 2,
-                        }}>
-                        <View style={{ flex: 1, paddingRight: 10 }}>
-                            <Text style={{ fontSize: 18, color: COLORS.black }}>
-                                {quiz.title}
-                            </Text>
-                            {quiz.description != '' ? (
-                                <Text style={{ opacity: 0.5 }}>{quiz.description}</Text>
-                            ) : null}
-                        </View>
-                        <TouchableOpacity
-                            style={{
-                                paddingVertical: 10,
-                                paddingHorizontal: 30,
-                                borderRadius: 50,
-                                backgroundColor: COLORS.primary + '20',
-                            }}
-                            onPress={() => {
-                                navigation.navigate(screenName.PlayQuiz, {
-                                    quizId: quiz.id,
-                                });
-                            }}>
-                            <Text style={{ color: COLORS.primary }}>Play</Text>
-                        </TouchableOpacity>
-                    </View>
-                )}
-            />
 
-            {/* Button */}
-            <FormButton
-                labelText="Create Quiz"
-                style={{
-                    position: 'absolute',
-                    bottom: 20,
-                    right: 20,
-                    borderRadius: 50,
-                    paddingHorizontal: 30,
-                }}
-                handleOnPress={() => navigation.navigate('CreateQuizScreen')}
-            />
         </SafeAreaView>
     );
 };

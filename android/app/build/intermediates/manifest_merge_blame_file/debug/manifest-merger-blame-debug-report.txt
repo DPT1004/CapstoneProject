@@ -130,7 +130,7 @@
 71            android:name="com.facebook.FacebookActivity"
 71-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:31:15-59
 72            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-72-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:9-109
+72-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:9-110
 73            android:label="@string/app_name"
 73-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:34:9-41
 74            android:theme="@style/com_facebook_activity_theme" />
