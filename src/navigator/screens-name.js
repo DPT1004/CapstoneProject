@@ -6,6 +6,8 @@ export const screenName = {
     Test: "Test",
     ManageQuiz: "ManageQuiz",
     CreateQuiz: "CreateQuiz",
+    EditQuiz: "EditQuiz",
+    ListQuestion: "ListQuestion",
     ManageQuestion: "ManageQuestion",
     PlayQuiz: "PlayQuiz",
     MultipleChoice: "MultipleChoice",

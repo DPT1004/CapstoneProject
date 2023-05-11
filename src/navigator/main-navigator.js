@@ -13,13 +13,15 @@ import SignUp from '../Screen/SignUp/SignUp'
 import Home from '../Screen/Home/Home'
 import ManageQuiz from '../Screen/ManageQuiz/ManageQuiz'
 import ManageQuestion from '../Screen/CreateQuiz/components/ManageQuestion/ManageQuestion'
+import ListQuestion from '../Screen/EditQuiz/components/ListQuestion/ListQuestion'
 import CreateQuiz from "../Screen/CreateQuiz/CreateQuiz"
+import EditQuiz from '../Screen/EditQuiz/EditQuiz'
 import PlayQuiz from '../Screen/PlayQuiz/PlayQuiz'
 import MultipleChoice from '../Screen/Question/MultipleChoice/MultipleChoice'
 import CheckBox from '../Screen/Question/CheckBox/CheckBox'
 import AnswerMultiChoice from '../Screen/Answer/AnswerMultiChoice/AnswerMultiChoice'
 import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
-import Test4 from '../Screen/Test/Test4'
+import Test from '../Screen/Test/Test'
 
 
 const arrTab = [
@@ -38,11 +40,11 @@ function BottomTab() {
         tabBarStyle: {
           height: 60,
           position: "absolute",
-          bottom: 16,
+          bottom: 10,
           left: 15,
           right: 15,
           borderRadius: 30,
-          backgroundColor: "transparent",
+          backgroundColor: COLORS.white,
           elevation: 1
         }
       }}
@@ -71,12 +73,14 @@ const MainStack = () => {
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen name={screenName.Test} component={Test4} /> */}
+      {/* <Stack.Screen name={screenName.Test} component={Test} /> */}
       <Stack.Screen name={screenName.SignIn} component={SignIn} />
       <Stack.Screen name={screenName.SignUp} component={SignUp} />
       <Stack.Screen name={screenName.BottomTab} component={BottomTab} />
       <Stack.Screen name={screenName.PlayQuiz} component={PlayQuiz} />
       <Stack.Screen name={screenName.CreateQuiz} component={CreateQuiz} />
+      <Stack.Screen name={screenName.EditQuiz} component={EditQuiz} />
+      <Stack.Screen name={screenName.ListQuestion} component={ListQuestion} />
       <Stack.Screen name={screenName.ManageQuestion} component={ManageQuestion} />
       <Stack.Screen name={screenName.MultipleChoice} component={MultipleChoice} />
       <Stack.Screen name={screenName.CheckBox} component={CheckBox} />

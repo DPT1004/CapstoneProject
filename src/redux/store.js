@@ -9,6 +9,6 @@ export const store = configureStore({
         counter: counterSlice,
         userCompetitive: userCompetitiveSlice,
         user: userSlice,
-        newQuiz: newQuizSlice
+        newQuiz: newQuizSlice,
     },
 })

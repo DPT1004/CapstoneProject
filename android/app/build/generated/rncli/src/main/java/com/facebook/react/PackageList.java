@@ -13,10 +13,6 @@ import java.util.ArrayList;
 
 // @react-native-firebase/app
 import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
-// @react-native-firebase/auth
-import io.invertase.firebase.auth.ReactNativeFirebaseAuthPackage;
-// @react-native-firebase/firestore
-import io.invertase.firebase.firestore.ReactNativeFirebaseFirestorePackage;
 // @react-native-firebase/storage
 import io.invertase.firebase.storage.ReactNativeFirebaseStoragePackage;
 // lottie-react-native
@@ -83,8 +79,6 @@ public class PackageList {
     return new ArrayList<>(Arrays.<ReactPackage>asList(
       new MainReactPackage(mConfig),
       new ReactNativeFirebaseAppPackage(),
-      new ReactNativeFirebaseAuthPackage(),
-      new ReactNativeFirebaseFirestorePackage(),
       new ReactNativeFirebaseStoragePackage(),
       new LottiePackage(),
       new FBSDKPackage(),

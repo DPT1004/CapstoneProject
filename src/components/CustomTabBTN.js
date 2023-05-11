@@ -59,4 +59,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default CustomTabBTN;
+export default React.memo(CustomTabBTN)

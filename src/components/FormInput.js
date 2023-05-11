@@ -7,9 +7,10 @@ const FormInput = ({
   placeholderText = '',
   onChangeText = null,
   value = "",
-  maxLength = 75,
+  maxLength = 65,
   showCharCount = false,
   multiline = true,
+  children,
   ...more
 }) => {
   return (
@@ -24,16 +25,19 @@ const FormInput = ({
             <></>
         }
       </View>
-      <TextInput
-        style={styles.txtInput}
-        selectionColor={COLORS.primary}
-        placeholder={placeholderText}
-        onChangeText={onChangeText}
-        value={value}
-        maxLength={maxLength}
-        multiline={multiline}
-        {...more}
-      />
+      <View style={styles.viewTxtInput}>
+        <TextInput
+          style={styles.txtInput}
+          selectionColor={COLORS.primary}
+          placeholder={placeholderText}
+          onChangeText={onChangeText}
+          value={value.replace(/\s/g, '')}
+          maxLength={maxLength}
+          multiline={multiline}
+          {...more}
+        />
+        {children}
+      </View>
     </View>
   );
 };
@@ -46,17 +50,20 @@ const styles = StyleSheet.create({
   viewFlex1: {
     flex: 1
   },
+  viewTxtInput: {
+    paddingHorizontal: 8,
+    borderColor: COLORS.black + 20,
+    width: '100%',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginTop: 10,
+  },
   txtLabel: {
     fontSize: 15,
   },
   txtInput: {
-    padding: 10,
-    borderColor: COLORS.black + 20,
-    borderWidth: 1,
-    width: '100%',
-    borderRadius: 5,
-    marginTop: 10,
+    fontSize: 16
   }
 })
 
-export default FormInput;
+export default React.memo(FormInput)

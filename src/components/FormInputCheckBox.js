@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default FormInputCheckBox;
+export default React.memo(FormInputCheckBox)

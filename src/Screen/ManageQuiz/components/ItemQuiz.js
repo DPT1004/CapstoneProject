@@ -1,11 +1,11 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, Alert, ToastAndroid } from 'react-native'
 import { COLORS } from '../../../common/theme'
-import { BASE_URL } from '../../../common/shareVarible'
+import { BASE_URL, uriImgQuiz } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
-import { img } from '../../../assets/index'
 import { useNavigation } from "@react-navigation/native"
-import { useSelector } from 'react-redux'
+import { updateQuiz } from '../../../redux/Slice/newQuizSlice'
+import { useSelector, useDispatch } from 'react-redux'
 import {
     BottomSheetModal,
 } from '@gorhom/bottom-sheet'
@@ -13,17 +13,19 @@ import FormButton from '../../../components/FormButton'
 import Icon from 'react-native-vector-icons/Feather'
 import Icon1 from 'react-native-vector-icons/Octicons'
 
-const ItemQuiz = ({ item, index, setRefreshing }) => {
+const ItemQuiz = ({ item, onRefreshing }) => {
 
     const navigation = useNavigation()
+    const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
+    const imgQuiz = item.backgroundImage !== "" ? item.backgroundImage : uriImgQuiz
 
-    const bottomSheetModalRef = React.useRef(null);
-    const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], []);
+    const bottomSheetModalRef = React.useRef(null)
+    const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], [])
 
     const deleteQuiz = async () => {
         var url = BASE_URL + "/quiz/" + item._id
-        setRefreshing(true)
+
         try {
             await fetch(url, {
                 method: "DELETE",
@@ -47,7 +49,7 @@ const ItemQuiz = ({ item, index, setRefreshing }) => {
                             })
                     }
 
-                }).finally(() => setRefreshing(false))
+                }).finally(() => onRefreshing())
         } catch (error) {
             ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
         }
@@ -58,7 +60,7 @@ const ItemQuiz = ({ item, index, setRefreshing }) => {
             <View style={styles.container}>
                 <Image
                     style={styles.quizBGR}
-                    source={img.quizBGR}
+                    source={{ uri: imgQuiz }}
                 />
                 <View style={{ alignItems: "center", flex: 1 }}>
                     <Text style={[styles.txt, { fontSize: 20 }]}>{item.name}</Text>
@@ -66,7 +68,6 @@ const ItemQuiz = ({ item, index, setRefreshing }) => {
                         <Text style={{ opacity: 0.5 }}>{item.description}</Text>
                     ) : null}
                 </View>
-
                 <Icon
                     name={"more-horizontal"}
                     style={{ position: "absolute", top: 2, right: 5 }}
@@ -98,10 +99,10 @@ const ItemQuiz = ({ item, index, setRefreshing }) => {
                             </View>
                         }
                         handleOnPress={() => {
-                            bottomSheetModalRef.current?.close()
                             navigation.navigate(screenName.PlayQuiz, {
                                 questionList: item.questionList
                             })
+                            bottomSheetModalRef.current?.close()
                         }
                         }
                     />
@@ -118,7 +119,11 @@ const ItemQuiz = ({ item, index, setRefreshing }) => {
                                 />
                             </View>
                         }
-                        handleOnPress={() => { bottomSheetModalRef.current?.close() }}
+                        handleOnPress={() => {
+                            bottomSheetModalRef.current?.close()
+                            dispatch(updateQuiz(item))
+                            navigation.navigate(screenName.EditQuiz)
+                        }}
                     />
                     <FormButton
                         labelText="Delete Quiz"
@@ -166,16 +171,17 @@ const styles = StyleSheet.create({
     container: {
         padding: 20,
         borderRadius: 5,
-        marginBottom: 25,
+        marginBottom: 35,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: COLORS.white,
         elevation: 4,
     },
     quizBGR: {
-        height: 80,
-        width: 80,
-        alignSelf: "center"
+        height: 90,
+        width: 90,
+        alignSelf: "center",
+        borderRadius: 5
     },
     viewNumQuestion: {
         backgroundColor: COLORS.gray,
@@ -203,4 +209,4 @@ const styles = StyleSheet.create({
         color: COLORS.black
     }
 })
-export default ItemQuiz;
+export default ItemQuiz

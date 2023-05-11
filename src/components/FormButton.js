@@ -55,4 +55,4 @@ const FormButton = ({
   );
 };
 
-export default FormButton;
+export default FormButton

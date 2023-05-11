@@ -1,36 +1,36 @@
 import React from 'react'
-import { Text, LayoutAnimation, ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
+import { ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
-import { LoginButton, AccessToken, Profile } from 'react-native-fbsdk-next'
 import { COLORS, SIZES } from '../../common/theme'
-import { BASE_URL } from '../../common/shareVarible'
+import { BASE_URL, checkEmailIsInvalid } from '../../common/shareVarible'
 import { img } from '../../assets/index'
-import { useDispatch } from 'react-redux'
-import { handleUserLogin } from '../../redux/Slice/userSlice'
 import Icon from "react-native-vector-icons/Entypo"
 import FormButton from '../../components/FormButton'
 import FormInput from '../../components/FormInput'
 
-
-const listIcon = ["facebook", "twitter", "google-"]
-
 const SignUp = () => {
 
     const navigation = useNavigation()
-    const dispatch = useDispatch()
 
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false)
+    const [isSecure, setIsSecure] = React.useState(false)
+    const [isSecure1, setIsSecure1] = React.useState(false)
 
     const handleRegister = () => {
         if (email == '' || password == '' || confirmPassword == '') {
             ToastAndroid.show("Empty Email or Password or ConfirmPassword", ToastAndroid.SHORT)
+        } else if (checkEmailIsInvalid(email)) {
+            ToastAndroid.show("Email invalid", ToastAndroid.SHORT)
         }
         else if (password !== confirmPassword) {
             ToastAndroid.show("Password and ConfirmPassword is not the same", ToastAndroid.SHORT)
+        }
+        else if (password.length < 8) {
+            ToastAndroid.show("Password need at least 8 char", ToastAndroid.SHORT)
         }
         else {
             Post_Register()
@@ -38,9 +38,8 @@ const SignUp = () => {
     };
 
     const Post_Register = async () => {
-
-        var url = BASE_URL + "/user/register"
         setIsLoading(true)
+        var url = BASE_URL + "/user/register"
         await fetch(url, {
             method: "POST",
             headers: {
@@ -60,8 +59,8 @@ const SignUp = () => {
                 } else {
                     ToastAndroid.show("Wrong Email or Password")
                 }
-            })
-        setIsLoading(false)
+            }).finally(() => setIsLoading(false))
+
     }
 
     return (
@@ -81,6 +80,7 @@ const SignUp = () => {
                     <FormInput
                         labelText="Email"
                         multiline={false}
+                        maxLength={40}
                         onChangeText={txt => setEmail(txt)}
                         value={email}
                         keyboardType={'email-address'}
@@ -88,7 +88,20 @@ const SignUp = () => {
                     <FormInput
                         labelText="Password"
                         multiline={false}
+                        maxLength={40}
                         onChangeText={txt => setPassword(txt)}
+                        children={
+                            <TouchableOpacity
+                                onPress={() => setIsSecure(!isSecure)}
+                                activeOpacity={0.6}
+                                style={styles.viewIcon}>
+                                <Icon
+                                    name={isSecure ? "eye" : "eye-with-line"}
+                                    size={28}
+                                    color={COLORS.gray}
+                                />
+                            </TouchableOpacity>
+                        }
                         value={password}
                         secureTextEntry={true}
                     />
@@ -96,6 +109,18 @@ const SignUp = () => {
                         labelText="Confirm Password"
                         multiline={false}
                         onChangeText={txt => setConfirmPassword(txt)}
+                        children={
+                            <TouchableOpacity
+                                onPress={() => setIsSecure1(!isSecure1)}
+                                activeOpacity={0.6}
+                                style={styles.viewIcon}>
+                                <Icon
+                                    name={isSecure1 ? "eye" : "eye-with-line"}
+                                    size={28}
+                                    color={COLORS.gray}
+                                />
+                            </TouchableOpacity>
+                        }
                         value={confirmPassword}
                         secureTextEntry={true}
                     />
@@ -135,6 +160,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 20,
         width: "100%"
+    },
+    viewIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 8
     },
     quizLogo: {
         height: SIZES.windowWidth * 0.3,

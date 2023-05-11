@@ -12,7 +12,6 @@ import { clearInfoCompetitive } from '../../../redux/Slice/userCompetitiveSlice'
 import { screenName } from '../../../navigator/screens-name'
 import Icon from 'react-native-vector-icons/Entypo'
 
-
 const TopBar = ({ children }) => {
 
     const dispatch = useDispatch()

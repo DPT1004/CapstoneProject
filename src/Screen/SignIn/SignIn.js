@@ -2,9 +2,9 @@ import React from 'react'
 import { Text, ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
-import { LoginButton, AccessToken, Profile } from 'react-native-fbsdk-next'
+import { LoginButton, AccessToken, Profile, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk-next'
 import { COLORS, SIZES } from '../../common/theme'
-import { BASE_URL } from '../../common/shareVarible'
+import { BASE_URL, checkEmailIsInvalid } from '../../common/shareVarible'
 import { img } from '../../assets/index'
 import { useDispatch } from 'react-redux'
 import { handleUserLogin } from '../../redux/Slice/userSlice'
@@ -14,7 +14,6 @@ import FormInput from '../../components/FormInput'
 
 const listIcon = ["facebook", "twitter", "google-"]
 
-
 const SignIn = () => {
 
     const navigation = useNavigation()
@@ -23,10 +22,14 @@ const SignIn = () => {
     const [email, setEmail] = React.useState('teacher1@gmail.com');
     const [password, setPassword] = React.useState('12345678')
     const [isLoading, setIsLoading] = React.useState(false)
+    const [isSecure, setIsSecure] = React.useState(true)
+
 
     const handleLogin = () => {
         if (email == '' || password == '') {
             ToastAndroid.show("Empty Email or Password", ToastAndroid.SHORT)
+        } else if (checkEmailIsInvalid(email)) {
+            ToastAndroid.show("Email invalid", ToastAndroid.SHORT)
         }
         else {
             Post_Login()
@@ -91,6 +94,7 @@ const SignIn = () => {
                     <FormInput
                         labelText="Email"
                         multiline={false}
+                        maxLength={40}
                         onChangeText={txt => setEmail(txt)}
                         value={email}
                         keyboardType={'email-address'}
@@ -98,9 +102,22 @@ const SignIn = () => {
                     <FormInput
                         labelText="Password"
                         multiline={false}
+                        children={
+                            <TouchableOpacity
+                                onPress={() => setIsSecure(!isSecure)}
+                                activeOpacity={0.6}
+                                style={styles.viewIcon}>
+                                <Icon
+                                    name={isSecure ? "eye" : "eye-with-line"}
+                                    size={28}
+                                    color={COLORS.gray}
+                                />
+                            </TouchableOpacity>
+                        }
+                        maxLength={40}
                         onChangeText={txt => setPassword(txt)}
                         value={password}
-                        secureTextEntry={true}
+                        secureTextEntry={isSecure}
                     />
                     <FormButton
                         labelText="Login"
@@ -183,6 +200,15 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginVertical: 20,
         width: "100%"
+    },
+    viewIcon: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingHorizontal: 8
     },
     quizLogo: {
         height: SIZES.windowWidth * 0.3,

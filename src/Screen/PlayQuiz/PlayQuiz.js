@@ -1,73 +1,68 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react'
 import {
     View,
     Text,
     StatusBar,
-    LayoutAnimation
+    LayoutAnimation,
+    Button
 } from 'react-native';
-import { COLORS } from '../../common/theme';
-import { useNavigation, useRoute } from "@react-navigation/native"
-import { screenName } from '../../navigator/screens-name'
-import FormButton from '../../components/FormButton';
-import ResultModal from './components/ResultModal';
-import AnswerCheckBox from '../Answer/AnswerCheckBox/AnswerCheckBox'
-import AnswerMultiChoice from '../Answer/AnswerMultiChoice/AnswerMultiChoice'
+import { COLORS } from '../../common/theme'
 import { useSelector, useDispatch } from 'react-redux'
 import { clearInfoCompetitive } from '../../redux/Slice/userCompetitiveSlice'
+import { useNavigation, useRoute } from "@react-navigation/native"
+import FormButton from '../../components/FormButton'
+import ResultModal from './components/ResultModal'
+import AnswerCheckBox from '../Answer/AnswerCheckBox/AnswerCheckBox'
+import AnswerMultiChoice from '../Answer/AnswerMultiChoice/AnswerMultiChoice'
+import { screenName } from '../../navigator/screens-name';
+
 
 const PlayQuiz = () => {
 
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const route = useRoute()
-
     const userCompetitive = useSelector((state) => state.userCompetitive)
-    const [questions, setQuestions] = useState(route.params?.questionList)
-    const [currentIndexQuestion, setCurrentIndexQuestion] = useState(0)
-    const [isResultModalVisible, setIsResultModalVisible] = useState(false)
+    const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
+    const [questions, setQuestions] = React.useState(route.params.questionList)
+    const [isResultModalVisible, setIsResultModalVisible] = React.useState(false)
 
-    const handleNextQuestion = (nextQuest) => {
-        setCurrentIndexQuestion(nextQuest)
-    }
-
+    console.log("currentIndexQuestion: ", currentIndexQuestion)
     const renderQuestion = () => {
         LayoutAnimation.configureNext({
             duration: 300,
-            create: { type: "easeIn", property: "scaleXY" },
-            update: { type: 'easeIn', property: 'scaleXY' },
-            delete: { type: 'easeIn', property: 'scaleXY' },
+            create: { type: "linear", property: "opacity" },
+            update: { type: 'linear', property: 'opacity' },
+            delete: { type: 'linear', property: 'opacity' },
         })
-        return (
-            currentIndexQuestion === questions.length ?
-                <View style={{ flex: 1 }}>
-                    <Text>All done</Text>
-                    <FormButton
-                        labelText="Submit"
-                        style={{ margin: 10 }}
-                        handleOnPress={() => {
-                            // Show Result modal
-                            setIsResultModalVisible(true);
-                        }}
-                    />
-                </View>
-                :
-                questions[currentIndexQuestion].questionType === "MultipleChoice" ?
-                    <AnswerMultiChoice
-                        quest={questions[currentIndexQuestion]}
-                        indexQuestion={currentIndexQuestion}
-                        handleNextQuestion={() => handleNextQuestion()}
-                    />
-                    :
-                    questions[currentIndexQuestion].questionType === "CheckBox" ?
-                        <AnswerCheckBox
-                            quest={questions[currentIndexQuestion]}
-                            indexQuestion={currentIndexQuestion}
-                            handleNextQuestion={() => handleNextQuestion()}
-                        />
-                        :
-                        <></>
-        )
+
+        if (currentIndexQuestion >= questions.length) {
+            return (<View style={{ flex: 1 }}>
+                <Text>All done</Text>
+                <FormButton
+                    labelText="Submit"
+                    style={{ margin: 10 }}
+                    handleOnPress={() => {
+                        // Show Result modal
+                        setIsResultModalVisible(true);
+                    }}
+                />
+            </View>)
+        } else if (questions[currentIndexQuestion].questionType === "MultipleChoice") {
+            return (
+                <AnswerMultiChoice
+                    question={questions[currentIndexQuestion]}
+                />
+            )
+        } else if (questions[currentIndexQuestion].questionType === "CheckBox") {
+            return (
+                <AnswerCheckBox
+                    quest={questions[currentIndexQuestion]}
+                />
+            )
+        }
     }
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -77,13 +72,6 @@ const PlayQuiz = () => {
                 renderQuestion()
             }
             {/* Result Modal */}
-            <FormButton
-                labelText="Go back"
-                style={{ margin: 10 }}
-                handleOnPress={() => {
-                    navigation.navigate(screenName.ManageQuiz)
-                }}
-            />
             <ResultModal
                 isModalVisible={isResultModalVisible}
                 correctCount={userCompetitive.correctCount}

@@ -29,6 +29,7 @@ const MultipleChoice = () => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const newQuiz = useSelector((state) => state.newQuiz)
+    const quiz = useSelector((state) => state.quiz)
     const [question, setQuestion] = React.useState('')
     const [imageUri, setImageUri] = React.useState('')
     const [timeAnswer, setTimeAnswer] = React.useState(10)
@@ -85,36 +86,43 @@ const MultipleChoice = () => {
         } else {
             setIsLoading(true)
 
-            //Upload Image for Question
-            let imageUrl = ''
-            if (imageUri != '') {
-                const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
-                await reference.putFile(imageUri)
-                //Get url of image was upload on Firebase
-                imageUrl = await reference.getDownloadURL()
-            }
-
-            // Upload Image for Answer
-            var newArrAnswer = []
-            for (let item of arrAnswer) {
-                if (item.img !== '') {
-                    const reference = storage().ref(item.img.slice(item.img.lastIndexOf("/") + 1, item.img.length));
-                    await reference.putFile(item.img)
-
+            // Upload Image and get UrlImage for Question
+            try {
+                var imageUrl = ''
+                if (imageUri != '') {
+                    const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
+                    await reference.putFile(imageUri)
                     //Get url of image was upload on Firebase
-                    await reference.getDownloadURL().then((imgUrl) => {
-                        newArrAnswer.push({
-                            ...item,
-                            img: imgUrl
-                        })
-                    })
-                } else {
-                    newArrAnswer.push(item)
+                    imageUrl = await reference.getDownloadURL()
                 }
-            }
 
-            //if route.params?.question !== undefine then just update questionList else add new question*/ }    
+            } catch (error) { }
+
+            // Upload Image and get UrlImage for Answer
+            try {
+                var newArrAnswer = []
+                for (let item of arrAnswer) {
+                    if (item.img !== '') {
+                        const reference = storage().ref(item.img.slice(item.img.lastIndexOf("/") + 1, item.img.length));
+                        await reference.putFile(item.img)
+
+                        //Get url of image was upload on Firebase
+                        await reference.getDownloadURL().then((imgUrl) => {
+                            newArrAnswer.push({
+                                ...item,
+                                img: imgUrl
+                            })
+                        })
+                    } else {
+                        newArrAnswer.push(item)
+                    }
+                }
+            } catch (error) { }
+
+
+            //if route.params?.question !== undefine then just update questionList else add new question    
             if (route.params?.question !== undefined) {
+
                 // update question
                 let newQuestionList = [...newQuiz.questionList]
                 newQuestionList[route.params.indexQuestion] = {
@@ -126,8 +134,14 @@ const MultipleChoice = () => {
                 }
                 dispatch(updateQuestionList(newQuestionList))
                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                navigation.navigate(screenName.ManageQuestion)
+                if (route.params?.fromScreen == "EditQuiz") {
+                    navigation.navigate(screenName.ListQuestion)
+                } else {
+                    navigation.navigate(screenName.ManageQuestion)
+                }
+
             } else {
+
                 //Add new Question
                 dispatch(addNewQuestion({
                     questionType: "MultipleChoice",
@@ -135,11 +149,15 @@ const MultipleChoice = () => {
                     time: timeAnswer,
                     backgroundImage: imageUrl,
                     answerList: newArrAnswer,
-                    tempId: newQuiz.questionList.length
+                    id: newQuiz.questionList.length
                 }))
                 ToastAndroid.show('Add success', ToastAndroid.SHORT)
                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                navigation.navigate(screenName.ManageQuestion)
+                if (route.params?.fromScreen == "EditQuiz") {
+                    navigation.navigate(screenName.ListQuestion)
+                } else {
+                    navigation.navigate(screenName.ManageQuestion)
+                }
             }
 
             // Reset
@@ -206,16 +224,13 @@ const MultipleChoice = () => {
                                                 onPress={() => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 
-                                                    // let newArrOptionAnswer = [...arrOptionAnswer]
-                                                    // newArrOptionAnswer.splice(index, 1)
+                                                    let newArrAnswer = [...arrAnswer]
+                                                    newArrAnswer.splice(index, 1)
+                                                    setArrAnswer(newArrAnswer)
 
-                                                    // let newArrAnswer = [...arrAnswer]
-                                                    // newArrAnswer.splice(index, 1)
-
-                                                    // setArrAnswer(newArrAnswer)
-                                                    // setArrOptionAnswer(newArrAnswer)
-
-
+                                                    let newArrOptionAnswer = [...arrOptionAnswer]
+                                                    newArrOptionAnswer.splice(index, 1)
+                                                    setArrOptionAnswer(newArrOptionAnswer)
                                                 }}
                                             />
                                             {/* Add image for answer */}

@@ -4,13 +4,14 @@ import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
 import { BASE_URL } from '../../common/shareVarible'
-import { img } from '../../assets/index'
-import FormInput from '../../components/FormInput'
-import FormButton from '../../components/FormButton'
-import Icon from "react-native-vector-icons/FontAwesome"
-import Icon1 from "react-native-vector-icons/Octicons"
 import { useDispatch } from 'react-redux'
 import { addNewQuiz } from '../../redux/Slice/newQuizSlice'
+import storage from '@react-native-firebase/storage'
+import FormInput from '../../components/FormInput'
+import FormButton from '../../components/FormButton'
+import ChooseImgBTN from '../../components/ChooseImgBTN'
+import Icon from "react-native-vector-icons/FontAwesome"
+import Icon1 from "react-native-vector-icons/Octicons"
 
 const maxChooseCategory = 3
 
@@ -21,6 +22,7 @@ const CreateQuiz = () => {
 
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
+  const [imageUri, setImageUri] = React.useState('')
   const [categories, setCategories] = React.useState([])
   const [chooseCategory, setChooseCategory] = React.useState([])
   const [display, setDisplay] = React.useState(true)
@@ -65,7 +67,7 @@ const CreateQuiz = () => {
     }
   }
 
-  const handleContinue = () => {
+  const handleContinue = async () => {
     if (title == "") {
       ToastAndroid.show("Empty Title", ToastAndroid.SHORT)
     }
@@ -74,17 +76,29 @@ const CreateQuiz = () => {
     } else if (chooseCategory.length == 0) {
       ToastAndroid.show("Please choose Category", ToastAndroid.SHORT)
     } else {
+
+      // Upload Image and get UrlImage for Quiz
+      try {
+        var imageUrl = ''
+        if (imageUri != '') {
+          const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
+          await reference.putFile(imageUri)
+          //Get url of image was upload on Firebase
+          imageUrl = await reference.getDownloadURL()
+        }
+      } catch (error) { }
+
       dispatch(addNewQuiz({
         name: title,
         description: description,
-        backgroundImage: "",
+        backgroundImage: imageUrl,
         isPublic: display,
         categories: chooseCategory,
         questionList: [{
           questionType: "MultipleChoice",
           question: "Toi la ai trong em ??",
           time: 10,
-          backgroundImage: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb",
+          backgroundImage: "",
           answerList: [
             {
               answer: "Toi",
@@ -107,13 +121,13 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
-          tempId: 0
+          tempAnswerId: "answer0"
         },
         {
           questionType: "CheckBox",
           question: "B ??",
           time: 10,
-          backgroundImage: "",
+          backgroundImage: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb",
           answerList: [
             {
               answer: "",
@@ -136,7 +150,7 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
-          tempId: 1
+          tempAnswerId: "answer1"
         }]
       }))
       navigation.navigate(screenName.ManageQuestion)
@@ -171,6 +185,9 @@ const CreateQuiz = () => {
             value={description}
             showCharCount={true}
           />
+
+          {/* Image upload */}
+          <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
 
           <Text style={styles.txt}>Display</Text>
           <View>

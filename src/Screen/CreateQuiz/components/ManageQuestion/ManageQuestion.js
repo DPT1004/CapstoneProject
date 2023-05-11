@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, Text, StyleSheet, StatusBar, ToastAndroid, ActivityIndicator } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, ToastAndroid } from 'react-native'
 import { COLORS } from '../../../../common/theme'
+import { img } from '../../../../assets/index'
 import { BASE_URL } from '../../../../common/shareVarible'
 import { useSelector } from 'react-redux'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
@@ -10,6 +11,9 @@ import { screenName } from '../../../../navigator/screens-name'
 import FormButton from '../../../../components/FormButton'
 import BottomSheetAddQuestion from './components/BottomSheetAddQuestion'
 import DraggleListQuestion from './components/DraggleListQuestion'
+import Lottie from "lottie-react-native"
+import Icon from "react-native-vector-icons/Ionicons"
+import SearchBar from '../../../../components/SearchBar/SearchBar'
 
 const ManageQuestion = () => {
 
@@ -60,7 +64,12 @@ const ManageQuestion = () => {
         <GestureHandlerRootView style={{ flex: 1 }}>
             {
                 isLoading ?
-                    <ActivityIndicator size={40} style={{ flex: 1 }} color={COLORS.primary} />
+                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.white }}>
+                        <Lottie
+                            source={img.loadingPrimary}
+                            autoPlay
+                            style={{ flex: 1 }} />
+                    </View>
                     :
                     <BottomSheetModalProvider>
                         <View style={styles.container}>
@@ -68,16 +77,34 @@ const ManageQuestion = () => {
                             <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
 
                             <View style={styles.topBar}>
-                                <Text style={styles.title}>MANAGE QUESTION</Text>
-                                {/* Save Quiz */}
-                                <FormButton
-                                    labelText="Save"
-                                    isPrimary={true}
-                                    style={{ paddingHorizontal: 20 }}
-                                    handleOnPress={() => {
-                                        Post_CreateQuiz()
-                                    }}
-                                />
+                                <View style={styles.viewTopInTopBar}>
+                                    <Text style={styles.title}>MANAGE QUESTION</Text>
+                                    {/* Save Quiz */}
+                                    <FormButton
+                                        labelText="Save"
+                                        isPrimary={true}
+                                        style={{ paddingHorizontal: 40, paddingRight: 10 }}
+                                        children={
+                                            <View style={styles.viewIcon}>
+                                                <Icon
+                                                    name={"md-cloud-upload-sharp"}
+                                                    size={25}
+                                                    color={COLORS.white}
+                                                />
+                                            </View>
+                                        }
+                                        handleOnPress={() => {
+                                            // if (newQuiz.questionList.length < 3) {
+                                            //     ToastAndroid.show("You need to add at least 3 question", ToastAndroid.SHORT)
+                                            // } else {
+                                            //     Post_CreateQuiz()
+                                            // }
+                                            Post_CreateQuiz()
+                                        }}
+                                    />
+                                </View>
+                                {/*Search*/}
+                                <SearchBar />
                             </View>
                             {/* Questions list */}
                             <DraggleListQuestion bottomSheetModalRef={bottomSheetModalRef} />
@@ -88,7 +115,7 @@ const ManageQuestion = () => {
 
                     </BottomSheetModalProvider>
             }
-        </GestureHandlerRootView>
+        </GestureHandlerRootView >
     );
 };
 
@@ -98,20 +125,31 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.background
     },
     topBar: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
         backgroundColor: COLORS.white,
-        height: 60,
         borderBottomWidth: 1,
         borderColor: COLORS.gray,
         paddingHorizontal: 20,
+        paddingBottom: 10
+    },
+    viewTopInTopBar: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 10
     },
     title: {
         color: COLORS.black,
         fontSize: 20,
         fontWeight: "400"
-    }
+    },
+    viewIcon: {
+        position: 'absolute',
+        top: 0,
+        left: 5,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 })
 
-export default React.memo(ManageQuestion);
+export default ManageQuestion

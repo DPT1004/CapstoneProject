@@ -1,84 +1,108 @@
 import React from 'react'
 import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import FormButton from '../../components/FormButton';
-import {
-    BottomSheetModal,
-    BottomSheetModalProvider,
-} from '@gorhom/bottom-sheet';
-import ImagePicker from 'react-native-image-crop-picker';
-import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { LoginButton, AccessToken, Profile, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk-next'
 import { COLORS } from '../../common/theme'
 
-const Test = ({
-    handleChooseImg = null,
-    imageUri = ""
-}) => {
+const Test = () => {
 
-    // ref
-    const bottomSheetModalRef = React.useRef(null);
+    const [userInfo, setUserInfo] = React.useState({ name: "" })
 
-    const snapPoints = React.useMemo(() => ["25%", "50%", "90%"], []);
-
-    const selectImage = async () => {
-        await ImagePicker.openPicker({
-            cropping: false
-        }).then(image => {
-            handleChooseImg(image.path)
-        });
+    logoutWithFacebook = () => {
+        LoginManager.logOut();
+        setUserInfo({})
     };
 
+    getInfoFromToken = token => {
+        const PROFILE_REQUEST_PARAMS = {
+            fields: {
+                string: 'id,name,first_name,last_name',
+            },
+        };
+        const profileRequest = new GraphRequest(
+            '/me',
+            { token, parameters: PROFILE_REQUEST_PARAMS },
+            (error, user) => {
+                if (error) {
+                    console.log('login info has error: ' + error);
+                } else {
+                    setUserInfo(user)
+                    console.log('result:', user);
+                }
+            },
+        );
+        new GraphRequestManager().addRequest(profileRequest).start();
+    };
+
+    loginWithFacebook = () => {
+        // Attempt a login using the Facebook login dialog asking for default permissions.
+        LoginManager.logInWithPermissions(['public_profile']).then(
+            login => {
+                if (login.isCancelled) {
+                    console.log('Login cancelled');
+                } else {
+                    AccessToken.getCurrentAccessToken().then(data => {
+                        const accessToken = data.accessToken.toString();
+                        console.log(accessToken)
+                    });
+                }
+            },
+            error => {
+                console.log('Login fail with error: ' + error);
+            },
+        );
+    }
+
+    const isLogin = userInfo.name !== "" ? true : false
+    const buttonText = isLogin ? 'Logout With Facebook' : 'Login From Facebook'
+    const onPressButton = isLogin
+        ? logoutWithFacebook()
+        : loginWithFacebook()
+
     return (
-        <GestureHandlerRootView style={{ flex: 1 }}>
-            <BottomSheetModalProvider>
-                <View style={styles.container}>
-                    {/* Image upload */}
-                    {imageUri == '' ? (
-                        <TouchableOpacity
-                            style={styles.btnChooseIMG}
-                            onPress={() => bottomSheetModalRef.current?.present()}>
-                            <Text style={styles.txtChooseIMG}>
-                                + choose image
-                            </Text>
-                        </TouchableOpacity>
-                    ) : (
-                        <TouchableOpacity
-                            onPress={() => bottomSheetModalRef.current?.present()}>
-                            <Image
-                                source={{ uri: imageUri }}
-                                resizeMode={'cover'}
-                                style={styles.img}
-                            />
-                        </TouchableOpacity>
-                    )}
-                    <BottomSheetModal
-                        ref={bottomSheetModalRef}
-                        index={1}
-                        snapPoints={snapPoints}
-                    >
-                        <View style={styles.contentContainer}>
-                            <FormButton
-                                labelText="Take Photo"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => selectImage()}
-                            />
-                            <FormButton
-                                labelText="Choose From Library"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => selectImage()}
-                            />
-                            <FormButton
-                                labelText="Cancel"
-                                isPrimary={true}
-                                style={{ marginBottom: 20 }}
-                                handleOnPress={() => bottomSheetModalRef.current?.close()}
-                            />
-                        </View>
-                    </BottomSheetModal>
-                </View>
-            </BottomSheetModalProvider>
-        </GestureHandlerRootView>
+        <View style={styles.container}>
+            {/* login facebook */}
+            <LoginButton
+                onLoginFinished={
+                    (error, result) => {
+                        if (error) {
+                            console.log("login has error: " + result.error);
+                        } else if (result.isCancelled) {
+                            console.log("login is cancelled.");
+                            setUserInfo(null)
+                        } else {
+                            AccessToken.getCurrentAccessToken().then(
+                                (data) => {
+                                    console.log(data.accessToken.toString())
+                                }
+                            )
+                        }
+                        const currentProfile = Profile.getCurrentProfile().then(
+                            function (currentProfile) {
+                                if (currentProfile) {
+                                    console.log(currentProfile);
+                                }
+                            }
+                        );
+                    }
+                }
+                onLogoutFinished={() => console.log("logout.")} />
+            {/* <TouchableOpacity
+                onPress={onPressButton}
+                style={{
+                    backgroundColor: 'blue',
+                    padding: 16,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                }}>
+                <Text style={{ fontSize: 16, marginVertical: 16, color: "white" }}>{buttonText}</Text>
+            </TouchableOpacity>
+            {userInfo.name && (
+                <Text style={{ fontSize: 16, marginVertical: 16, color: "white" }}>
+                    Logged in As {userInfo.name}
+                </Text>
+            )} */}
+        </View>
     );
 };
 

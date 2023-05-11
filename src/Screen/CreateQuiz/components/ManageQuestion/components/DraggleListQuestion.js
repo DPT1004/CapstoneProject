@@ -25,7 +25,10 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
             <OpacityDecorator>
-                <View style={styles.rowItem}>
+                <TouchableOpacity
+                    style={styles.rowItem}
+                    onLongPress={drag}
+                    disabled={isActive}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
                         <TouchableOpacity
@@ -115,7 +118,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         <View style={styles.containerAnswerChoice}>
                             {
                                 item.answerList.map((item, index) => (
-                                    <View key={index} style={styles.viewItemAnswerChoice}>
+                                    <View key={item.id} style={styles.viewItemAnswerChoice}>
                                         {
                                             item.isCorrect ?
                                                 <Icon
@@ -147,7 +150,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </View>
 
                     </View>
-                </View>
+                </TouchableOpacity>
             </OpacityDecorator >
         );
     }
@@ -158,28 +161,28 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
             showsVerticalScrollIndicator={false}
             data={newQuiz.questionList}
             onDragEnd={({ data }) => dispatch(updateQuestionList(data))}
-            keyExtractor={(item) => item.tempId}
+            keyExtractor={(item) => item.tempAnswerId}
             renderItem={renderItem}
-            ListFooterComponent={() => (
-                <View style={styles.containerFooter}>
+            ListHeaderComponent={() => (
+                <View style={styles.containerHeader}>
                     <FormButton
-                        labelText="New Question"
+                        labelText="Cancel"
                         isPrimary={false}
                         style={{
                             paddingHorizontal: 20,
                             marginRight: 20
                         }}
-                        handleOnPress={() => bottomSheetModalRef.current?.present()}
-                    />
-                    <FormButton
-                        labelText="Cancel"
-                        isPrimary={false}
-                        style={{
-                            paddingHorizontal: 20
-                        }}
                         handleOnPress={() => {
                             navigation.navigate(screenName.ManageQuiz);
                         }}
+                    />
+                    <FormButton
+                        labelText="New Question"
+                        isPrimary={false}
+                        style={{
+                            paddingHorizontal: 20,
+                        }}
+                        handleOnPress={() => bottomSheetModalRef.current?.present()}
                     />
                 </View>
             )}
@@ -214,12 +217,12 @@ const styles = StyleSheet.create({
         width: sizeViewItemAnswerChoice,
         height: sizeViewItemAnswerChoice * 2 / 3
     },
-    containerFooter: {
+    containerHeader: {
         flexDirection: "row",
         backgroundColor: COLORS.white,
         alignItems: "center",
         justifyContent: "center",
-        marginBottom: 25,
+        marginVertical: 20,
         padding: 20,
         alignSelf: "center",
         borderRadius: 10
@@ -252,9 +255,10 @@ const styles = StyleSheet.create({
     },
     txt: {
         color: COLORS.black,
-        fontSize: 18
+        fontSize: 16,
+        flex: 1
     }
 
 })
 
-export default React.memo(DraggleListQuestion);
+export default DraggleListQuestion

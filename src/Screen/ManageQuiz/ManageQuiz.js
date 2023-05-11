@@ -1,30 +1,41 @@
 import React from 'react'
-import { View, Text, StyleSheet, StatusBar, FlatList, ToastAndroid, RefreshControl, TouchableOpacity } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, FlatList, ToastAndroid, RefreshControl, ActivityIndicator } from 'react-native'
 import { COLORS } from '../../common/theme'
 import { BASE_URL } from '../../common/shareVarible'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { useSelector } from 'react-redux'
-import ItemQuiz from './components/ItemQuiz'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import Icon from 'react-native-vector-icons/Octicons'
 import FormButton from '../../components/FormButton'
+import ItemQuiz from './components/ItemQuiz'
 
 const ManageQuiz = () => {
 
     const navigation = useNavigation()
     const user = useSelector((state) => state.user)
 
-    const [allQuizzes, setAllQuizzes] = React.useState([]);
-    const [refreshing, setRefreshing] = React.useState(false);
+    const [page, setPage] = React.useState(1)
+    const [totalPage, setTotalPage] = React.useState(2)
+    const [allQuizzes, setAllQuizzes] = React.useState([])
+    const [refreshing, setRefreshing] = React.useState(false)
+    const [isLoading, setIsLoading] = React.useState(false)
 
-    const handleSetRefreshing = (status) => {
-        setRefreshing(status)
+    const handleRefreshing = () => {
+        setPage(1)
+        getUserQuizzesForRefresing()
+    }
+
+    const handleLoadMore = () => {
+        if (page + 1 <= totalPage) {
+            setPage(prev => prev + 1)
+        }
     }
 
     const getUserQuizzes = async () => {
-        setRefreshing(true)
-        var url = BASE_URL + "/quiz/creator/" + user.userId
+        setIsLoading(true)
+        var url = BASE_URL + "/quiz/creator/" + user.userId + "?page=" + page
         try {
             await fetch(url, {
                 method: "GET",
@@ -38,9 +49,41 @@ const ManageQuiz = () => {
                         if (response.status == 200) {
                             Promise.resolve(response.json())
                                 .then((data) => {
-                                    setAllQuizzes(data)
+                                    setTotalPage(data.numberOfPages)
+                                    setAllQuizzes(allQuizzes.concat(data.data))
                                 })
+                        }
+                    } else {
+                        Promise.resolve(response.json())
+                            .then((data) => {
+                                ToastAndroid.show(data.message, ToastAndroid.SHORT)
+                            })
+                    }
+                }).finally(() => setIsLoading(false))
+        } catch (error) {
+            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+        }
+    }
 
+    const getUserQuizzesForRefresing = async () => {
+        setRefreshing(true)
+        var url = BASE_URL + "/quiz/creator/" + user.userId + "?page=1"
+        try {
+            await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Authorization": "Bearer " + user.token,
+                    "Content-Type": "application/json",
+                }
+            })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.status == 200) {
+                            Promise.resolve(response.json())
+                                .then((data) => {
+                                    setTotalPage(data.numberOfPages)
+                                    setAllQuizzes(data.data)
+                                })
                         }
                     } else {
                         Promise.resolve(response.json())
@@ -56,10 +99,19 @@ const ManageQuiz = () => {
     }
 
     React.useEffect(() => {
+        if (user.token !== "" && page !== 1) {
+            setIsLoading(true)
+            setTimeout(() => getUserQuizzes(), 3000)
+        }
+    }, [user, page])
+
+
+    React.useEffect(() => {
         if (user.token !== "") {
-            getUserQuizzes()
+            getUserQuizzesForRefresing()
         }
     }, [user])
+
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -71,9 +123,21 @@ const ManageQuiz = () => {
                         <FormButton
                             labelText="Create quiz"
                             isPrimary={true}
-                            style={{ paddingHorizontal: 20 }}
+                            children={
+                                <View style={styles.viewIcon}>
+                                    <Icon
+                                        name={"plus-circle"}
+                                        size={18}
+                                        color={COLORS.white}
+                                    />
+                                </View>
+                            }
+                            style={{ paddingLeft: 35, paddingRight: 20, borderRadius: 20 }}
                             handleOnPress={() => {
-                                navigation.navigate(screenName.CreateQuiz)
+                                navigation.navigate(screenName.CreateQuiz, {
+                                    onRefreshing: () => handleRefreshing(),
+                                    name: "hi"
+                                })
                             }}
                         />
                     </View>
@@ -83,22 +147,38 @@ const ManageQuiz = () => {
                         refreshControl={
                             <RefreshControl
                                 refreshing={refreshing}
-                                onRefresh={() => getUserQuizzes()}
+                                onRefresh={handleRefreshing}
                                 progressBackgroundColor={COLORS.white}
                                 colors={[COLORS.primary]} />
                         }
                         showsVerticalScrollIndicator={false}
                         style={{
                             backgroundColor: COLORS.background,
-                            paddingVertical: 20,
-                            paddingHorizontal: 10
+                            paddingTop: 30,
+                            paddingHorizontal: 10,
                         }}
                         renderItem={({ item, index }) => (
                             <ItemQuiz
                                 item={item}
-                                index={index}
-                                setRefreshing={(status) => handleSetRefreshing(status)} />
+                                onRefreshing={handleRefreshing}
+                            />
                         )}
+                        onEndReached={handleLoadMore}
+                        onEndReachedThreshold={0}
+                        ListFooterComponent={
+
+                            isLoading ?
+                                <View style={{ height: 60, width: "100%", alignItems: "center", justifyContent: "center", marginBottom: 120 }}>
+                                    <ActivityIndicator size={40} color={COLORS.primary} />
+                                </View>
+                                :
+                                page == totalPage ?
+                                    <View style={{ height: 30, width: "100%", alignItems: "center", justifyContent: "center", marginBottom: 120 }}>
+                                        <Text style={{ fontSize: 16, color: COLORS.black, fontWeight: "bold" }}>LOAD ENOUGH DATA</Text>
+                                    </View>
+                                    :
+                                    <></>
+                        }
                     />
                 </View>
             </BottomSheetModalProvider>
@@ -110,6 +190,14 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.background
+    },
+    viewIcon: {
+        position: 'absolute',
+        top: 0,
+        left: 8,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     topBar: {
         flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image, Button } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { timeWaitToNextQuestion } from '../../../common/shareVarible'
 import Icon from "react-native-vector-icons/FontAwesome"
