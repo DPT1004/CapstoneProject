@@ -7,21 +7,26 @@ import { store } from '../redux/store'
 import { Provider } from 'react-redux'
 import { screenName } from './screens-name'
 import { COLORS } from '../common/theme'
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import socketServcies from '../until/socketServices'
 import CustomTabBTN from '../components/CustomTabBTN'
 import SignIn from '../Screen/SignIn/SignIn'
 import SignUp from '../Screen/SignUp/SignUp'
 import Home from '../Screen/Home/Home'
+import WaitingRoom from '../Screen/Game/WaitingRoom/WaitingRoom'
 import ManageQuiz from '../Screen/ManageQuiz/ManageQuiz'
 import ManageQuestion from '../Screen/CreateQuiz/components/ManageQuestion/ManageQuestion'
 import ListQuestion from '../Screen/EditQuiz/components/ListQuestion/ListQuestion'
 import CreateQuiz from "../Screen/CreateQuiz/CreateQuiz"
 import EditQuiz from '../Screen/EditQuiz/EditQuiz'
-import PlayQuiz from '../Screen/PlayQuiz/PlayQuiz'
+import PlayQuiz from '../Screen/Game/PlayQuiz/PlayQuiz'
 import MultipleChoice from '../Screen/Question/MultipleChoice/MultipleChoice'
 import CheckBox from '../Screen/Question/CheckBox/CheckBox'
 import AnswerMultiChoice from '../Screen/Answer/AnswerMultiChoice/AnswerMultiChoice'
 import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
-import Test from '../Screen/Test/Test'
+import Test1 from '../Screen/Test/Test1'
+
 
 
 const arrTab = [
@@ -35,6 +40,7 @@ function BottomTab() {
   return (
     <Tab.Navigator
       screenOptions={{
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -52,7 +58,10 @@ function BottomTab() {
       {
         arrTab.map((item, index) => {
           return (
-            <Tab.Screen key={index} name={item.screen} component={item.component}
+            <Tab.Screen
+              key={index}
+              name={item.screen}
+              component={item.component}
               options={{
                 tabBarButton: (props) => <CustomTabBTN {...props} tabItem={item} />
               }} />
@@ -73,11 +82,12 @@ const MainStack = () => {
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen name={screenName.Test} component={Test} /> */}
+      {/* <Stack.Screen name={screenName.Test} component={Test1} /> */}
       <Stack.Screen name={screenName.SignIn} component={SignIn} />
       <Stack.Screen name={screenName.SignUp} component={SignUp} />
       <Stack.Screen name={screenName.BottomTab} component={BottomTab} />
       <Stack.Screen name={screenName.PlayQuiz} component={PlayQuiz} />
+      <Stack.Screen name={screenName.WaitingRoom} component={WaitingRoom} />
       <Stack.Screen name={screenName.CreateQuiz} component={CreateQuiz} />
       <Stack.Screen name={screenName.EditQuiz} component={EditQuiz} />
       <Stack.Screen name={screenName.ListQuestion} component={ListQuestion} />
@@ -105,10 +115,19 @@ const MainNavigator = () => {
     return () => backHandler.remove();
   }, [])
 
+  // Initial socket connect with server
+  React.useEffect(() => {
+    socketServcies.initializeSocket()
+  }, [])
+
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <MainStack />
+        <GestureHandlerRootView style={{ flex: 1 }}>
+          <BottomSheetModalProvider>
+            <MainStack />
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
       </NavigationContainer>
     </Provider>
   )

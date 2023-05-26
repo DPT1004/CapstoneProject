@@ -50,7 +50,7 @@ const SearchBar = ({ more, style }) => {
     }
 
     const handleSearch = () => {
-        if (txtSearch == "" && categories.length == 0) {
+        if (txtSearch == "" && chooseCategory.length == 0) {
             ToastAndroid.show("Type something or choose category to search", ToastAndroid.SHORT)
         } else {
             setIsLoading(true)
@@ -228,7 +228,7 @@ const SearchBar = ({ more, style }) => {
                 }}>
                 <View style={styles.containerModal}>
                     <View style={styles.childModal}>
-                        <View style={{ height: 40, width: "100%", backgroundColor: COLORS.white, borderBottomWidth: 2, borderColor: COLORS.gray }}>
+                        <View style={{ height: 40, width: "100%", backgroundColor: COLORS.white, elevation: 4 }}>
                             {/*Button go back to Quiz List Flatlist just show when modal is viewing Question list */}
                             {
                                 questionList.length !== 0 ?

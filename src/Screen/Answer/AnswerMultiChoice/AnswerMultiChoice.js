@@ -2,20 +2,24 @@ import React from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
-import { moreCorrect, moreIncorrect, nextQuestion } from '../../../redux/Slice/userCompetitiveSlice'
-import { timeWaitToNextQuestion } from '../../../common/shareVarible'
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import TopBar from '../../PlayQuiz/components/TopBar'
-import CustomViewScore from '../../PlayQuiz/components/CustomViewScore'
+import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
+import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
+import TopBar from '../../Game/PlayQuiz/components/TopBar'
+import CustomViewScore from '../../Game/PlayQuiz/components/CustomViewScore'
+import socketServcies from '../../../until/socketServices'
+import Icon from "react-native-vector-icons/FontAwesome"
 
 const AnswerMultiChoice = ({ question }) => {
 
     const dispatch = useDispatch()
     const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
-    const [userAnswer, setUserAnswer] = React.useState(null)
-    const [time, setTime] = React.useState(question.time)
+    const game = useSelector((state) => state.game)
+    const user = useSelector((state) => state.user)
     const score = React.useRef()
+    const [userAnswer, setUserAnswer] = React.useState([])
+    const [time, setTime] = React.useState(question.time)
     const [showViewScore, setShowViewScore] = React.useState(false)
+
     const [sizeContainerOption, setSizeContainerOption] = React.useState({
         width: 0,
         height: 0
@@ -23,30 +27,49 @@ const AnswerMultiChoice = ({ question }) => {
 
 
     const isCorrectAnswer = () => {
-        if (userAnswer == null || userAnswer.isCorrect == false) {
+        if (userAnswer.length == 0 || userAnswer[0].isCorrect == false) {
             return false
         }
         return true
     }
 
     const handleAfterDone = () => {
+
         setShowViewScore(true)
-        const timeout = setTimeout(() => {
-            setUserAnswer(null)
-            setShowViewScore(false)
+        if (isCorrectAnswer()) {
+            dispatch(moreCorrect(score.current))
+        } else {
+            dispatch(moreIncorrect())
+        }
+
+        setTimeout(() => {
+            dispatch(showLeaderBoard(true))
+
+            var userId = user.userId
+            var pin = game.pin
+            var scoreRecieve = isCorrectAnswer() ? score.current : 0
+            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion })
+
             dispatch(nextQuestion())
-            if (isCorrectAnswer()) {
-                dispatch(moreCorrect(score.current))
-            } else {
-                dispatch(moreIncorrect())
-            }
-            setUserAnswer(null)
-            clearTimeout(timeout)
-        }, timeWaitToNextQuestion)
+        }, timeWaitToPreviewAndLeaderBoard)
+
+    }
+
+    const handleComplete = () => {
+        setUserAnswer([{
+            isCorrect: false
+        }])
+        handleAfterDone()
+    }
+
+    const handleUpdate = (currentTime) => {
+        var timeUserResponed = time - currentTime
+        var takenScore = 1 - (timeUserResponed / time) / 2
+        score.current = Number(takenScore).toFixed(3) * 1000
     }
 
     const getOptionBgColor = (option, indexOption) => {
-        if (userAnswer !== null) {
+        if (userAnswer.length !== 0) {
             if (option.isCorrect) {
                 return COLORS.success
             } else {
@@ -67,11 +90,11 @@ const AnswerMultiChoice = ({ question }) => {
         }
     }
 
-    // React.useEffect(() => {
-    //     if (userAnswer !== null && userAnswer !== { isCorrect: false }) {
-    //         handleAfterDone()
-    //     }
-    // }, [userAnswer])
+    React.useEffect(() => {
+        if (userAnswer.length !== 0 && userAnswer !== { isCorrect: false }) {
+            handleAfterDone()
+        }
+    }, [userAnswer])
 
     const renderOption = () => {
         if (question.answerList.some(answer => answer.img !== "")) {
@@ -89,16 +112,14 @@ const AnswerMultiChoice = ({ question }) => {
                             <TouchableOpacity
                                 key={indexOption}
                                 activeOpacity={0.8}
-                                disabled={userAnswer !== null ? true : false}
+                                disabled={userAnswer.length !== 0 ? true : false}
                                 style={[styles.btnOptionImage, {
                                     backgroundColor: getOptionBgColor(option, indexOption),
-                                    borderWidth: option == userAnswer ? 3 : 0,
-                                    borderColor: COLORS.black,
                                     width: (sizeContainerOption.width - 16) / 2,
                                     height: (sizeContainerOption.height - 16) / 2,
                                 }]}
                                 onPress={() => {
-                                    setUserAnswer(option)
+                                    setUserAnswer([option])
                                 }}>
                                 {
                                     option.img !== "" ?
@@ -109,6 +130,17 @@ const AnswerMultiChoice = ({ question }) => {
                                         />
                                         :
                                         <Text style={styles.txtOption}>{option.answer}</Text>
+                                }
+                                {
+                                    userAnswer.includes(option) ?
+                                        <View style={styles.iconChoose}>
+                                            <Icon
+                                                name={"check-circle-o"}
+                                                size={20}
+                                                color={COLORS.white} />
+                                        </View>
+                                        :
+                                        <></>
                                 }
                             </TouchableOpacity>
                         ))
@@ -123,17 +155,25 @@ const AnswerMultiChoice = ({ question }) => {
                             <TouchableOpacity
                                 key={indexOption}
                                 activeOpacity={0.8}
-                                disabled={userAnswer !== null ? true : false}
+                                disabled={userAnswer.length !== 0 ? true : false}
                                 style={[styles.btnOptionOnlyText, {
                                     backgroundColor: getOptionBgColor(option, indexOption),
-                                    borderWidth: option == userAnswer ? 3 : 0,
-                                    borderColor: COLORS.black
                                 }]}
                                 onPress={() => {
-                                    setUserAnswer(option)
+                                    setUserAnswer([option])
                                 }}>
-
                                 <Text style={styles.txtOption}>{option.answer}</Text>
+                                {
+                                    userAnswer.includes(option) ?
+                                        <View style={styles.iconChoose}>
+                                            <Icon
+                                                name={"check-circle-o"}
+                                                size={20}
+                                                color={COLORS.white} />
+                                        </View>
+                                        :
+                                        <></>
+                                }
                             </TouchableOpacity>
                         ))
                     }
@@ -142,45 +182,25 @@ const AnswerMultiChoice = ({ question }) => {
         }
     }
 
-
     return (
         <>
             <View style={styles.container}>
-                <TopBar children={
-                    <CountdownCircleTimer
-                        isPlaying={userAnswer !== null ? false : true}
-                        duration={time}
-                        trailColor={COLORS.gray}
-                        size={40}
-                        strokeWidth={5}
-                        colors={[COLORS.success, COLORS.answerC, COLORS.error]}
-                        colorsTime={[time, time / 3, 0]}
-                        onUpdate={(currentTime) => {
-                            var timeUserResponed = time - currentTime
-                            var takenScore = 1 - (timeUserResponed / time) / 2
-                            score.current = Number(takenScore).toFixed(3) * 1000
-                        }}
-                        onComplete={() => {
-                            // setUserAnswer({
-                            //     isCorrect: false
-                            // })
-                            // handleAfterDone()
-
-                        }}>
-                        {({ remainingTime, color }) => <Text style={{ fontSize: 20, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
-                    </CountdownCircleTimer>
-                } />
+                <TopBar
+                    userAnswer={userAnswer}
+                    time={time}
+                    handleComplete={handleComplete}
+                    handleUpdate={(currentTime) => handleUpdate(currentTime)}
+                />
                 {/* Container Question */}
                 <View style={styles.containerQuestion}>
-                    <Text style={styles.txtQuestion}> {currentIndexQuestion + 1}. {question.question} </Text>
+                    <Text style={styles.txtQuestion}>{currentIndexQuestion + 1 + "." + question.question}</Text>
                     {
-                        question.backgroundImage != '' ? (
+                        question.backgroundImage != '' ?
                             <Image
                                 source={{ uri: question.backgroundImage }}
                                 resizeMode={"stretch"}
                                 style={styles.imgQuestion}
                             />
-                        )
                             :
                             <></>
                     }
@@ -201,7 +221,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 10,
-        paddingBottom: 60,
         backgroundColor: COLORS.white
     },
     containerQuestion: {
@@ -215,12 +234,18 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         alignContent: "space-around",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+    },
+    iconChoose: {
+        position: "absolute",
+        bottom: 3,
+        right: 3
     },
     imgQuestion: {
-        width: 250,
-        height: 180,
-        marginTop: 15,
+        flex: 1,
+        height: "100%",
+        width: "75%",
+        marginTop: 5,
         alignSelf: "center",
         borderRadius: 5,
     },
@@ -233,7 +258,7 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         marginBottom: 5,
         borderColor: COLORS.border,
         flexDirection: 'row',
@@ -242,7 +267,7 @@ const styles = StyleSheet.create({
     },
     btnOptionImage: {
         padding: 15,
-        borderRadius: 10,
+        borderRadius: 5,
         borderColor: COLORS.border,
         flexDirection: 'row',
         alignItems: 'center',
@@ -255,9 +280,9 @@ const styles = StyleSheet.create({
     },
     txtOption: {
         fontWeight: "bold",
-        fontSize: 18,
+        fontSize: 16,
         color: COLORS.white,
     }
 })
 
-export default React.memo(AnswerMultiChoice)
+export default AnswerMultiChoice

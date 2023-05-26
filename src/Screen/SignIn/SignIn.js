@@ -93,7 +93,6 @@ const SignIn = () => {
                     />
                     <FormInput
                         labelText="Email"
-                        multiline={false}
                         maxLength={40}
                         onChangeText={txt => setEmail(txt)}
                         value={email}
@@ -101,7 +100,6 @@ const SignIn = () => {
                     />
                     <FormInput
                         labelText="Password"
-                        multiline={false}
                         children={
                             <TouchableOpacity
                                 onPress={() => setIsSecure(!isSecure)}

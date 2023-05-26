@@ -11,7 +11,6 @@ import { screenName } from '../../../../../navigator/screens-name'
 import FormButton from '../../../../../components/FormButton'
 import Icon from 'react-native-vector-icons/Octicons'
 
-
 const paddingHorizonContainerDraggle = 20
 const paddingHorizonViewBottom = 10
 const sizeViewItemAnswerChoice = 0.5 * (SIZES.windowWidth - paddingHorizonContainerDraggle * 2 - paddingHorizonViewBottom * 2)
@@ -25,10 +24,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
             <OpacityDecorator>
-                <TouchableOpacity
-                    style={styles.rowItem}
-                    onLongPress={drag}
-                    disabled={isActive}>
+                <View key={getIndex()} style={styles.rowItem}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
                         <TouchableOpacity
@@ -118,7 +114,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         <View style={styles.containerAnswerChoice}>
                             {
                                 item.answerList.map((item, index) => (
-                                    <View key={item.id} style={styles.viewItemAnswerChoice}>
+                                    <View key={index} style={styles.viewItemAnswerChoice}>
                                         {
                                             item.isCorrect ?
                                                 <Icon
@@ -150,7 +146,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </View>
 
                     </View>
-                </TouchableOpacity>
+                </View>
             </OpacityDecorator >
         );
     }
@@ -161,7 +157,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
             showsVerticalScrollIndicator={false}
             data={newQuiz.questionList}
             onDragEnd={({ data }) => dispatch(updateQuestionList(data))}
-            keyExtractor={(item) => item.tempAnswerId}
+            keyExtractor={(item) => item.tempQuestionId}
             renderItem={renderItem}
             ListHeaderComponent={() => (
                 <View style={styles.containerHeader}>
@@ -193,7 +189,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
 const styles = StyleSheet.create({
     rowItem: {
         borderRadius: 10,
-        marginVertical: 20,
+        marginBottom: 20,
         backgroundColor: COLORS.white,
         elevation: 4,
     },

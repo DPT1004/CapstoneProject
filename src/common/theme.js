@@ -5,6 +5,7 @@ const windowHeight = Dimensions.get('window').height
 export const COLORS = {
   primary: '#4630EB',
   secondary: '#000020',
+  bgrForPrimary: "#E1E2FF",
 
   success: '#00C851',
   error: '#ff4444',

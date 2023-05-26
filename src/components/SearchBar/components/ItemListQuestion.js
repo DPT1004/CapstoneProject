@@ -1,9 +1,9 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid, LayoutAnimation } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { SIZES } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
-import newQuizSlice, { addNewQuestion } from '../../../redux/Slice/newQuizSlice'
+import { addNewQuestion } from '../../../redux/Slice/newQuizSlice'
 import Icon from 'react-native-vector-icons/Octicons'
 
 const paddingHorizonContainerFlatlist = 10
@@ -23,12 +23,12 @@ const ItemListQuestion = ({ itemQuestion }) => {
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={() => {
-                        if (quiz.questionList.some(item => item._id == itemQuestion._id)) {
+                        if (quiz.questionList.some(item => item._id == itemQuestion._id || item.tempQuestionId == itemQuestion._id)) {
                             ToastAndroid.show("This question have existed in your quiz", ToastAndroid.SHORT)
                         } else {
                             dispatch(addNewQuestion({
                                 ...itemQuestion,
-                                tempAnswerId: "answer" + quiz.questionList.length
+                                tempQuestionId: itemQuestion._id
                             }))
                             ToastAndroid.show("Add question success", ToastAndroid.SHORT)
                         }

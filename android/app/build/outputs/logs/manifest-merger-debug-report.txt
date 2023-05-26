@@ -311,7 +311,7 @@ ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\An
 	android:launchMode
 		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:21:9-40
 	android:windowSoftInputMode
-		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-51
+		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-48
 	android:exported
 		ADDED from I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:23:9-32
 	android:configChanges

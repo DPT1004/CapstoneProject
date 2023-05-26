@@ -24,7 +24,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
             <OpacityDecorator>
-                <View style={styles.rowItem}>
+                <View key={item._id} style={styles.rowItem}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
                         <TouchableOpacity
@@ -76,13 +76,15 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                     case "MultipleChoice":
                                         navigation.navigate(screenName.MultipleChoice, {
                                             question: item,
-                                            indexQuestion: getIndex()
+                                            indexQuestion: getIndex(),
+                                            fromScreen: "EditQuiz"
                                         })
                                         break
                                     case "CheckBox":
                                         navigation.navigate(screenName.CheckBox, {
                                             question: item,
-                                            indexQuestion: getIndex()
+                                            indexQuestion: getIndex(),
+                                            fromScreen: "EditQuiz"
                                         })
                                         break
                                 }
@@ -189,7 +191,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
 const styles = StyleSheet.create({
     rowItem: {
         borderRadius: 10,
-        marginVertical: 20,
+        marginBottom: 20,
         backgroundColor: COLORS.white,
         elevation: 4,
     },

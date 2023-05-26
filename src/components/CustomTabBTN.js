@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, TouchableOpacity, StyleSheet } from 'react-native'
+import { Animated, TouchableOpacity, StyleSheet, LayoutAnimation } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const CustomTabBTN = (props) => {
@@ -29,17 +29,18 @@ const CustomTabBTN = (props) => {
                 {
                     scale: selectedAnim
                 },
-                {
-                    translateY: selectedAnim.interpolate({
-                        inputRange: [1, 1.25, 1.5],
-                        outputRange: [0, -10, -14]
-                    })
-                }
+                // {
+                //     translateY: selectedAnim.interpolate({
+                //         inputRange: [1, 1.25, 1.5],
+                //         outputRange: [0, -10, -14]
+                //     })
+                // }
             ]
         }]}>
             <TouchableOpacity
                 style={[styles.touch, { backgroundColor: focused ? props.tabItem.activeColorBG : props.tabItem.inActiveColorBG }]}
-                onPress={props.onPress}>
+                onPress={() => props.onPress()
+                }>
                 <Icon name={props.tabItem.icon} size={22} color={focused ? props.tabItem.activeColorIcon : props.tabItem.inActiveColorIcon} />
             </TouchableOpacity>
         </Animated.View>

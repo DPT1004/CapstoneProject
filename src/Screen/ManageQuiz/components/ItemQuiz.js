@@ -5,6 +5,7 @@ import { BASE_URL, uriImgQuiz } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { updateQuiz } from '../../../redux/Slice/newQuizSlice'
+import { POST_createGame, updateGame } from '../../../redux/Slice/gameSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     BottomSheetModal,
@@ -12,12 +13,14 @@ import {
 import FormButton from '../../../components/FormButton'
 import Icon from 'react-native-vector-icons/Feather'
 import Icon1 from 'react-native-vector-icons/Octicons'
+import socketServcies, { socketId } from '../../../until/socketServices'
 
 const ItemQuiz = ({ item, onRefreshing }) => {
 
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
+    const game = useSelector((state) => state.game)
     const imgQuiz = item.backgroundImage !== "" ? item.backgroundImage : uriImgQuiz
 
     const bottomSheetModalRef = React.useRef(null)
@@ -60,10 +63,11 @@ const ItemQuiz = ({ item, onRefreshing }) => {
             <View style={styles.container}>
                 <Image
                     style={styles.quizBGR}
+                    resizeMode="stretch"
                     source={{ uri: imgQuiz }}
                 />
-                <View style={{ alignItems: "center", flex: 1 }}>
-                    <Text style={[styles.txt, { fontSize: 20 }]}>{item.name}</Text>
+                <View style={styles.containerQuizNameAndDesc}>
+                    <Text numberOfLines={3} style={[styles.txt, { fontSize: 18 }]}>{item.name}</Text>
                     {item.description != '' ? (
                         <Text style={{ opacity: 0.5 }}>{item.description}</Text>
                     ) : null}
@@ -76,7 +80,7 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                     onPress={() => bottomSheetModalRef.current?.present()}
                 />
                 <View style={styles.viewNumQuestion}>
-                    <Text style={styles.txt}>{item.numberOfQuestions + " Qs"}</Text>
+                    <Text style={[styles.txt, { fontWeight: "bold" }]}>{item.numberOfQuestions + " Qs"}</Text>
                 </View>
             </View>
             <BottomSheetModal
@@ -99,12 +103,25 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                             </View>
                         }
                         handleOnPress={() => {
-                            navigation.navigate(screenName.PlayQuiz, {
-                                questionList: item.questionList
+                            const newGame = {
+                                hostId: user.userId,
+                                quizId: item._id,
+                                pin: Math.floor(100000 + Math.random() * 900000),
+                                isLive: false,
+                                playerList: [{
+                                    userId: user.userId,
+                                    userName: user.email,
+                                    socketId: socketId,
+                                }]
+                            }
+
+                            dispatch(POST_createGame(newGame)).then(() => {
+                                socketServcies.emit("init-game", game)
+                                navigation.navigate(screenName.WaitingRoom)
+                                bottomSheetModalRef.current?.close()
                             })
-                            bottomSheetModalRef.current?.close()
-                        }
-                        }
+
+                        }}
                     />
                     <FormButton
                         labelText="Edit Quiz"
@@ -169,25 +186,30 @@ const ItemQuiz = ({ item, onRefreshing }) => {
 
 const styles = StyleSheet.create({
     container: {
-        padding: 20,
-        borderRadius: 5,
+        borderRadius: 15,
         marginBottom: 35,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor: COLORS.white,
         elevation: 4,
     },
+    containerQuizNameAndDesc: {
+        alignItems: "center",
+        flex: 1,
+        paddingHorizontal: 10
+    },
     quizBGR: {
-        height: 90,
-        width: 90,
+        height: 150,
+        width: 150,
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         alignSelf: "center",
-        borderRadius: 5
     },
     viewNumQuestion: {
         backgroundColor: COLORS.gray,
         paddingVertical: 2,
-        paddingHorizontal: 10,
-        borderRadius: 5,
+        paddingHorizontal: 12,
+        borderRadius: 15,
         position: "absolute",
         bottom: 5,
         right: 5

@@ -14,7 +14,7 @@ import { addNewQuestion, updateQuestionList } from '../../../redux/Slice/newQuiz
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { COLORS } from '../../../common/theme'
 import { img } from '../../../assets/index'
-import { arrTime } from '../../../common/shareVarible'
+import { arrTime, firebaseHeaderUrl } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
 import ChooseImgBTN from '../../../components/ChooseImgBTN'
 import FormInput from '../../../components/FormInput'
@@ -27,6 +27,7 @@ const CheckBox = () => {
 
     const route = useRoute()
     const dispatch = useDispatch()
+
     const navigation = useNavigation()
     const newQuiz = useSelector((state) => state.newQuiz)
     const [question, setQuestion] = React.useState('')
@@ -68,6 +69,15 @@ const CheckBox = () => {
         }
     }, [])
 
+    const handleNavigation = () => {
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+        if (route.params?.fromScreen == "EditQuiz") {
+            navigation.navigate(screenName.ListQuestion)
+        } else {
+            navigation.navigate(screenName.ManageQuestion)
+        }
+    }
+
     const handleContinue = async () => {
 
         //Check empty
@@ -88,11 +98,13 @@ const CheckBox = () => {
             // Upload Image and get UrlImage for Question
             try {
                 var imageUrl = ''
-                if (imageUri != '') {
+                if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
                     const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
                     await reference.putFile(imageUri)
                     //Get url of image was upload on Firebase
                     imageUrl = await reference.getDownloadURL()
+                } else {
+                    imageUrl = imageUri
                 }
             } catch (error) { }
 
@@ -100,7 +112,7 @@ const CheckBox = () => {
             try {
                 var newArrAnswer = []
                 for (let item of arrAnswer) {
-                    if (item.img !== '') {
+                    if (item.img !== '' && item.img.includes(firebaseHeaderUrl) == false) {
                         const reference = storage().ref(item.img.slice(item.img.lastIndexOf("/") + 1, item.img.length));
                         await reference.putFile(item.img)
 
@@ -130,12 +142,7 @@ const CheckBox = () => {
                     answerList: newArrAnswer,
                 }
                 dispatch(updateQuestionList(newQuestionList))
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                if (route.params?.fromScreen == "EditQuiz") {
-                    navigation.navigate(screenName.ListQuestion)
-                } else {
-                    navigation.navigate(screenName.ManageQuestion)
-                }
+                handleNavigation()
             } else {
                 //Add new Question
                 dispatch(addNewQuestion({
@@ -144,15 +151,10 @@ const CheckBox = () => {
                     time: timeAnswer,
                     backgroundImage: imageUrl,
                     answerList: newArrAnswer,
-                    id: newQuiz.questionList.length
+                    tempQuestionId: "answer" + newQuiz.questionList.length
                 }))
                 ToastAndroid.show('Add success', ToastAndroid.SHORT)
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                if (route.params?.fromScreen == "EditQuiz") {
-                    navigation.navigate(screenName.ListQuestion)
-                } else {
-                    navigation.navigate(screenName.ManageQuestion)
-                }
+                handleNavigation()
             }
 
             // Reset
@@ -396,9 +398,7 @@ const CheckBox = () => {
                         <FormButton
                             labelText="Cancel"
                             isPrimary={false}
-                            handleOnPress={() => {
-                                navigation.navigate(screenName.ManageQuestion);
-                            }}
+                            handleOnPress={() => handleNavigation()}
                             style={{
                                 marginVertical: 20,
                             }}

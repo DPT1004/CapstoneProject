@@ -4,6 +4,7 @@ export const screenName = {
     Home: "Home",
     BottomTab: "BottomTab",
     Test: "Test",
+    WaitingRoom: "WaitingRoom",
     ManageQuiz: "ManageQuiz",
     CreateQuiz: "CreateQuiz",
     EditQuiz: "EditQuiz",

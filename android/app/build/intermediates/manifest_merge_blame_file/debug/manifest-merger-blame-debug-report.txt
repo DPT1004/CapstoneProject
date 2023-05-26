@@ -112,8 +112,8 @@
 61-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:19:9-41
 62            android:launchMode="singleTask"
 62-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:21:9-40
-63            android:windowSoftInputMode="adjustResize" >
-63-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-51
+63            android:windowSoftInputMode="adjustPan" >
+63-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-48
 64            <intent-filter>
 64-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:24:9-27:25
 65                <action android:name="android.intent.action.MAIN" />

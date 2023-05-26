@@ -1,6 +1,7 @@
-import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { COLORS } from '../common/theme';
+import React from 'react'
+import { View, Text, TextInput, StyleSheet } from 'react-native'
+import { COLORS } from '../common/theme'
+import { onlyOneSpaceBetweenString } from '../common/shareVarible'
 
 const FormInput = ({
   labelText = '',
@@ -9,7 +10,6 @@ const FormInput = ({
   value = "",
   maxLength = 65,
   showCharCount = false,
-  multiline = true,
   children,
   ...more
 }) => {
@@ -31,9 +31,8 @@ const FormInput = ({
           selectionColor={COLORS.primary}
           placeholder={placeholderText}
           onChangeText={onChangeText}
-          value={value.replace(/\s/g, '')}
+          value={onlyOneSpaceBetweenString(value)}
           maxLength={maxLength}
-          multiline={multiline}
           {...more}
         />
         {children}

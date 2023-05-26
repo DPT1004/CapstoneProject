@@ -1,53 +1,88 @@
 import React from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { COLORS } from '../../../common/theme'
-import { timeWaitToNextQuestion } from '../../../common/shareVarible'
+import { useDispatch, useSelector } from 'react-redux'
+import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
+import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
+import TopBar from '../../Game/PlayQuiz/components/TopBar'
+import CustomViewScore from '../../Game/PlayQuiz/components/CustomViewScore'
+import socketServcies from '../../../until/socketServices'
 import Icon from "react-native-vector-icons/FontAwesome"
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import CustomViewScore from '../../PlayQuiz/components/CustomViewScore'
-import TopBar from '../../PlayQuiz/components/TopBar'
-import { useDispatch } from 'react-redux'
-import { moreCorrect, moreIncorrect } from '../../../redux/Slice/userCompetitiveSlice'
 
-const AnswerCheckBox = ({ quest, indexQuestion, handleNextQuestion }) => {
+const AnswerMultiChoice = ({ question }) => {
 
-    question = {
-        ...quest,
-        arrOption: [...quest.incorrect_answers, ...quest.correct_answer]
-    }
-    const [userAnswer, setUserAnswer] = React.useState([])
-    const [activeSubmit, setActiveSubmit] = React.useState(false)
-    const [rerender, setReRender] = React.useState(0)
-    const score = React.useRef()
     const dispatch = useDispatch()
+    const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
+    const game = useSelector((state) => state.game)
+    const user = useSelector((state) => state.user)
+    const score = React.useRef()
+    const [userAnswer, setUserAnswer] = React.useState([])
+    const arrCorrectAnswer = React.useMemo(() => {
+        var arrCorrect = []
+        question.answerList.forEach(answer => {
+            if (answer.isCorrect) {
+                arrCorrect.push(answer)
+            }
+        })
+        return arrCorrect
+    }, [question])
+    const [activeSubmit, setActiveSubmit] = React.useState(false)
+    const [time, setTime] = React.useState(question.time)
+    const [sizeContainerOption, setSizeContainerOption] = React.useState({
+        width: 0,
+        height: 0
+    })
 
-    function isUserAnswerCorrect(array1, array2) {
+    const isUserAnswerCorrect = (array1, array2) => {
         if (array1.length === array2.length) {
-            return array1.every((element, index) => {
-                if (element === array2[index]) {
+            return array1.every(element => {
+                if (array2.includes(element)) {
                     return true;
                 }
+
                 return false;
             });
         }
+
         return false;
     }
 
     const handleAfterDone = () => {
+
+        if (isUserAnswerCorrect(userAnswer, arrCorrectAnswer)) {
+            dispatch(moreCorrect(score.current))
+        } else {
+            dispatch(moreIncorrect())
+        }
+
         setTimeout(() => {
-            handleNextQuestion(indexQuestion + 1)
-            setUserAnswer([])
-            if (isUserAnswerCorrect(userAnswer, question.correct_answer)) {
-                dispatch(moreCorrect(score.current))
-            } else {
-                dispatch(moreIncorrect())
-            }
-        }, timeWaitToNextQuestion)
+            dispatch(showLeaderBoard(true))
+
+            var userId = user.userId
+            var pin = game.pin
+            var scoreRecieve = isUserAnswerCorrect(userAnswer, arrCorrectAnswer) ? score.current : 0
+            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion })
+
+            dispatch(nextQuestion())
+        }, timeWaitToPreviewAndLeaderBoard)
+
+    }
+
+    const handleComplete = () => {
+        setActiveSubmit(true)
+        setUserAnswer([])
+        handleAfterDone()
+    }
+
+    const handleUpdate = (currentTime) => {
+        var timeUserResponed = time - currentTime
+        var takenScore = 1 - (timeUserResponed / time) / 2
+        score.current = Number(takenScore).toFixed(3) * 1000
     }
 
     const getOptionBgColor = (option, indexOption) => {
         if (activeSubmit) {
-            if (question.correct_answer.includes(option)) {
+            if (option.isCorrect) {
                 return COLORS.success
             } else {
                 return COLORS.error
@@ -65,19 +100,6 @@ const AnswerCheckBox = ({ quest, indexQuestion, handleNextQuestion }) => {
                     return COLORS.answerD
             }
         }
-    };
-
-    const getOptionIcon = (indexOption) => {
-        switch (indexOption) {
-            case 0:
-                return "hand-grab-o"
-            case 1:
-                return "hand-pointer-o"
-            case 2:
-                return "hand-peace-o"
-            case 3:
-                return "hand-spock-o"
-        }
     }
 
     React.useEffect(() => {
@@ -86,94 +108,144 @@ const AnswerCheckBox = ({ quest, indexQuestion, handleNextQuestion }) => {
         }
     }, [activeSubmit])
 
-    return (
-        <View style={styles.viewFlex1}>
-            <View style={styles.container}>
-                <TopBar children={
-                    <CountdownCircleTimer
-                        isPlaying={activeSubmit ? false : true}
-                        duration={question.time}
-                        size={40}
-                        strokeWidth={5}
-                        colors={[COLORS.success, COLORS.answerC, COLORS.error]}
-                        colorsTime={[question.time, question.time / 3, 0]}
-                        onUpdate={(currentTime) => {
-                            var timeUserResponed = question.time - currentTime
-                            var takenScore = 1 - (timeUserResponed / question.time) / 2
-                            score.current = Number(takenScore).toFixed(3) * 1000
-                        }}
-                        onComplete={() => {
-                            handleAfterDone()
-                            setActiveSubmit(true)
-                        }}
-                    >
-                        {({ remainingTime, color }) => <Text style={{ fontSize: 20, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
-                    </CountdownCircleTimer>
-                } />
-                <View style={styles.containerQuestion}>
-                    <Text style={styles.txtQuestion}> {indexQuestion + 1}. {question.question} </Text>
-                    {question.imageUrl != '' ? (
-                        <Image
-                            source={{
-                                uri: question.imageUrl,
-                            }}
-                            resizeMode={'contain'}
-                            style={styles.img}
-                        />
-                    ) : <></>}
-                </View>
-                <View style={styles.containerOption}>
-                    {question.arrOption.map((option, indexOption) => {
-                        return (
+    const renderOption = () => {
+        if (question.answerList.some(answer => answer.img !== "")) {
+            return (
+                <View style={styles.containerOptionImage}
+                    onLayout={(event) => {
+                        var { x, y, width, height } = event.nativeEvent.layout
+                        setSizeContainerOption({
+                            width: width,
+                            height: height
+                        })
+                    }}>
+                    {
+                        question.answerList.map((option, indexOption) => (
                             <TouchableOpacity
                                 key={indexOption}
+                                activeOpacity={0.8}
                                 disabled={activeSubmit}
-                                style={[styles.btnOption, { backgroundColor: getOptionBgColor(option, indexOption) }]}
+                                style={[styles.btnOptionImage, {
+                                    backgroundColor: getOptionBgColor(option, indexOption),
+                                    width: (sizeContainerOption.width - 16) / 2,
+                                    height: (sizeContainerOption.height - 16) / 2,
+                                }]}
                                 onPress={() => {
-                                    var newUserAnswer = userAnswer
+                                    var newUserAnswer = [...userAnswer]
                                     if (!newUserAnswer.includes(option)) {
                                         newUserAnswer.push(option);
                                     } else {
                                         newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
                                     }
-                                    setReRender(Math.random())
                                     setUserAnswer(newUserAnswer)
                                 }}>
-                                <Icon
-                                    name={getOptionIcon(indexOption)}
-                                    size={25}
-                                    color={COLORS.white}
-                                />
-                                <Text style={styles.txtOption}>{option}</Text>
+                                {
+                                    option.img !== "" ?
+                                        <Image
+                                            style={styles.imgAnswer}
+                                            resizeMode="stretch"
+                                            source={{ uri: option.img }}
+                                        />
+                                        :
+                                        <Text style={styles.txtOption}>{option.answer}</Text>
+                                }
                                 {
                                     userAnswer.includes(option) ?
                                         <View style={styles.iconChoose}>
                                             <Icon
-                                                name={"check-circle"}
+                                                name={"check-square"}
+                                                size={14}
+                                                color={COLORS.white} />
+                                        </View>
+                                        :
+                                        <></>
+                                }
+                            </TouchableOpacity>
+                        ))
+                    }
+                </View>
+            )
+        } else {
+            return (
+                < View style={styles.containerOptionOnlyText}>
+                    {
+                        question.answerList.map((option, indexOption) => (
+                            <TouchableOpacity
+                                key={indexOption}
+                                activeOpacity={0.8}
+                                disabled={activeSubmit}
+                                style={[styles.btnOptionOnlyText, {
+                                    backgroundColor: getOptionBgColor(option, indexOption),
+                                }]}
+                                onPress={() => {
+                                    var newUserAnswer = [...userAnswer]
+                                    if (!newUserAnswer.includes(option)) {
+                                        newUserAnswer.push(option);
+                                    } else {
+                                        newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
+                                    }
+                                    setUserAnswer(newUserAnswer)
+                                }}>
+                                <Text style={styles.txtOption}>{option.answer}</Text>
+                                {
+                                    userAnswer.includes(option) ?
+                                        <View style={styles.iconChoose}>
+                                            <Icon
+                                                name={"check-square"}
                                                 size={20}
                                                 color={COLORS.white} />
                                         </View>
                                         :
-                                        <View style={styles.circleUnchoose} />
+                                        <></>
                                 }
                             </TouchableOpacity>
-                        );
-                    })}
-                    <TouchableOpacity style={styles.btnSubmit}
-                        disabled={activeSubmit}
-                        onPress={() => setActiveSubmit(true)}>
-                        <Icon
-                            name="arrow-right"
-                            color={COLORS.white}
-                            size={20}
-                        />
-                    </TouchableOpacity>
+                        ))
+                    }
                 </View>
+            )
+        }
+    }
+
+    return (
+        <>
+            <View style={styles.container}>
+                <TopBar
+                    activeSubmit={activeSubmit}
+                    time={time}
+                    handleComplete={handleComplete}
+                    handleUpdate={(currentTime) => handleUpdate(currentTime)}
+                />
+                {/* Container Question */}
+                <View style={styles.containerQuestion}>
+                    <Text style={styles.txtQuestion}>{currentIndexQuestion + 1 + "." + question.question}</Text>
+                    {
+                        question.backgroundImage != '' ?
+                            <Image
+                                source={{ uri: question.backgroundImage }}
+                                resizeMode={"stretch"}
+                                style={styles.imgQuestion}
+                            />
+                            :
+                            <></>
+                    }
+                </View>
+                {/* Render answer/option */}
+                {
+                    renderOption()
+                }
+                <TouchableOpacity
+                    disabled={activeSubmit}
+                    onPress={() => {
+                        setActiveSubmit(true)
+                    }}
+                    style={{ alignSelf: "flex-end", paddingHorizontal: 15, paddingVertical: 10, backgroundColor: COLORS.primary, marginBottom: 5, borderRadius: 10 }} >
+                    <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: "bold" }}>Submit</Text>
+                </TouchableOpacity>
             </View>
             {
-                activeSubmit ? <CustomViewScore score={score.current} isCorrect={isUserAnswerCorrect(userAnswer, question.correct_answer)} /> : <></>
+                activeSubmit ? <CustomViewScore score={score.current} isCorrect={isUserAnswerCorrect(userAnswer, arrCorrectAnswer)} /> : <></>
             }
-        </View>
+        </>
     );
 };
 
@@ -184,58 +256,54 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white
     },
     containerQuestion: {
-        flex: 0.45
-    },
-    containerOption: {
-        flex: 0.55,
-    },
-    viewFlex1: {
         flex: 1
     },
-    circleUnchoose: {
-        height: 15,
-        width: 15,
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: 10,
-        backgroundColor: COLORS.white,
-        position: "absolute",
-        bottom: 5,
-        right: 5
+    containerOptionOnlyText: {
+        flex: 1.5,
+    },
+    containerOptionImage: {
+        flex: 1.5,
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignContent: "space-around",
+        justifyContent: "space-between",
     },
     iconChoose: {
         position: "absolute",
-        bottom: 5,
-        right: 5
+        bottom: 3,
+        right: 3
     },
-    img: {
-        width: '80%',
-        height: 150,
-        marginTop: 20,
-        marginLeft: '10%',
+    imgQuestion: {
+        flex: 1,
+        height: "100%",
+        width: "75%",
+        marginTop: 5,
+        alignSelf: "center",
         borderRadius: 5,
     },
-    btnSubmit: {
-        borderRadius: 10,
-        marginVertical: 10,
-        backgroundColor: COLORS.primary,
-        alignSelf: "flex-end",
-        padding: 10,
-        paddingHorizontal: 30,
-        justifyContent: "center",
-        alignItems: "center"
+    imgAnswer: {
+        height: "100%",
+        width: "100%",
+        borderRadius: 5
     },
-    btnOption: {
+    btnOptionOnlyText: {
         flex: 1,
         paddingVertical: 10,
         paddingHorizontal: 15,
-        borderTopWidth: 1,
-        borderRadius: 10,
+        borderRadius: 5,
         marginBottom: 5,
         borderColor: COLORS.border,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'flex-start',
+        justifyContent: 'center',
+    },
+    btnOptionImage: {
+        padding: 15,
+        borderRadius: 5,
+        borderColor: COLORS.border,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     txtQuestion: {
         fontWeight: "bold",
@@ -244,12 +312,9 @@ const styles = StyleSheet.create({
     },
     txtOption: {
         fontWeight: "bold",
-        fontSize: 18,
+        fontSize: 16,
         color: COLORS.white,
-        marginLeft: 10
     }
-
-
 })
 
-export default AnswerCheckBox
+export default AnswerMultiChoice

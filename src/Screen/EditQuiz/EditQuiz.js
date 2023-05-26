@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, ScrollView, Tou
 import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
-import { BASE_URL } from '../../common/shareVarible'
+import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBackgroundImage } from '../../redux/Slice/newQuizSlice'
 import storage from '@react-native-firebase/storage'
@@ -81,11 +81,13 @@ const EditQuiz = () => {
             // Upload Image and get UrlImage for Quiz
             try {
                 var imageUrl = ''
-                if (imageUri != '') {
+                if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
                     const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
                     await reference.putFile(imageUri)
                     //Get url of image was upload on Firebase
                     imageUrl = await reference.getDownloadURL()
+                } else {
+                    imageUrl = imageUri
                 }
             } catch (error) { }
 

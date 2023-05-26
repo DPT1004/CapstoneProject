@@ -3,7 +3,8 @@ import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, ScrollView, Tou
 import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
-import { BASE_URL } from '../../common/shareVarible'
+import { img } from '../../assets/index'
+import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
 import { useDispatch } from 'react-redux'
 import { addNewQuiz } from '../../redux/Slice/newQuizSlice'
 import storage from '@react-native-firebase/storage'
@@ -12,6 +13,7 @@ import FormButton from '../../components/FormButton'
 import ChooseImgBTN from '../../components/ChooseImgBTN'
 import Icon from "react-native-vector-icons/FontAwesome"
 import Icon1 from "react-native-vector-icons/Octicons"
+import Lottie from "lottie-react-native"
 
 const maxChooseCategory = 3
 
@@ -26,11 +28,11 @@ const CreateQuiz = () => {
   const [categories, setCategories] = React.useState([])
   const [chooseCategory, setChooseCategory] = React.useState([])
   const [display, setDisplay] = React.useState(true)
+  const [isLoadingCateogries, setIsLoadingCateogries] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
 
-
   const GET_AllCategory = async () => {
-    setIsLoading(true)
+    setIsLoadingCateogries(true)
     var url = BASE_URL + "/category"
     try {
       await fetch(url, {
@@ -45,7 +47,7 @@ const CreateQuiz = () => {
                 })
             }
           }
-        }).finally(() => setIsLoading(false))
+        }).finally(() => setIsLoadingCateogries(false))
     } catch (error) {
       ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
     }
@@ -80,7 +82,8 @@ const CreateQuiz = () => {
       // Upload Image and get UrlImage for Quiz
       try {
         var imageUrl = ''
-        if (imageUri != '') {
+        if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
+          setIsLoading(true)
           const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
           await reference.putFile(imageUri)
           //Get url of image was upload on Firebase
@@ -121,7 +124,7 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
-          tempAnswerId: "answer0"
+          tempQuestionId: "answer0"
         },
         {
           questionType: "CheckBox",
@@ -150,9 +153,11 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
-          tempAnswerId: "answer1"
+          tempQuestionId: "answer1"
         }]
       }))
+
+      setIsLoading(false)
       navigation.navigate(screenName.ManageQuestion)
     }
   }
@@ -165,124 +170,135 @@ const CreateQuiz = () => {
     <TouchableWithoutFeedback
       onPress={() => { Keyboard.dismiss() }}
       accessible={false}>
-      <ScrollView
-        style={styles.scrollView}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.container}>
-
-          <Text style={styles.title}>Create Quiz</Text>
-          <FormInput
-            labelText="Title"
-            placeholderText='Type at least 3 char'
-            onChangeText={val => setTitle(val)}
-            value={title}
-            showCharCount={true}
-          />
-          <FormInput
-            labelText="Description"
-            onChangeText={val => setDescription(val)}
-            value={description}
-            showCharCount={true}
-          />
-
-          {/* Image upload */}
-          <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
-
-          <Text style={styles.txt}>Display</Text>
-          <View>
-            <View style={styles.viewCheckBox}>
-              <TouchableOpacity
-                style={[styles.checkBoxDisplay, { borderColor: display == false ? COLORS.success : COLORS.gray }]}
-                onPress={() => setDisplay(false)}
-              >
-                {
-                  display == false ?
-                    <Icon
-                      name={"check-circle"}
-                      size={15}
-                      color={COLORS.success}
-                    />
-                    :
-                    <></>
-                }
-              </TouchableOpacity>
-              <Text style={styles.txtCategory}>Private, only you can see it</Text>
-            </View>
-            <View style={styles.viewCheckBox}>
-              <TouchableOpacity
-                style={[styles.checkBoxDisplay, { borderColor: display == true ? COLORS.success : COLORS.gray }]}
-                onPress={() => setDisplay(true)}
-              >
-                {
-                  display == true ?
-                    <Icon
-                      name={"check-circle"}
-                      size={15}
-                      color={COLORS.success}
-                    />
-                    :
-                    <></>
-                }
-              </TouchableOpacity>
-              <Text style={styles.txtCategory}>Public, everyone can see it</Text>
-            </View>
+      {
+        isLoading ?
+          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.white }}>
+            <Lottie
+              source={img.loadingPrimary}
+              autoPlay
+              style={{ flex: 1 }} />
           </View>
+          :
+          <ScrollView
+            style={styles.scrollView}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.container}>
 
-          <Text style={styles.txt}>Choose category is relate</Text>
-          <View style={styles.containerCategory}>
+              <Text style={styles.title}>Create Quiz</Text>
+              <FormInput
+                labelText="Title"
+                placeholderText='Type at least 3 char'
+                onChangeText={val => setTitle(val)}
+                value={title}
+                showCharCount={true}
+              />
+              <FormInput
+                labelText="Description"
+                onChangeText={val => setDescription(val)}
+                value={description}
+                maxLength={30}
+                showCharCount={true}
+              />
 
-            <Text style={styles.txtAlert}>
-              <Icon1
-                name={"alert"}
-                size={18}
-                color={COLORS.error} /> Choose at least 1 category and max {maxChooseCategory} category
-            </Text>
-            {
-              isLoading ?
-                <ActivityIndicator size={20} color={COLORS.primary} />
-                :
-                categories.map((item, index) => (
+              {/* Image upload */}
+              <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
+
+              <Text style={styles.txt}>Display</Text>
+              <View>
+                <View style={styles.viewCheckBox}>
                   <TouchableOpacity
-                    key={item._id}
-                    style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item.name) }]}
-                    onPress={() => {
-                      var newChooseCategory = [...chooseCategory]
-                      if (chooseCategory.length < maxChooseCategory) {
-                        if (!newChooseCategory.includes(item.name)) {
-                          newChooseCategory.push(item.name);
-                        }
-                        else {
-                          newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
-                        }
-                      } else {
-                        newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
-                      }
-                      setChooseCategory(newChooseCategory)
-                    }}>
-                    <Text style={[styles.txtCategory, { color: getOptionTxtCategory(item.name) }]}>{item.name}</Text>
-                  </TouchableOpacity>))
-            }
-          </View>
-          <FormButton
-            labelText="Continue"
-            style={{
-              marginVertical: 20,
-            }}
-            handleOnPress={handleContinue}
-          />
-          <FormButton
-            labelText="Cancel"
-            isPrimary={false}
-            style={{
-              marginBottom: 20,
-            }}
-            handleOnPress={() => {
-              navigation.navigate(screenName.ManageQuiz);
-            }}
-          />
-        </View>
-      </ScrollView>
+                    style={[styles.checkBoxDisplay, { borderColor: display == false ? COLORS.success : COLORS.gray }]}
+                    onPress={() => setDisplay(false)}
+                  >
+                    {
+                      display == false ?
+                        <Icon
+                          name={"check-circle"}
+                          size={15}
+                          color={COLORS.success}
+                        />
+                        :
+                        <></>
+                    }
+                  </TouchableOpacity>
+                  <Text style={styles.txtCategory}>Private, only you can see it</Text>
+                </View>
+                <View style={styles.viewCheckBox}>
+                  <TouchableOpacity
+                    style={[styles.checkBoxDisplay, { borderColor: display == true ? COLORS.success : COLORS.gray }]}
+                    onPress={() => setDisplay(true)}
+                  >
+                    {
+                      display == true ?
+                        <Icon
+                          name={"check-circle"}
+                          size={15}
+                          color={COLORS.success}
+                        />
+                        :
+                        <></>
+                    }
+                  </TouchableOpacity>
+                  <Text style={styles.txtCategory}>Public, everyone can see it</Text>
+                </View>
+              </View>
+
+              <Text style={styles.txt}>Choose category is relate</Text>
+              <View style={styles.containerCategory}>
+
+                <Text style={styles.txtAlert}>
+                  <Icon1
+                    name={"alert"}
+                    size={18}
+                    color={COLORS.error} /> Choose at least 1 category and max {maxChooseCategory} category
+                </Text>
+                {
+                  isLoadingCateogries ?
+                    <ActivityIndicator size={20} color={COLORS.primary} />
+                    :
+                    categories.map((item, index) => (
+                      <TouchableOpacity
+                        key={item._id}
+                        style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item.name) }]}
+                        onPress={() => {
+                          var newChooseCategory = [...chooseCategory]
+                          if (chooseCategory.length < maxChooseCategory) {
+                            if (!newChooseCategory.includes(item.name)) {
+                              newChooseCategory.push(item.name);
+                            }
+                            else {
+                              newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
+                            }
+                          } else {
+                            newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
+                          }
+                          setChooseCategory(newChooseCategory)
+                        }}>
+                        <Text style={[styles.txtCategory, { color: getOptionTxtCategory(item.name) }]}>{item.name}</Text>
+                      </TouchableOpacity>))
+                }
+              </View>
+              <FormButton
+                labelText="Continue"
+                style={{
+                  marginVertical: 20,
+                }}
+                handleOnPress={handleContinue}
+              />
+              <FormButton
+                labelText="Cancel"
+                isPrimary={false}
+                style={{
+                  marginBottom: 20,
+                }}
+                handleOnPress={() => {
+                  navigation.navigate(screenName.ManageQuiz);
+                }}
+              />
+            </View>
+          </ScrollView>
+      }
     </TouchableWithoutFeedback >
   );
 };
