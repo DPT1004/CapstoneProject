@@ -6,11 +6,12 @@ const initialState = {
     description: "",
     backgroundImage: "",
     creatorId: "",
-    numberOfQuestions: "",
+    questionList: [],
+    numberOfQuestions: 0,
     isPublic: false,
     categories: [],
     dateCreated: "",
-    questionList: []
+    numberOfQuestionsOrigin: 0
 }
 
 export const newQuizSlice = createSlice({
@@ -22,8 +23,10 @@ export const newQuizSlice = createSlice({
             state.description = actions.payload.description
             state.backgroundImage = actions.payload.backgroundImage
             state.isPublic = actions.payload.isPublic
+            state.numberOfQuestions = actions.payload.numberOfQuestions
             state.categories = actions.payload.categories
             state.questionList = actions.payload.questionList
+            state.numberOfQuestionsOrigin = actions.payload.numberOfQuestions
         },
         updateQuiz: (state, actions) => {
             state.id = actions.payload._id
@@ -36,23 +39,48 @@ export const newQuizSlice = createSlice({
             state.categories = actions.payload.categories
             state.dateCreated = actions.payload.dateCreated
             state.questionList = actions.payload.questionList
+            state.numberOfQuestionsOrigin = actions.payload.numberOfQuestions
         },
         addNewQuestion: (state, actions) => {
             state.questionList.unshift(actions.payload)
+            state.numberOfQuestions += 1
+            state.numberOfQuestionsOrigin += 1
+        },
+        addManyNewQuestion: (state, actions) => {
+            state.questionList = [...actions.payload, ...state.questionList]
+            state.numberOfQuestions += actions.payload.length
+            state.numberOfQuestionsOrigin += actions.payload.length
         },
         updateQuestionList: (state, actions) => {
             state.questionList = actions.payload
         },
+        updateNumberOfQuestionsOrigin: (state, actions) => {
+            state.numberOfQuestionsOrigin += actions.payload
+        },
         deleteQuestionByIndex: (state, actions) => {
             state.questionList.splice(actions.payload, 1)
+            state.numberOfQuestions -= 1
+            state.numberOfQuestionsOrigin += 1
         },
         updateBackgroundImage: (state, actions) => {
             state.backgroundImage = actions.payload
         },
+        clearQuizInfo: (state) => {
+            state.id = ""
+            state.name = ""
+            state.description = ""
+            state.backgroundImage = ""
+            state.creatorId = ""
+            state.numberOfQuestions = 2
+            state.isPublic = false
+            state.categories = []
+            state.dateCreated = ""
+            state.questionList = []
+        }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addNewQuiz, updateQuiz, updateBackgroundImage, addNewQuestion, updateQuestionList, deleteQuestionByIndex } = newQuizSlice.actions
+export const { addNewQuiz, updateQuiz, updateBackgroundImage, addNewQuestion, addManyNewQuestion, updateQuestionList, deleteQuestionByIndex, clearQuizInfo, updateNumberOfQuestionsOrigin } = newQuizSlice.actions
 
 export default newQuizSlice.reducer

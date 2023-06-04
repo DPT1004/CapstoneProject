@@ -27,7 +27,7 @@ const CustomViewScore = ({ score, isCorrect }) => {
         if (isCorrect) {
             return (
                 <View style={styles.viewScore}>
-                    <Text style={[styles.txtScoreCorrect, { fontSize: 15 }]}>Điểm trả lời </Text>
+                    <Text style={[styles.txtScoreCorrect, { fontSize: 15 }]}>Score </Text>
                     <Text style={styles.txtScoreCorrect}>{"+" + score}</Text>
                     <View style={styles.icon}>
                         <Icon
@@ -42,7 +42,7 @@ const CustomViewScore = ({ score, isCorrect }) => {
         else {
             return (
                 <View style={styles.viewScore}>
-                    <Text style={styles.txtScoreIncorrect}>Câu trả lời sai</Text>
+                    <Text style={styles.txtScoreIncorrect}>Wrong Answer</Text>
                     <View style={styles.icon}>
                         <Icon
                             name="closecircle"

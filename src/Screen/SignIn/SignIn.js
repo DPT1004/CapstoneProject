@@ -2,22 +2,30 @@ import React from 'react'
 import { Text, ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
-import { LoginButton, AccessToken, Profile, GraphRequest, GraphRequestManager, LoginManager } from 'react-native-fbsdk-next'
 import { COLORS, SIZES } from '../../common/theme'
-import { BASE_URL, checkEmailIsInvalid } from '../../common/shareVarible'
+import { BASE_URL, webClientId, checkEmailIsInvalid } from '../../common/shareVarible'
 import { img } from '../../assets/index'
-import { useDispatch } from 'react-redux'
-import { handleUserLogin } from '../../redux/Slice/userSlice'
-import Icon from "react-native-vector-icons/Entypo"
+import { useDispatch, useSelector } from 'react-redux'
+import { handleUserLogin, setIsLoginBySocial } from '../../redux/Slice/userSlice'
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin'
+import AsyncStorage from "@react-native-async-storage/async-storage"
+import Icon from "react-native-vector-icons/AntDesign"
 import FormButton from '../../components/FormButton'
 import FormInput from '../../components/FormInput'
 
-const listIcon = ["facebook", "twitter", "google-"]
+
+const listIcon = ["facebook-square", "google", "twitter"]
+GoogleSignin.configure({
+    scopes: ['email'],
+    webClientId: webClientId,
+    offlineAccess: true
+})
 
 const SignIn = () => {
 
     const navigation = useNavigation()
     const dispatch = useDispatch()
+    const user = useSelector((state) => state.user)
 
     const [email, setEmail] = React.useState('teacher1@gmail.com');
     const [password, setPassword] = React.useState('12345678')
@@ -37,6 +45,7 @@ const SignIn = () => {
     }
 
     const handleDispatchAsync = async (data) => {
+        await AsyncStorage.setItem('@userInfo', JSON.stringify(data))
         dispatch(handleUserLogin(data))
     }
 
@@ -60,7 +69,10 @@ const SignIn = () => {
                         if (response.status == 200) {
                             Promise.resolve(response.json())
                                 .then((data) => {
-                                    handleDispatchAsync(data)
+                                    handleDispatchAsync({
+                                        ...data,
+                                        isLoginBySocial: false
+                                    })
                                 })
                             navigation.navigate(screenName.BottomTab)
                         }
@@ -76,6 +88,78 @@ const SignIn = () => {
             ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
         }
     }
+
+    const FaceBook_Login = async () => {
+        var userInfo = {}
+        var url = BASE_URL + "/user/loginWithSocial"
+
+        try {
+            await GoogleSignin.hasPlayServices()
+            userInfo = await GoogleSignin.signIn()
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+            } else {
+                // some other error happened
+            }
+        }
+
+        try {
+            setIsLoading(true)
+            await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: userInfo.user.email,
+                    photo: userInfo.user.photo,
+                    name: userInfo.user.name,
+                }),
+            })
+                .then(response => {
+                    if (response.ok) {
+                        if (response.status == 200) {
+                            Promise.resolve(response.json())
+                                .then((data) => {
+                                    handleDispatchAsync({
+                                        ...data,
+                                        isLoginBySocial: true
+                                    })
+                                }).then(() => navigation.navigate(screenName.BottomTab))
+
+                        }
+                    } else {
+                        Promise.resolve(response.json())
+                            .then((data) => {
+                                ToastAndroid.show(data.message, ToastAndroid.SHORT)
+                            })
+                    }
+
+                }).finally(() => setIsLoading(false))
+        } catch (error) {
+            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+        }
+    }
+
+    const getUserInfoFromLocalStore = async () => {
+        var userInfo = await AsyncStorage.getItem("@userInfo")
+        if (userInfo !== null) {
+            userInfo = JSON.parse(userInfo)
+            dispatch(handleUserLogin(userInfo))
+        }
+    }
+
+    React.useEffect(() => {
+        getUserInfoFromLocalStore()
+        if (user.token !== "") {
+            navigation.navigate(screenName.BottomTab)
+        }
+    }, [user])
 
     return (
         <TouchableWithoutFeedback
@@ -93,6 +177,7 @@ const SignIn = () => {
                     />
                     <FormInput
                         labelText="Email"
+                        editable={!isLoading}
                         maxLength={40}
                         onChangeText={txt => setEmail(txt)}
                         value={email}
@@ -100,6 +185,7 @@ const SignIn = () => {
                     />
                     <FormInput
                         labelText="Password"
+                        editable={!isLoading}
                         children={
                             <TouchableOpacity
                                 onPress={() => setIsSecure(!isSecure)}
@@ -124,39 +210,19 @@ const SignIn = () => {
                         isLoading={isLoading}
                         style={{ width: '100%', marginVertical: 27 }}
                     />
-                    {/* login facebook */}
-                    {/* <LoginButton
-                        onLoginFinished={
-                            (error, result) => {
-                                if (error) {
-                                    console.log("login has error: " + result.error);
-                                } else if (result.isCancelled) {
-                                    console.log("login is cancelled.");
-                                    setUser(null)
-                                } else {
-                                    AccessToken.getCurrentAccessToken().then(
-                                        (data) => {
-                                            console.log(data.accessToken.toString())
-                                        }
-                                    )
-                                }
-                                const currentProfile = Profile.getCurrentProfile().then(
-                                    function (currentProfile) {
-                                        if (currentProfile) {
-                                            console.log(currentProfile);
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                        onLogoutFinished={() => console.log("logout.")} /> */}
                     <View style={styles.containerBottom}>
                         <Text style={styles.txt}>---You can login with---</Text>
                         <View style={styles.viewSocial}>
                             {
                                 listIcon.map((item, index) =>
                                     <TouchableOpacity
+                                        disabled={isLoading}
                                         activeOpacity={0.8}
+                                        onPress={() => {
+                                            if (item == "google") {
+                                                FaceBook_Login()
+                                            }
+                                        }}
                                         key={index}
                                         style={styles.btnIcon}>
                                         <Icon

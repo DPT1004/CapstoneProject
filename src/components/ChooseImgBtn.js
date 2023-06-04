@@ -4,6 +4,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import { COLORS } from '../common/theme'
 
 const ChooseImgBTN = ({ setImageUri, imageUri }) => {
+    const lastTap = React.useRef(0)
 
     const selectImage = async () => {
         try {
@@ -35,8 +36,16 @@ const ChooseImgBTN = ({ setImageUri, imageUri }) => {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     onPress={() => {
-                        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                        setImageUri("")
+                        const now = Date.now()
+                        const DELAY = 400
+
+                        // detect if a double tap
+                        if (lastTap.current && now - lastTap.current < DELAY) {
+                            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                            setImageUri("")
+                        } else {
+                            lastTap.current = now
+                        }
                     }}
                     onLongPress={() => selectImage()}>
                     <Image

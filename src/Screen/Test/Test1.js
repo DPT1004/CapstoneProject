@@ -2,41 +2,74 @@ import React from 'react'
 import { Button, Text, View, ActivityIndicator, TouchableOpacity, StyleSheet, Modal, Image, Alert, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS } from '../../common/theme'
+import auth from '@react-native-firebase/auth'
+import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
+
+GoogleSignin.configure({
+    scopes: ['email'],
+    webClientId: "17379159055-d7h444d8l7tdpeqkttu6rc3ltse5eb7n.apps.googleusercontent.com",
+    offlineAccess: true
+})
 
 const Test1 = () => {
 
-    const [modalVisible, setModalVisible] = React.useState(false)
+    const [userInfo, setuserInfo] = React.useState({})
+
+
+    const signIn = async () => {
+
+        try {
+            await GoogleSignin.hasPlayServices()
+            const userInfo = await GoogleSignin.signIn()
+            console.log("userInfo ", userInfo)
+            setuserInfo({ userInfo })
+        } catch (error) {
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+                // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+                // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+                // play services not available or outdated
+            } else {
+                // some other error happened
+            }
+        }
+
+    }
+
+    const signOut = async () => {
+        try {
+            await GoogleSignin.revokeAccess();
+            await GoogleSignin.signOut();
+            setuserInfo({});
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const getNewToken = async () => {
+        try {
+            var newToken = await GoogleSignin.getTokens()
+            console.log("newToken ", newToken.accessToken)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <View style={styles.container}>
             <Button
-                title="Show Modal"
-                onPress={() => setModalVisible(true)}
+                title={"Login"}
+                onPress={() => signIn()}
             />
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}>
-                <View style={styles.containerModal}>
-                    <View style={styles.childModal}>
-
-                        <ActivityIndicator size={80} color={COLORS.primary} />
-
-                        {/*Button close modal */}
-                        <TouchableOpacity
-                            style={styles.btnCloseModal}
-                            activeOpacity={0.4}
-                            onPress={() => setModalVisible(false)} >
-                            <Icon
-                                name={"close"}
-                                size={20}
-                                color={COLORS.white}
-                            />
-                        </TouchableOpacity>
-
-                    </View>
-                </View>
-            </Modal>
+            <Button
+                title={"LogOut"}
+                onPress={() => signOut()}
+            />
+            <Button
+                title={"New token"}
+                onPress={() => getNewToken()}
+            />
         </View>
 
     )

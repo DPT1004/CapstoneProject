@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native'
+import { Text, View, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
 import { timeWaitToNextQuestion } from '../../../common/shareVarible'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import { COLORS } from '../../../common/theme'
@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../../navigator/screens-name'
 import socketServcies from '../../../until/socketServices'
 import FormButton from '../../../components/FormButton'
+import ModalSummary from './components/ModalSummary'
 
 const PreviewAndLeaderBoard = () => {
 
@@ -19,8 +20,13 @@ const PreviewAndLeaderBoard = () => {
     const user = useSelector((state) => state.user)
     const quiz = useSelector((state) => state.newQuiz)
     const [leaderBoard, setLeaderBoard] = React.useState([])
-    const [indexPlayer, setIndexPlayer] = React.useState(-1)
+    const [indexPlayer, setIndexPlayer] = React.useState(0)
     const [isLoading, setIsLoading] = React.useState(true)
+    const [modalVisible, setModalVisible] = React.useState(false)
+
+    const closeModal = () => {
+        setModalVisible(false)
+    }
 
     React.useEffect(() => {
 
@@ -63,6 +69,14 @@ const PreviewAndLeaderBoard = () => {
                             style={styles.txtChooseContentColumn}>{index + 1}</Text>
                     </View>
                     <View style={[styles.viewTitleColumn, { flex: 2 }]}>
+                        {
+                            item.photo !== "" &&
+                            <Image
+                                style={styles.imgAvatarPlayer}
+                                resizeMode="stretch"
+                                source={{ uri: item.photo }}
+                            />
+                        }
                         <Text
                             numberOfLines={1}
                             style={styles.txtChooseContentColumn}>{item.userName}</Text>
@@ -89,6 +103,14 @@ const PreviewAndLeaderBoard = () => {
                             style={styles.txtContentColumn}>{index + 1}</Text>
                     </View>
                     <View style={[styles.viewTitleColumn, { flex: 2 }]}>
+                        {
+                            item.photo !== "" &&
+                            <Image
+                                style={styles.imgAvatarPlayer}
+                                resizeMode="stretch"
+                                source={{ uri: item.photo }}
+                            />
+                        }
                         <Text
                             numberOfLines={1}
                             style={styles.txtContentColumn}>{item.userName}</Text>
@@ -161,6 +183,25 @@ const PreviewAndLeaderBoard = () => {
                             renderItem={renderItem}
                         />
                     </View>
+
+                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} playerResult={leaderBoard[indexPlayer].playerResult} />
+
+                    <FormButton
+                        labelText="Summary"
+                        activeOpacity={0.5}
+                        isPrimary={false}
+                        style={{
+                            height: 90,
+                            width: 90,
+                            borderRadius: 45,
+                            borderWidth: 1.5,
+                            marginVertical: 10,
+                            alignSelf: "center"
+                        }}
+                        handleOnPress={() => {
+                            setModalVisible(true)
+                        }} />
+
                     <FormButton
                         labelText="Go Home"
                         activeOpacity={0.8}
@@ -213,9 +254,29 @@ const PreviewAndLeaderBoard = () => {
                                     <Text style={styles.txtNextQuestion}>Waiting for another player finish the game</Text>
                                 </View>
                                 :
-                                <Text style={styles.txtNextQuestion}>Game finish</Text>
+                                <>
+                                    <FormButton
+                                        labelText="Summary"
+                                        activeOpacity={0.5}
+                                        isPrimary={false}
+                                        style={{
+                                            height: 90,
+                                            width: 90,
+                                            borderRadius: 45,
+                                            borderWidth: 1.5,
+                                            marginVertical: 10,
+                                            alignSelf: "center"
+                                        }}
+                                        handleOnPress={() => {
+                                            setModalVisible(true)
+                                        }} />
+                                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} playerResult={leaderBoard[indexPlayer].playerResult} />
+                                    {/* <Text style={styles.txtNextQuestion}>Game finish</Text> */}
+                                </>
                         }
                     </View>
+
+
                     <FormButton
                         labelText="Go Home"
                         activeOpacity={0.8}
@@ -314,21 +375,29 @@ const styles = StyleSheet.create({
     containerContentColumn: {
         flexDirection: "row",
         marginBottom: 10,
+        paddingVertical: 5
     },
     containerChooseTitleColumn: {
         flexDirection: "row",
         marginBottom: 10,
-        backgroundColor: COLORS.primary
+        backgroundColor: COLORS.primary,
+        paddingVertical: 5
     },
     viewTitleColumn: {
         flex: 1,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     viewTimeCounter: {
         alignItems: "center",
         justifyContent: "center",
         paddingVertical: 10
+    },
+    imgAvatarPlayer: {
+        width: 30,
+        height: 30,
+        borderRadius: 15,
+        marginRight: 5,
     },
     txtTitleColumn: {
         color: COLORS.black,

@@ -28,7 +28,6 @@ import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
 import Test1 from '../Screen/Test/Test1'
 
 
-
 const arrTab = [
   { icon: "save", label: "Manage Quiz", activeColorBG: COLORS.primary, inActiveColorBG: "transparent", activeColorIcon: "white", inActiveColorIcon: COLORS.primary, screen: screenName.ManageQuiz, component: ManageQuiz },
   { icon: "home", label: "Home", activeColorBG: COLORS.primary, inActiveColorBG: "transparent", activeColorIcon: "white", inActiveColorIcon: COLORS.primary, screen: screenName.Home, component: Home },
@@ -75,6 +74,7 @@ function BottomTab() {
 const Stack = createNativeStackNavigator()
 
 const MainStack = () => {
+
   return (
 
     <Stack.Navigator

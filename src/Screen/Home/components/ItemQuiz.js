@@ -123,8 +123,9 @@ const ItemQuiz = ({ item, index }) => {
                                     isLive: false,
                                     playerList: [{
                                         userId: user.userId,
-                                        userName: user.email,
+                                        userName: user.name,
                                         socketId: socketId,
+                                        photo: user.photo
                                     }]
                                 }
                                 dispatch(POST_createGame(newGame)).then(() => {

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, TouchableOpacity, LayoutAnimation, ToastAndroid, Button } from 'react-native'
+import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity, LayoutAnimation, ToastAndroid, Button } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { screenName } from '../../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
@@ -112,15 +112,26 @@ const WaitingRoom = () => {
                                 showsVerticalScrollIndicator={false}
                                 style={{
                                     backgroundColor: COLORS.bgrForPrimary,
-                                    paddingHorizontal: 30,
+                                    paddingHorizontal: 20,
                                     paddingTop: 30,
                                     borderTopRightRadius: 20,
                                     borderTopLeftRadius: 20
                                 }}
                                 renderItem={({ item }) =>
                                     <View style={styles.rowItem}>
-                                        <Text style={styles.txtUserName}>{item.userName}</Text>
+                                        {
+                                            item.photo !== "" &&
+                                            <Image
+                                                style={styles.imgAvatarPlayer}
+                                                resizeMode="stretch"
+                                                source={{ uri: item.photo }}
+                                            />
+                                        }
+                                        <Text numberOfLines={1} style={styles.txtUserName}>{item.userName}</Text>
                                     </View>
+                                }
+                                ListFooterComponent={
+                                    <View style={{ height: 30 }} />
                                 }
                             />
                         </View>
@@ -161,12 +172,22 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     rowItem: {
-        height: 45,
+        flexDirection: "row",
+        paddingVertical: 15,
+        paddingHorizontal: 5,
         backgroundColor: COLORS.white,
         borderRadius: 10,
         marginBottom: 10,
         alignItems: "center",
         justifyContent: "center"
+    },
+    imgAvatarPlayer: {
+        width: 40,
+        height: 40,
+        borderRadius: 20,
+        marginRight: 10,
+        position: "absolute",
+        left: 5
     },
     btnQuit: {
         alignItems: "center",

@@ -15,7 +15,7 @@ import Icon from "react-native-vector-icons/FontAwesome"
 import Icon1 from "react-native-vector-icons/Octicons"
 import Lottie from "lottie-react-native"
 
-const maxChooseCategory = 3
+const maxChooseCategory = 1
 
 const CreateQuiz = () => {
 
@@ -97,6 +97,7 @@ const CreateQuiz = () => {
         backgroundImage: imageUrl,
         isPublic: display,
         categories: chooseCategory,
+        numberOfQuestions: 2,
         questionList: [{
           questionType: "MultipleChoice",
           question: "Toi la ai trong em ??",
@@ -124,6 +125,8 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
+          difficulty: "easy",
+          category: chooseCategory[0],
           tempQuestionId: "answer0"
         },
         {
@@ -153,6 +156,8 @@ const CreateQuiz = () => {
               img: ""
             },
           ],
+          difficulty: "easy",
+          category: chooseCategory[0],
           tempQuestionId: "answer1"
         }]
       }))
@@ -263,14 +268,15 @@ const CreateQuiz = () => {
                         style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item.name) }]}
                         onPress={() => {
                           var newChooseCategory = [...chooseCategory]
-                          if (chooseCategory.length < maxChooseCategory) {
-                            if (!newChooseCategory.includes(item.name)) {
-                              newChooseCategory.push(item.name);
+                          if (!newChooseCategory.includes(item.name)) {
+                            if (chooseCategory.length < maxChooseCategory) {
+                              newChooseCategory.push(item.name)
                             }
                             else {
-                              newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
+                              newChooseCategory[newChooseCategory.length - 1] = item.name
                             }
-                          } else {
+                          }
+                          else {
                             newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
                           }
                           setChooseCategory(newChooseCategory)
@@ -345,12 +351,14 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   btnCategory: {
+    flexGrow: 1,
+    alignItems: "center",
+    justifyContent: "center",
     backgroundColor: COLORS.gray,
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 20,
     margin: 5,
-    flexWrap: "wrap"
   },
   checkBoxDisplay: {
     height: 24,

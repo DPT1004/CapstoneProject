@@ -54,8 +54,8 @@ const TopBar = ({ userAnswer, activeSubmit, time, handleUpdate, handleComplete }
                                 var userId = user.userId
                                 socketServices.emit("player-quit-when-game-isPlaying", { userId, pin })
                                 dispatch(clearGame())
-                                navigation.navigate(screenName.Home)
                                 dispatch(clearInfoCompetitive())
+                                navigation.navigate(screenName.Home)
                             }
                         },
                         {

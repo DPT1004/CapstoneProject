@@ -14,7 +14,7 @@ import { addNewQuestion, updateQuestionList } from '../../../redux/Slice/newQuiz
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { COLORS } from '../../../common/theme'
 import { img } from '../../../assets/index'
-import { arrTime, firebaseHeaderUrl } from '../../../common/shareVarible'
+import { arrTime, arrDifficulty, firebaseHeaderUrl } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
 import ChooseImgBTN from '../../../components/ChooseImgBTN'
 import FormInput from '../../../components/FormInput'
@@ -33,6 +33,7 @@ const CheckBox = () => {
     const [question, setQuestion] = React.useState('')
     const [imageUri, setImageUri] = React.useState('')
     const [timeAnswer, setTimeAnswer] = React.useState(10)
+    const [difficulty, setDifficulty] = React.useState("easy")
     const [arrAnswer, setArrAnswer] = React.useState([{
         isCorrect: false,
         answer: "",
@@ -54,8 +55,9 @@ const CheckBox = () => {
             setImageUri(route.params.question.backgroundImage)
             setTimeAnswer(route.params.question.time)
             setArrAnswer(arrAns)
+            setDifficulty(route.params.question.difficulty)
 
-            arrAns.map((item, index) => {
+            arrAns.map((item) => {
                 item.answer !== "" ? arrOptionAns.push({
                     isTextorImage: false
                 })
@@ -140,8 +142,10 @@ const CheckBox = () => {
                     time: timeAnswer,
                     backgroundImage: imageUrl,
                     answerList: newArrAnswer,
+                    difficulty: difficulty,
                 }
                 dispatch(updateQuestionList(newQuestionList))
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                 handleNavigation()
             } else {
                 //Add new Question
@@ -151,9 +155,12 @@ const CheckBox = () => {
                     time: timeAnswer,
                     backgroundImage: imageUrl,
                     answerList: newArrAnswer,
-                    tempQuestionId: "answer" + newQuiz.questionList.length
+                    difficulty: difficulty,
+                    category: newQuiz.categories[0],
+                    tempQuestionId: "question" + newQuiz.numberOfQuestionsOrigin
                 }))
                 ToastAndroid.show('Add success', ToastAndroid.SHORT)
+                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                 handleNavigation()
             }
 
@@ -346,6 +353,28 @@ const CheckBox = () => {
                             }
                         </View>
 
+                        {/*Break line between Time and Difficulty*/}
+                        <View style={[styles.containerLineHorizon, { marginTop: 0 }]}>
+                            <View style={[styles.lineHorizon, { marginRight: 5, flex: 1 }]} />
+                            <Text>difficulty</Text>
+                            <View style={[styles.lineHorizon, { marginLeft: 5, flex: 5 }]} />
+                        </View>
+                        {/* Difficulty */}
+                        <View style={styles.containerDifficulty}>
+                            {
+                                arrDifficulty.map((item, index) => (
+                                    <TouchableOpacity
+                                        key={index}
+                                        style={[styles.rowItemDifficulty, { backgroundColor: item == difficulty ? COLORS.primary : COLORS.white }]}
+                                        activeOpacity={0.6}
+                                        onPress={() => setDifficulty(item)}
+                                    >
+                                        <Text style={[styles.txtDifficulty, { color: item == difficulty ? COLORS.white : COLORS.primary }]}>{item}</Text>
+                                    </TouchableOpacity>
+                                ))
+                            }
+                        </View>
+
                         {/*Button add more answer */}
                         <FormButton
                             labelText="More Answer"
@@ -432,7 +461,23 @@ const styles = StyleSheet.create({
         borderColor: COLORS.primary,
         borderRadius: 5
     },
+    rowItemDifficulty: {
+        flexGrow: 1,
+        margin: 10,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        borderWidth: 1,
+        borderColor: COLORS.primary,
+        borderRadius: 5
+    },
     containerTimeAnswer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginBottom: 40
+    },
+    containerDifficulty: {
         flexDirection: "row",
         flexWrap: "wrap",
         marginBottom: 40
@@ -462,6 +507,10 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     txtTimeAnswer: {
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+    txtDifficulty: {
         fontSize: 20,
         fontWeight: "bold"
     },

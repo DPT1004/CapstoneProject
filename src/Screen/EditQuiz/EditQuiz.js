@@ -5,7 +5,7 @@ import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
 import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateBackgroundImage } from '../../redux/Slice/newQuizSlice'
+import { updateBackgroundImage, updateQuestionList } from '../../redux/Slice/newQuizSlice'
 import storage from '@react-native-firebase/storage'
 import FormInput from '../../components/FormInput'
 import FormButton from '../../components/FormButton'
@@ -91,6 +91,12 @@ const EditQuiz = () => {
                 }
             } catch (error) { }
 
+            const changeQuestionList = quiz.questionList.map((item, index) => ({
+                ...item,
+                tempQuestionId: "question" + index
+            }))
+
+            dispatch(updateQuestionList(changeQuestionList))
             dispatch(updateBackgroundImage(imageUrl))
             navigation.navigate(screenName.ListQuestion)
         }
@@ -168,7 +174,7 @@ const EditQuiz = () => {
                         </View>
                     </View>
 
-                    <Text style={styles.txt}>Choose category is relate</Text>
+                    {/* <Text style={styles.txt}>Choose category is relate</Text>
                     <View style={styles.containerCategory}>
 
                         <Text style={styles.txtAlert}>
@@ -187,14 +193,15 @@ const EditQuiz = () => {
                                         style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item.name) }]}
                                         onPress={() => {
                                             var newChooseCategory = [...chooseCategory]
-                                            if (chooseCategory.length < maxChooseCategory) {
-                                                if (!newChooseCategory.includes(item.name)) {
-                                                    newChooseCategory.push(item.name);
+                                            if (!newChooseCategory.includes(item.name)) {
+                                                if (chooseCategory.length < maxChooseCategory) {
+                                                    newChooseCategory.push(item.name)
                                                 }
                                                 else {
-                                                    newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
+                                                    newChooseCategory[newChooseCategory.length - 1] = item.name
                                                 }
-                                            } else {
+                                            }
+                                            else {
                                                 newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
                                             }
                                             setChooseCategory(newChooseCategory)
@@ -202,7 +209,7 @@ const EditQuiz = () => {
                                         <Text style={[styles.txtCategory, { color: getOptionTxtCategory(item.name) }]}>{item.name}</Text>
                                     </TouchableOpacity>))
                         }
-                    </View>
+                    </View> */}
                     <FormButton
                         labelText="Continue"
                         style={{

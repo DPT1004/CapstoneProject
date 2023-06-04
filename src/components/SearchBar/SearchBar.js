@@ -1,13 +1,12 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, ImageBackground, TextInput, Modal, StyleSheet, LayoutAnimation, FlatList, ToastAndroid, Animated, Easing, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, Image, TextInput, Modal, StyleSheet, LayoutAnimation, FlatList, ToastAndroid, Animated, Easing, ActivityIndicator } from 'react-native'
 import { COLORS } from '../../common/theme'
-import { BASE_URL } from '../../common/shareVarible'
+import { BASE_URL, arrQuestionType } from '../../common/shareVarible'
 import { useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
-import ItemResultQuiz from './components/ItemResultQuiz'
 import ItemListQuestion from './components/ItemListQuestion'
+import { img } from '../../assets'
 
-const maxChooseCategory = 3
 
 const SearchBar = ({ more, style }) => {
 
@@ -15,16 +14,14 @@ const SearchBar = ({ more, style }) => {
     const rotateValue = React.useRef(new Animated.Value(0)).current
 
     const [txtSearch, setTxtSearch] = React.useState("")
-    const [showCategories, setShowCategories] = React.useState(false)
-    const [categories, setCategories] = React.useState([])
-    const [chooseCategory, setChooseCategory] = React.useState([])
+    const [showQuestionType, setShowQuestionType] = React.useState(false)
+    const [chooseQuestionType, setChooseQuestionType] = React.useState([])
     const [result, SetResult] = React.useState([])
     const [isLoading, setIsLoading] = React.useState(false)
     const [modalVisible, setModalVisible] = React.useState(false)
-    const [questionList, setQuestionList] = React.useState([])
 
     const getOptionTxtCategory = (item) => {
-        if (chooseCategory.includes(item)) {
+        if (chooseQuestionType.includes(item)) {
             return COLORS.white
         } else {
             return COLORS.black
@@ -32,65 +29,38 @@ const SearchBar = ({ more, style }) => {
     }
 
     const getOptionBgColor = (item) => {
-        if (chooseCategory.includes(item)) {
+        if (chooseQuestionType.includes(item)) {
             return COLORS.primary
         } else {
             return COLORS.gray
         }
     }
 
-    const handleSetQuestionList = (item) => {
-        LayoutAnimation.configureNext({
-            duration: 500,
-            create: { type: "linear", property: "scaleXY" },
-            update: { type: 'linear', property: 'scaleXY' },
-            delete: { type: 'linear', property: 'scaleXY' },
-        })
-        setQuestionList(item)
-    }
-
     const handleSearch = () => {
-        if (txtSearch == "" && chooseCategory.length == 0) {
-            ToastAndroid.show("Type something or choose category to search", ToastAndroid.SHORT)
+        if (txtSearch == "" && chooseQuestionType.length == 0) {
+            ToastAndroid.show("Type something to search", ToastAndroid.SHORT)
         } else {
             setIsLoading(true)
             setTimeout(() => {
                 Get_SearchQuiz()
                 setIsLoading(false)
-            }, 3000)
-        }
-    }
-
-    const GET_AllCategory = async () => {
-        var url = BASE_URL + "/category"
-        try {
-            await fetch(url, {
-                method: "GET"
-            })
-                .then(response => {
-                    if (response.ok) {
-                        if (response.status == 200) {
-                            Promise.resolve(response.json())
-                                .then((data) => {
-                                    setCategories(data)
-                                })
-                        }
-                    }
-                })
-        } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            }, 1500)
         }
     }
 
     const Get_SearchQuiz = async () => {
-        var url = BASE_URL + "/quiz/search?" + "nameQuiz=" + txtSearch + "&tags=" + chooseCategory
+        var url = BASE_URL + "/questionBank/search"
         try {
             await fetch(url, {
-                method: "GET",
+                method: "POST",
                 headers: {
                     "Authorization": "Bearer " + user.token,
                     "Content-Type": "application/json"
                 },
+                body: JSON.stringify({
+                    searchQuery: txtSearch,
+                    arrQuestionType: chooseQuestionType
+                })
             })
                 .then(response => {
                     if (response.ok) {
@@ -113,11 +83,7 @@ const SearchBar = ({ more, style }) => {
     }
 
     React.useEffect(() => {
-        GET_AllCategory()
-    }, [])
-
-    React.useEffect(() => {
-        if (showCategories) {
+        if (showQuestionType) {
             Animated.timing(rotateValue, {
                 toValue: 1,
                 duration: 500,
@@ -132,7 +98,7 @@ const SearchBar = ({ more, style }) => {
                 useNativeDriver: true,
             }).start()
         }
-    }, [showCategories])
+    }, [showQuestionType])
 
     return (
         <View style={[styles.container, { ...style }]}  {...more}>
@@ -154,7 +120,7 @@ const SearchBar = ({ more, style }) => {
                             update: { type: 'linear', property: 'scaleY' },
                             delete: { type: 'linear', property: 'scaleY' },
                         })
-                        setShowCategories(!showCategories)
+                        setShowQuestionType(!showQuestionType)
                     }}
                 >
                     <Icon
@@ -166,35 +132,31 @@ const SearchBar = ({ more, style }) => {
             </Animated.View>
             {
                 isLoading ?
-                    <ActivityIndicator size={22} style={{ alignSelf: "center", flex: 1 }} color={COLORS.gray} />
+                    <ActivityIndicator size={30} color={COLORS.gray} style={{ flex: 1 }} />
                     :
-                    showCategories ?
+                    showQuestionType ?
                         <FlatList
-                            data={categories}
+                            data={arrQuestionType}
                             horizontal
                             showsHorizontalScrollIndicator={false}
                             style={{
                                 backgroundColor: COLORS.white,
                             }}
-                            renderItem={({ item, index }) => (
+                            renderItem={({ item }) => (
                                 <TouchableOpacity
                                     key={item._id}
-                                    style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item.name) }]}
+                                    style={[styles.btnCategory, { backgroundColor: getOptionBgColor(item) }]}
                                     onPress={() => {
-                                        var newChooseCategory = [...chooseCategory]
-                                        if (chooseCategory.length < maxChooseCategory) {
-                                            if (!newChooseCategory.includes(item.name)) {
-                                                newChooseCategory.push(item.name);
-                                            }
-                                            else {
-                                                newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
-                                            }
-                                        } else {
-                                            newChooseCategory.splice(newChooseCategory.indexOf(item.name), 1);
+                                        var newChooseQuestionType = [...chooseQuestionType]
+                                        if (!newChooseQuestionType.includes(item)) {
+                                            newChooseQuestionType.push(item);
                                         }
-                                        setChooseCategory(newChooseCategory)
+                                        else {
+                                            newChooseQuestionType.splice(newChooseQuestionType.indexOf(item), 1)
+                                        }
+                                        setChooseQuestionType(newChooseQuestionType)
                                     }}>
-                                    <Text style={[styles.txtCategory, { color: getOptionTxtCategory(item.name) }]}>{item.name}</Text>
+                                    <Text style={[styles.txtCategory, { color: getOptionTxtCategory(item) }]}>{item}</Text>
                                 </TouchableOpacity>
                             )}
                         />
@@ -202,8 +164,25 @@ const SearchBar = ({ more, style }) => {
                         <TextInput style={{ flex: 1, fontSize: 16 }}
                             value={txtSearch}
                             onChangeText={(txt) => setTxtSearch(txt)}
+                            selectionColor={COLORS.primary}
                         />
             }
+
+            {/*remove text in search */}
+            {
+                txtSearch !== "" &&
+                <TouchableOpacity
+                    onPress={() => setTxtSearch("")}
+                    style={styles.btnRemoveTxtInSearch}
+                >
+                    <Icon
+                        size={20}
+                        color={COLORS.black}
+                        name={"remove"}
+                    />
+                </TouchableOpacity>
+            }
+
             {/*Button Search*/}
             <TouchableOpacity
                 style={styles.btnSearch}
@@ -229,30 +208,14 @@ const SearchBar = ({ more, style }) => {
                 <View style={styles.containerModal}>
                     <View style={styles.childModal}>
                         <View style={{ height: 40, width: "100%", backgroundColor: COLORS.white, elevation: 4 }}>
-                            {/*Button go back to Quiz List Flatlist just show when modal is viewing Question list */}
-                            {
-                                questionList.length !== 0 ?
-                                    <TouchableOpacity
-                                        style={styles.btnGoBack}
-                                        activeOpacity={0.4}
-                                        onPress={() => {
-                                            handleSetQuestionList([])
-                                        }} >
-                                        <Icon
-                                            name={"arrow-left"}
-                                            size={20}
-                                            color={COLORS.gray}
-                                        />
-                                    </TouchableOpacity>
-                                    :
-                                    null
-                            }
 
                             {/*Button close modal */}
                             <TouchableOpacity
                                 style={styles.btnCloseModal}
                                 activeOpacity={0.4}
-                                onPress={() => setModalVisible(false)} >
+                                onPress={() => {
+                                    setModalVisible(false)
+                                }} >
                                 <Icon
                                     name={"close"}
                                     size={20}
@@ -261,54 +224,31 @@ const SearchBar = ({ more, style }) => {
                             </TouchableOpacity>
                         </View>
 
-                        {
-                            questionList.length !== 0 ?
-                                // Questions list 
-                                <FlatList
-                                    data={questionList}
-                                    showsVerticalScrollIndicator={false}
-                                    style={{
-                                        backgroundColor: COLORS.background,
-                                        paddingTop: 30,
-                                        paddingHorizontal: 10,
-                                    }}
-                                    renderItem={({ item }) => (
-                                        <ItemListQuestion
-                                            itemQuestion={item}
-                                        />
-                                    )}
-                                    ListFooterComponent={
-                                        <View style={{ width: "100%", height: 30 }} />
-                                    }
+                        <FlatList
+                            data={result}
+                            showsVerticalScrollIndicator={false}
+                            style={{
+                                backgroundColor: COLORS.background,
+                                paddingTop: 30,
+                                paddingHorizontal: 10,
+                            }}
+                            renderItem={({ item }) => (
+                                <ItemListQuestion
+                                    itemQuestion={item}
                                 />
-                                :
-                                //Quiz list 
-                                <FlatList
-                                    data={result}
-                                    showsVerticalScrollIndicator={false}
-                                    style={{
-                                        backgroundColor: COLORS.background,
-                                        paddingTop: 30,
-                                        paddingHorizontal: 10,
-                                    }}
-                                    renderItem={({ item }) => (
-                                        <ItemResultQuiz
-                                            item={item}
-                                            onChooseItem={handleSetQuestionList}
-                                        />
-                                    )}
-                                    ListFooterComponent={
-                                        <View style={{ width: "100%", height: 30 }} />
-                                    }
-                                    ListEmptyComponent={
-                                        <ImageBackground
-                                            style={{ height: 340, width: "100%" }}
-                                            resizeMode={"stretch"}
-                                            source={require("../../assets/image/no-result.png")}
-                                        />
-                                    }
+                            )}
+                            ListFooterComponent={
+                                <View style={{ width: "100%", height: 30 }} />
+                            }
+                            ListEmptyComponent={
+                                <Image
+                                    source={img.noResult}
+                                    resizeMode="stretch"
+                                    style={{ width: "100%", height: 300 }}
                                 />
-                        }
+                            }
+                        />
+
                     </View>
                 </View>
             </Modal>
@@ -355,7 +295,6 @@ const styles = StyleSheet.create({
     btnGoBack: {
         paddingHorizontal: 10,
         borderRadius: 5,
-        // backgroundColor: "red",
         alignItems: "center",
         justifyContent: "center",
         position: "absolute",
@@ -374,6 +313,11 @@ const styles = StyleSheet.create({
         padding: 8,
         alignItems: "center",
         justifyContent: "center"
+    },
+    btnRemoveTxtInSearch: {
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 10
     },
     btnCategory: {
         backgroundColor: COLORS.gray,

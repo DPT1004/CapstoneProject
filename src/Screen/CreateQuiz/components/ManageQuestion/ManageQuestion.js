@@ -93,11 +93,11 @@ const ManageQuestion = () => {
                                         </View>
                                     }
                                     handleOnPress={() => {
-                                        if (newQuiz.questionList.length < 3) {
-                                            ToastAndroid.show("You need to add at least 3 question", ToastAndroid.SHORT)
-                                        } else {
-                                            Post_CreateQuiz()
-                                        }
+                                        // if (newQuiz.questionList.length < 3) {
+                                        //     ToastAndroid.show("You need to add at least 3 question", ToastAndroid.SHORT)
+                                        // } else {
+                                        Post_CreateQuiz()
+                                        // }
                                     }}
                                 />
                             </View>

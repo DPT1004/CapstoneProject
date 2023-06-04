@@ -7,7 +7,7 @@ const ModalLoading = ({ modalVisible }) => {
     return (
         <View style={styles.container}>
             <Modal
-                animationType="slide"
+                animationType="fade"
                 transparent={true}
                 visible={modalVisible}>
                 <View style={styles.containerModal}>
@@ -23,7 +23,6 @@ const ModalLoading = ({ modalVisible }) => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: COLORS.background
     },
     containerModal: {
@@ -41,20 +40,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         backgroundColor: COLORS.white,
         borderRadius: 20,
-    },
-    btnCloseModal: {
-        height: 30,
-        width: 30,
-        padding: 5,
-        borderRadius: 3,
-        backgroundColor: "red",
-        alignItems: "center",
-        justifyContent: "center",
-        position: "absolute",
-        top: 4,
-        bottom: 4,
-        right: 5
-    },
+    }
 
 })
 

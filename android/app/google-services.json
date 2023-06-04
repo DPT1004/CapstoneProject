@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "17379159055-e8jf9h04iumlqt24thmddudc0cd0ndjh.apps.googleusercontent.com",
+          "client_id": "17379159055-gdoa17p6a1ifhd4ftvb9ttirr9tn9t9o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mobilecapstone",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "17379159055-d7h444d8l7tdpeqkttu6rc3ltse5eb7n.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -27,7 +35,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "17379159055-e8jf9h04iumlqt24thmddudc0cd0ndjh.apps.googleusercontent.com",
+              "client_id": "17379159055-d7h444d8l7tdpeqkttu6rc3ltse5eb7n.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

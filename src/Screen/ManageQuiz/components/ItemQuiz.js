@@ -110,8 +110,9 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                                 isLive: false,
                                 playerList: [{
                                     userId: user.userId,
-                                    userName: user.email,
+                                    userName: user.name,
                                     socketId: socketId,
+                                    photo: user.photo
                                 }]
                             }
 

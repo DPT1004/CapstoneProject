@@ -35,11 +35,11 @@
 22-->[com.facebook.flipper:flipper:0.125.0] C:\Users\USER\.gradle\caches\transforms-3\647e8383da6ec610f267b32ab502830a\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:5-76
 22-->[com.facebook.flipper:flipper:0.125.0] C:\Users\USER\.gradle\caches\transforms-3\647e8383da6ec610f267b32ab502830a\transformed\jetified-flipper-0.125.0\AndroidManifest.xml:16:22-73
 23    <uses-permission android:name="android.permission.WAKE_LOCK" />
-23-->[:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-68
-23-->[:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-65
+23-->[:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-68
+23-->[:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-65
 24    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-24-->[:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-79
-24-->[:react-native-firebase_storage] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\storage\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:22-76
+24-->[:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-79
+24-->[:react-native-firebase_auth] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\auth\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:22-76
 25
 26    <queries>
 26-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-13:15
@@ -66,7 +66,7 @@
 36-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:26:22-107
 37
 38    <application
-38-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:8:5-49:19
+38-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:8:5-50:19
 39        android:name="com.mobilecapstone.MainApplication"
 39-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:9:7-38
 40        android:allowBackup="false"
@@ -81,9 +81,9 @@
 45        android:roundIcon="@mipmap/ic_launcher_round"
 45-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:12:7-52
 46        android:supportsRtl="true"
-46-->[com.facebook.android:facebook-android-sdk:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ea3303be3e2e9cd650d60254e96c1b88\transformed\jetified-facebook-android-sdk-15.2.0\AndroidManifest.xml:16:18-44
+46-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:14:7-33
 47        android:theme="@style/AppTheme"
-47-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:14:7-38
+47-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:7-38
 48        android:usesCleartextTraffic="true" >
 48-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\debug\AndroidManifest.xml:8:9-44
 49        <activity
@@ -94,103 +94,103 @@
 51-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\debug\AndroidManifest.xml:11:84-108
 52
 53        <meta-data
-53-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:7-105
+53-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:7-105
 54            android:name="com.facebook.sdk.ApplicationId"
-54-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:18-63
+54-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:18-63
 55            android:value="@string/facebook_app_id" />
-55-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:64-103
+55-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:64-103
 56
 57        <activity
-57-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:17:7-28:18
+57-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:18:7-29:18
 58            android:name="com.mobilecapstone.MainActivity"
-58-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:18:9-37
+58-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:19:9-37
 59            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
-59-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:20:9-118
+59-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:21:9-118
 60            android:exported="true"
-60-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:23:9-32
+60-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:24:9-32
 61            android:label="@string/app_name"
-61-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:19:9-41
+61-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:20:9-41
 62            android:launchMode="singleTask"
-62-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:21:9-40
+62-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-40
 63            android:windowSoftInputMode="adjustPan" >
-63-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:22:9-48
+63-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:23:9-48
 64            <intent-filter>
-64-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:24:9-27:25
+64-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:25:9-28:25
 65                <action android:name="android.intent.action.MAIN" />
-65-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:25:13-65
-65-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:25:21-62
+65-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:26:13-65
+65-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:26:21-62
 66
 67                <category android:name="android.intent.category.LAUNCHER" />
-67-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:26:13-73
-67-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:26:23-70
+67-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:27:13-73
+67-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:27:23-70
 68            </intent-filter>
 69        </activity>
 70        <activity
-70-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:31:5-34:44
+70-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:5-35:44
 71            android:name="com.facebook.FacebookActivity"
-71-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:31:15-59
+71-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:15-59
 72            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
-72-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:32:9-110
+72-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:33:9-110
 73            android:label="@string/app_name"
-73-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:34:9-41
+73-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:35:9-41
 74            android:theme="@style/com_facebook_activity_theme" />
 74-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:25:13-63
 75        <activity
-75-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:35:5-44:16
+75-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:36:5-45:16
 76            android:name="com.facebook.CustomTabActivity"
-76-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:36:9-54
+76-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:37:9-54
 77            android:exported="true" >
-77-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:37:9-32
+77-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:38:9-32
 78            <intent-filter>
-78-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:38:9-43:25
+78-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:39:9-44:25
 79                <action android:name="android.intent.action.VIEW" />
-79-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:39:13-65
-79-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:39:21-62
+79-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-65
+79-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:21-62
 80
 81                <category android:name="android.intent.category.DEFAULT" />
-81-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-72
-81-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:23-69
+81-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-72
+81-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-69
 82                <category android:name="android.intent.category.BROWSABLE" />
-82-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-74
-82-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-71
+82-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-74
+82-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:23-71
 83
 84                <data android:scheme="@string/fb_login_protocol_scheme" />
-84-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-71
-84-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:19-68
+84-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:13-71
+84-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:19-68
 85            </intent-filter>
 86            <intent-filter>
 86-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:31:13-40:29
 87                <action android:name="android.intent.action.VIEW" />
-87-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:39:13-65
-87-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:39:21-62
+87-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-65
+87-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:21-62
 88
 89                <category android:name="android.intent.category.DEFAULT" />
-89-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-72
-89-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:23-69
+89-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-72
+89-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-69
 90                <category android:name="android.intent.category.BROWSABLE" />
-90-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-74
-90-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-71
+90-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-74
+90-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:23-71
 91
 92                <data
-92-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-71
+92-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:13-71
 93                    android:host="cct.com.mobilecapstone"
 94                    android:scheme="fbconnect" />
-94-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:19-68
+94-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:19-68
 95            </intent-filter>
 96        </activity>
 97
 98        <meta-data
-98-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:7-105
+98-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:7-105
 99            android:name="com.facebook.sdk.ApplicationId"
-99-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:18-63
+99-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:18-63
 100            android:value="@string/facebook_app_id" />
-100-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:15:64-103
+100-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:16:64-103
 101        <meta-data
-101-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:48:7-109
+101-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:49:7-109
 102            android:name="com.facebook.sdk.ClientToken"
-102-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:48:18-61
+102-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:49:18-61
 103            android:value="@string/facebook_client_token" />
-103-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:48:62-107
+103-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:49:62-107
 104        <meta-data
 104-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:11:9-13:36
 105            android:name="app_data_collection_default_enabled"
@@ -219,217 +219,289 @@
 117                android:value="com.google.firebase.components.ComponentRegistrar" />
 117-->[com.google.firebase:firebase-analytics-ktx:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\5cc2c9a3174b5a779a835cdf514c146b\transformed\jetified-firebase-analytics-ktx-21.2.2\AndroidManifest.xml:13:17-82
 118            <meta-data
-118-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:14:13-16:85
-119                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
-119-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:15:17-113
+118-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:69:13-71:85
+119                android:name="com.google.firebase.components:com.google.firebase.auth.FirebaseAuthRegistrar"
+119-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:70:17-109
 120                android:value="com.google.firebase.components.ComponentRegistrar" />
-120-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:16:17-82
+120-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:71:17-82
 121            <meta-data
-121-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:32:13-34:85
-122                android:name="com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
-122-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:33:17-107
+121-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:14:13-16:85
+122                android:name="com.google.firebase.components:com.google.firebase.ktx.FirebaseCommonKtxRegistrar"
+122-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:15:17-113
 123                android:value="com.google.firebase.components.ComponentRegistrar" />
-123-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:34:17-82
+123-->[com.google.firebase:firebase-common-ktx:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\14866abede8d0219f8dc12d2c129d9f7\transformed\jetified-firebase-common-ktx-20.3.2\AndroidManifest.xml:16:17-82
 124            <meta-data
-124-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:31:13-33:85
-125                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
-125-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:32:17-139
+124-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:32:13-34:85
+125                android:name="com.google.firebase.components:com.google.firebase.storage.StorageRegistrar"
+125-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:33:17-107
 126                android:value="com.google.firebase.components.ComponentRegistrar" />
-126-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:33:17-82
+126-->[com.google.firebase:firebase-storage:20.1.0] C:\Users\USER\.gradle\caches\transforms-3\e01c2136ee8221d66b1eb0e7f22a5410\transformed\jetified-firebase-storage-20.1.0\AndroidManifest.xml:34:17-82
 127            <meta-data
-127-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:17:13-19:85
-128                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
-128-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:18:17-127
+127-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:31:13-33:85
+128                android:name="com.google.firebase.components:com.google.firebase.analytics.connector.internal.AnalyticsConnectorRegistrar"
+128-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:32:17-139
 129                android:value="com.google.firebase.components.ComponentRegistrar" />
-129-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:19:17-82
-130        </service>
-131
-132        <provider
-132-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:9-29:38
-133            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
-133-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-88
-134            android:authorities="com.mobilecapstone.reactnativefirebaseappinitprovider"
-134-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-86
-135            android:exported="false"
-135-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-37
-136            android:initOrder="99" />
-136-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-35
-137        <provider
-137-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:9-26:20
-138            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
-138-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-94
-139            android:authorities="com.mobilecapstone.provider"
-139-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-60
-140            android:exported="false"
-140-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-37
-141            android:grantUriPermissions="true" >
-141-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-47
-142            <meta-data
-142-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-25:78
-143                android:name="android.support.FILE_PROVIDER_PATHS"
-143-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:17-67
-144                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
-144-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:17-75
-145        </provider>
-146
-147        <activity
-147-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:9-30:72
-148            android:name="com.yalantis.ucrop.UCropActivity"
-148-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-60
-149            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-149-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:30:13-69
-150        <activity android:name="com.facebook.CustomTabMainActivity" />
-150-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:26:9-71
-150-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:26:19-68
-151
-152        <provider
-152-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:25:9-30:39
-153            android:name="com.google.firebase.provider.FirebaseInitProvider"
-153-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:26:13-77
-154            android:authorities="com.mobilecapstone.firebaseinitprovider"
-154-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:27:13-72
-155            android:directBootAware="true"
-155-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:28:13-43
-156            android:exported="false"
-156-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:29:13-37
-157            android:initOrder="100" />
-157-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:30:13-36
-158
-159        <activity
-159-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:23:9-27:75
-160            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
-160-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:24:13-93
-161            android:excludeFromRecents="true"
-161-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:25:13-46
-162            android:exported="false"
-162-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:26:13-37
-163            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-163-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:27:13-72
-164        <!--
-165            Service handling Google Sign-In user revocation. For apps that do not integrate with
-166            Google Sign-In, this service will never be started.
-167        -->
-168        <service
-168-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:33:9-37:51
-169            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
-169-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:34:13-89
-170            android:exported="true"
-170-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:35:13-36
-171            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
-171-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:36:13-107
-172            android:visibleToInstantApps="true" />
-172-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:37:13-48
-173
-174        <activity
-174-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
-175            android:name="com.google.android.gms.common.api.GoogleApiActivity"
-175-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
-176            android:exported="false"
-176-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
-177            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-177-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
-178
-179        <receiver
-179-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:29:9-33:20
-180            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
-180-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:30:13-85
-181            android:enabled="true"
-181-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:31:13-35
-182            android:exported="false" >
-182-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:32:13-37
-183        </receiver>
-184
-185        <service
-185-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:35:9-38:40
-186            android:name="com.google.android.gms.measurement.AppMeasurementService"
-186-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:36:13-84
-187            android:enabled="true"
-187-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:37:13-35
-188            android:exported="false" />
-188-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:38:13-37
-189        <service
-189-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:39:9-43:72
-190            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
-190-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:40:13-87
-191            android:enabled="true"
-191-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:41:13-35
-192            android:exported="false"
-192-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:42:13-37
-193            android:permission="android.permission.BIND_JOB_SERVICE" />
-193-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:43:13-69
-194
-195        <meta-data
-195-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
-196            android:name="com.google.android.gms.version"
-196-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
-197            android:value="@integer/google_play_services_version" />
-197-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
-198
-199        <provider
-199-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
-200            android:name="androidx.startup.InitializationProvider"
-200-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
-201            android:authorities="com.mobilecapstone.androidx-startup"
-201-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
-202            android:exported="false" >
-202-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
-203            <meta-data
-203-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
-204                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-204-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
-205                android:value="androidx.startup" />
-205-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
-206            <meta-data
-206-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
-207                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-207-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
-208                android:value="androidx.startup" />
-208-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
-209        </provider>
-210        <!--
-211         The initialization ContentProvider will call FacebookSdk.sdkInitialize automatically
-212         with the application context. This config is merged in with the host app's manifest,
-213         but there can only be one provider with the same authority activated at any given
-214         point; so if the end user has two or more different apps that use Facebook SDK, only the
-215         first one will be able to use the provider. To work around this problem, we use the
-216         following placeholder in the authority to identify each host application as if it was
-217         a completely different provider.
-218        -->
-219        <provider
-219-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:29:9-32:40
-220            android:name="com.facebook.internal.FacebookInitProvider"
-220-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:30:13-70
-221            android:authorities="com.mobilecapstone.FacebookInitProvider"
-221-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:31:13-72
-222            android:exported="false" />
-222-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:32:13-37
+129-->[com.google.android.gms:play-services-measurement-api:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\123ea9ac4a0ea7ee78331c712bb3f863\transformed\jetified-play-services-measurement-api-21.2.2\AndroidManifest.xml:33:17-82
+130            <meta-data
+130-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:17:13-19:85
+131                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+131-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:18:17-127
+132                android:value="com.google.firebase.components.ComponentRegistrar" />
+132-->[com.google.firebase:firebase-installations:17.1.3] C:\Users\USER\.gradle\caches\transforms-3\ad0e0ee61c16b5716f23daf26212ba12\transformed\jetified-firebase-installations-17.1.3\AndroidManifest.xml:19:17-82
+133        </service>
+134
+135        <provider
+135-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:9-29:38
+136            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+136-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:26:13-88
+137            android:authorities="com.mobilecapstone.reactnativefirebaseappinitprovider"
+137-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:27:13-86
+138            android:exported="false"
+138-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:13-37
+139            android:initOrder="99" />
+139-->[:react-native-firebase_app] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-firebase\app\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-35
+140        <provider
+140-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:18:9-26:20
+141            android:name="com.reactnative.ivpusic.imagepicker.IvpusicImagePickerFileProvider"
+141-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-94
+142            android:authorities="com.mobilecapstone.provider"
+142-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:20:13-60
+143            android:exported="false"
+143-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-37
+144            android:grantUriPermissions="true" >
+144-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-47
+145            <meta-data
+145-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-25:78
+146                android:name="android.support.FILE_PROVIDER_PATHS"
+146-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:17-67
+147                android:resource="@xml/ivpusic_imagepicker_provider_paths" />
+147-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:25:17-75
+148        </provider>
+149
+150        <activity
+150-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:28:9-30:72
+151            android:name="com.yalantis.ucrop.UCropActivity"
+151-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:29:13-60
+152            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+152-->[:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:30:13-69
+153        <activity android:name="com.facebook.CustomTabMainActivity" />
+153-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:26:9-71
+153-->[com.facebook.android:facebook-common:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\2086b5a6c491cac5e14bd5b2d046898e\transformed\jetified-facebook-common-15.2.0\AndroidManifest.xml:26:19-68
+154        <activity
+154-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:29:9-46:20
+155            android:name="com.google.firebase.auth.internal.GenericIdpActivity"
+155-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:30:13-80
+156            android:excludeFromRecents="true"
+156-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:31:13-46
+157            android:exported="true"
+157-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:32:13-36
+158            android:launchMode="singleTask"
+158-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:33:13-44
+159            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+159-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:34:13-72
+160            <intent-filter>
+160-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:35:13-45:29
+161                <action android:name="android.intent.action.VIEW" />
+161-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-65
+161-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:21-62
+162
+163                <category android:name="android.intent.category.DEFAULT" />
+163-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-72
+163-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-69
+164                <category android:name="android.intent.category.BROWSABLE" />
+164-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-74
+164-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:23-71
+165
+166                <data
+166-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:13-71
+167                    android:host="firebase.auth"
+168                    android:path="/"
+169                    android:scheme="genericidp" />
+169-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:19-68
+170            </intent-filter>
+171        </activity>
+172        <activity
+172-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:47:9-64:20
+173            android:name="com.google.firebase.auth.internal.RecaptchaActivity"
+173-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:48:13-79
+174            android:excludeFromRecents="true"
+174-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:49:13-46
+175            android:exported="true"
+175-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:50:13-36
+176            android:launchMode="singleTask"
+176-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:51:13-44
+177            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+177-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:52:13-72
+178            <intent-filter>
+178-->[com.google.firebase:firebase-auth:21.3.0] C:\Users\USER\.gradle\caches\transforms-3\818192686782a12e88cda9ea92021230\transformed\jetified-firebase-auth-21.3.0\AndroidManifest.xml:53:13-63:29
+179                <action android:name="android.intent.action.VIEW" />
+179-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:13-65
+179-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:40:21-62
+180
+181                <category android:name="android.intent.category.DEFAULT" />
+181-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:13-72
+181-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:41:23-69
+182                <category android:name="android.intent.category.BROWSABLE" />
+182-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:13-74
+182-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:42:23-71
+183
+184                <data
+184-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:13-71
+185                    android:host="firebase.auth"
+186                    android:path="/"
+187                    android:scheme="recaptcha" />
+187-->I:\Source code\CapstoneProject\MobileCapstone\android\app\src\main\AndroidManifest.xml:43:19-68
+188            </intent-filter>
+189        </activity>
+190
+191        <provider
+191-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:25:9-30:39
+192            android:name="com.google.firebase.provider.FirebaseInitProvider"
+192-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:26:13-77
+193            android:authorities="com.mobilecapstone.firebaseinitprovider"
+193-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:27:13-72
+194            android:directBootAware="true"
+194-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:28:13-43
+195            android:exported="false"
+195-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:29:13-37
+196            android:initOrder="100" />
+196-->[com.google.firebase:firebase-common:20.3.2] C:\Users\USER\.gradle\caches\transforms-3\6e494a0531c8c9ee8dd3dbbca891b08b\transformed\jetified-firebase-common-20.3.2\AndroidManifest.xml:30:13-36
+197
+198        <activity
+198-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:23:9-27:75
+199            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+199-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:24:13-93
+200            android:excludeFromRecents="true"
+200-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:25:13-46
+201            android:exported="false"
+201-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:26:13-37
+202            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+202-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:27:13-72
+203        <!--
+204            Service handling Google Sign-In user revocation. For apps that do not integrate with
+205            Google Sign-In, this service will never be started.
+206        -->
+207        <service
+207-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:33:9-37:51
+208            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+208-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:34:13-89
+209            android:exported="true"
+209-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:35:13-36
+210            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+210-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:36:13-107
+211            android:visibleToInstantApps="true" />
+211-->[com.google.android.gms:play-services-auth:20.3.0] C:\Users\USER\.gradle\caches\transforms-3\c6a83b35c5486a45c8da7a51f04293b1\transformed\jetified-play-services-auth-20.3.0\AndroidManifest.xml:37:13-48
+212
+213        <activity
+213-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:9-22:45
+214            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+214-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:20:19-85
+215            android:exported="false"
+215-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:22:19-43
+216            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+216-->[com.google.android.gms:play-services-base:18.0.1] C:\Users\USER\.gradle\caches\transforms-3\32b367b32e7630c7d573824391bffb78\transformed\jetified-play-services-base-18.0.1\AndroidManifest.xml:21:19-78
+217
+218        <receiver
+218-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:29:9-33:20
+219            android:name="com.google.android.gms.measurement.AppMeasurementReceiver"
+219-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:30:13-85
+220            android:enabled="true"
+220-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:31:13-35
+221            android:exported="false" >
+221-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:32:13-37
+222        </receiver>
 223
-224        <receiver
-224-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:34:9-40:20
-225            android:name="com.facebook.CurrentAccessTokenExpirationBroadcastReceiver"
-225-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:35:13-86
-226            android:exported="false" >
-226-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:36:13-37
-227            <intent-filter>
-227-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:37:13-39:29
-228                <action android:name="com.facebook.sdk.ACTION_CURRENT_ACCESS_TOKEN_CHANGED" />
-228-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:38:17-95
-228-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:38:25-92
-229            </intent-filter>
-230        </receiver>
-231        <receiver
-231-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:41:9-47:20
-232            android:name="com.facebook.AuthenticationTokenManager$CurrentAuthenticationTokenChangedBroadcastReceiver"
-232-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:42:13-118
-233            android:exported="false" >
-233-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:43:13-37
-234            <intent-filter>
-234-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:44:13-46:29
-235                <action android:name="com.facebook.sdk.ACTION_CURRENT_AUTHENTICATION_TOKEN_CHANGED" />
-235-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:45:17-103
-235-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:45:25-100
-236            </intent-filter>
-237        </receiver>
-238    </application>
-239
-240</manifest>
+224        <service
+224-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:35:9-38:40
+225            android:name="com.google.android.gms.measurement.AppMeasurementService"
+225-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:36:13-84
+226            android:enabled="true"
+226-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:37:13-35
+227            android:exported="false" />
+227-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:38:13-37
+228        <service
+228-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:39:9-43:72
+229            android:name="com.google.android.gms.measurement.AppMeasurementJobService"
+229-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:40:13-87
+230            android:enabled="true"
+230-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:41:13-35
+231            android:exported="false"
+231-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:42:13-37
+232            android:permission="android.permission.BIND_JOB_SERVICE" />
+232-->[com.google.android.gms:play-services-measurement:21.2.2] C:\Users\USER\.gradle\caches\transforms-3\b481310b01c4133236aa688e5cfcdd2e\transformed\jetified-play-services-measurement-21.2.2\AndroidManifest.xml:43:13-69
+233
+234        <meta-data
+234-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:21:9-23:69
+235            android:name="com.google.android.gms.version"
+235-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:22:13-58
+236            android:value="@integer/google_play_services_version" />
+236-->[com.google.android.gms:play-services-basement:18.1.0] C:\Users\USER\.gradle\caches\transforms-3\b8aa19f2757a2926a18a0e722b31b6fe\transformed\jetified-play-services-basement-18.1.0\AndroidManifest.xml:23:13-66
+237
+238        <provider
+238-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:26:9-34:20
+239            android:name="androidx.startup.InitializationProvider"
+239-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:27:13-67
+240            android:authorities="com.mobilecapstone.androidx-startup"
+240-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:28:13-68
+241            android:exported="false" >
+241-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:29:13-37
+242            <meta-data
+242-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:31:13-33:52
+243                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+243-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:32:17-75
+244                android:value="androidx.startup" />
+244-->[androidx.emoji2:emoji2:1.0.0] C:\Users\USER\.gradle\caches\transforms-3\0fa1b2d9455ab4251de1fa7b33cbc375\transformed\jetified-emoji2-1.0.0\AndroidManifest.xml:33:17-49
+245            <meta-data
+245-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:31:13-33:52
+246                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+246-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:32:17-78
+247                android:value="androidx.startup" />
+247-->[androidx.lifecycle:lifecycle-process:2.4.0] C:\Users\USER\.gradle\caches\transforms-3\c5b181dcf800f471f5f15027532330b5\transformed\jetified-lifecycle-process-2.4.0\AndroidManifest.xml:33:17-49
+248        </provider>
+249        <!--
+250         The initialization ContentProvider will call FacebookSdk.sdkInitialize automatically
+251         with the application context. This config is merged in with the host app's manifest,
+252         but there can only be one provider with the same authority activated at any given
+253         point; so if the end user has two or more different apps that use Facebook SDK, only the
+254         first one will be able to use the provider. To work around this problem, we use the
+255         following placeholder in the authority to identify each host application as if it was
+256         a completely different provider.
+257        -->
+258        <provider
+258-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:29:9-32:40
+259            android:name="com.facebook.internal.FacebookInitProvider"
+259-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:30:13-70
+260            android:authorities="com.mobilecapstone.FacebookInitProvider"
+260-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:31:13-72
+261            android:exported="false" />
+261-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:32:13-37
+262
+263        <receiver
+263-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:34:9-40:20
+264            android:name="com.facebook.CurrentAccessTokenExpirationBroadcastReceiver"
+264-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:35:13-86
+265            android:exported="false" >
+265-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:36:13-37
+266            <intent-filter>
+266-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:37:13-39:29
+267                <action android:name="com.facebook.sdk.ACTION_CURRENT_ACCESS_TOKEN_CHANGED" />
+267-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:38:17-95
+267-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:38:25-92
+268            </intent-filter>
+269        </receiver>
+270        <receiver
+270-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:41:9-47:20
+271            android:name="com.facebook.AuthenticationTokenManager$CurrentAuthenticationTokenChangedBroadcastReceiver"
+271-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:42:13-118
+272            android:exported="false" >
+272-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:43:13-37
+273            <intent-filter>
+273-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:44:13-46:29
+274                <action android:name="com.facebook.sdk.ACTION_CURRENT_AUTHENTICATION_TOKEN_CHANGED" />
+274-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:45:17-103
+274-->[com.facebook.android:facebook-core:15.2.0] C:\Users\USER\.gradle\caches\transforms-3\ddaedbf8aaebefa618b63a6224df64cf\transformed\jetified-facebook-core-15.2.0\AndroidManifest.xml:45:25-100
+275            </intent-filter>
+276        </receiver>
+277    </application>
+278
+279</manifest>

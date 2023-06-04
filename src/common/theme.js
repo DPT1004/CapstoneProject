@@ -7,8 +7,10 @@ export const COLORS = {
   secondary: '#000020',
   bgrForPrimary: "#E1E2FF",
 
-  success: '#00C851',
-  error: '#ff4444',
+  success: '#72FF0D',
+  error: '#FF001B',
+  blue: "#12B391",
+  blue1: "#0DFFCD",
 
   answerA: "#e31a3c",
   answerB: "#1267ce",

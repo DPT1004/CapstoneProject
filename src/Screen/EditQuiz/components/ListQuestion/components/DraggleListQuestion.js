@@ -24,7 +24,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
             <OpacityDecorator>
-                <View key={item._id} style={styles.rowItem}>
+                <View style={styles.rowItem}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
                         <TouchableOpacity
@@ -39,7 +39,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                             />
                         </TouchableOpacity>
 
-                        <Text style={[styles.txt, { color: COLORS.error, marginLeft: 40 }]}>{item.questionType} - {item.time}s</Text>
+                        <Text style={[styles.txt, { color: COLORS.error, marginLeft: 40 }]}>{"Question " + String(getIndex() + 1) + " / " + quiz.numberOfQuestions}</Text>
 
                         {/*Delete Question*/}
                         <TouchableOpacity
@@ -97,7 +97,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </TouchableOpacity>
                     </View>
                     {/*Question detail*/}
-                    <View style={styles.viewBottom}>
+                    <View style={styles.viewMiddle}>
                         <Text style={styles.txt}>{item.question}</Text>
                         {
                             item.backgroundImage !== "" ?
@@ -148,6 +148,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </View>
 
                     </View>
+
+                    {/*Question order and Level of hard */}
+                    <View style={styles.viewBottom}>
+                        <Text style={[styles.txt, { color: COLORS.error, flex: 0 }]}>{item.questionType} - {item.time}s - {item.difficulty}</Text>
+                    </View>
                 </View>
             </OpacityDecorator >
         );
@@ -159,10 +164,10 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
             showsVerticalScrollIndicator={false}
             data={quiz.questionList}
             onDragEnd={({ data }) => dispatch(updateQuestionList(data))}
-            keyExtractor={(item) => item._id}
+            keyExtractor={(item) => item.tempQuestionId}
             renderItem={renderItem}
             ListHeaderComponent={() => (
-                <View style={styles.containerHeader}>
+                <View style={styles.containerHeaderOrFooter}>
                     <FormButton
                         labelText="Cancel"
                         isPrimary={false}
@@ -184,6 +189,33 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                     />
                 </View>
             )}
+            ListFooterComponent={() => {
+                if (quiz.numberOfQuestions > 0) {
+                    return (
+                        <View style={[styles.containerHeaderOrFooter, { marginTop: 0 }]}>
+                            <FormButton
+                                labelText="Cancel"
+                                isPrimary={false}
+                                style={{
+                                    paddingHorizontal: 20,
+                                    marginRight: 20
+                                }}
+                                handleOnPress={() => {
+                                    navigation.navigate(screenName.ManageQuiz);
+                                }}
+                            />
+                            <FormButton
+                                labelText="New Question"
+                                isPrimary={false}
+                                style={{
+                                    paddingHorizontal: 20,
+                                }}
+                                handleOnPress={() => bottomSheetModalRef.current?.present()}
+                            />
+                        </View>
+                    )
+                }
+            }}
         />
     );
 };
@@ -204,10 +236,19 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 8,
         borderTopLeftRadius: 8
     },
-    viewBottom: {
+    viewMiddle: {
         backgroundColor: COLORS.white,
         paddingHorizontal: paddingHorizonViewBottom,
         paddingVertical: 5
+    },
+    viewBottom: {
+        height: 40,
+        paddingHorizontal: 10,
+        width: "100%",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        backgroundColor: COLORS.backgroundTopBar,
     },
     viewItemAnswerChoice: {
         flexDirection: "row",
@@ -215,7 +256,7 @@ const styles = StyleSheet.create({
         width: sizeViewItemAnswerChoice,
         height: sizeViewItemAnswerChoice * 2 / 3
     },
-    containerHeader: {
+    containerHeaderOrFooter: {
         flexDirection: "row",
         backgroundColor: COLORS.white,
         alignItems: "center",

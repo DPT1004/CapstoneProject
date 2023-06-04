@@ -15,7 +15,6 @@ const AnswerMultiChoice = ({ question }) => {
     const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
     const game = useSelector((state) => state.game)
     const user = useSelector((state) => state.user)
-    const score = React.useRef()
     const [userAnswer, setUserAnswer] = React.useState([])
     const arrCorrectAnswer = React.useMemo(() => {
         var arrCorrect = []
@@ -32,24 +31,28 @@ const AnswerMultiChoice = ({ question }) => {
         width: 0,
         height: 0
     })
+    const refUserAnswer = React.useRef([])
+    const indexUserAnswer = React.useRef([])
+    const score = React.useRef()
+    const timeUserAnswer = React.useRef(time)
 
     const isUserAnswerCorrect = (array1, array2) => {
         if (array1.length === array2.length) {
             return array1.every(element => {
                 if (array2.includes(element)) {
-                    return true;
+                    return true
                 }
 
-                return false;
+                return false
             });
         }
 
-        return false;
+        return false
     }
 
     const handleAfterDone = () => {
 
-        if (isUserAnswerCorrect(userAnswer, arrCorrectAnswer)) {
+        if (isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer)) {
             dispatch(moreCorrect(score.current))
         } else {
             dispatch(moreIncorrect())
@@ -57,11 +60,16 @@ const AnswerMultiChoice = ({ question }) => {
 
         setTimeout(() => {
             dispatch(showLeaderBoard(true))
-
             var userId = user.userId
             var pin = game.pin
-            var scoreRecieve = isUserAnswerCorrect(userAnswer, arrCorrectAnswer) ? score.current : 0
-            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion })
+            var scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? score.current : 0
+            var playerResult = {
+                question: question,
+                indexPlayerAnswer: indexUserAnswer.current,
+                score: scoreRecieve,
+                timeAnswer: timeUserAnswer.current
+            }
+            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
 
             dispatch(nextQuestion())
         }, timeWaitToPreviewAndLeaderBoard)
@@ -70,12 +78,19 @@ const AnswerMultiChoice = ({ question }) => {
 
     const handleComplete = () => {
         setActiveSubmit(true)
-        setUserAnswer([])
+        setUserAnswer([{
+            isCorrect: false
+        }])
+        refUserAnswer.current = [{
+            isCorrect: false
+        }]
+        indexUserAnswer.current = []
         handleAfterDone()
     }
 
     const handleUpdate = (currentTime) => {
         var timeUserResponed = time - currentTime
+        timeUserAnswer.current = timeUserResponed
         var takenScore = 1 - (timeUserResponed / time) / 2
         score.current = Number(takenScore).toFixed(3) * 1000
     }
@@ -103,7 +118,7 @@ const AnswerMultiChoice = ({ question }) => {
     }
 
     React.useEffect(() => {
-        if (activeSubmit === true) {
+        if (activeSubmit === true && JSON.stringify(userAnswer[0]) !== JSON.stringify({ isCorrect: false })) {
             handleAfterDone()
         }
     }, [activeSubmit])
@@ -138,6 +153,16 @@ const AnswerMultiChoice = ({ question }) => {
                                         newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
                                     }
                                     setUserAnswer(newUserAnswer)
+                                    refUserAnswer.current = newUserAnswer
+
+
+                                    var newIndexUserAnswer = [...indexUserAnswer.current]
+                                    if (!newIndexUserAnswer.includes(indexOption)) {
+                                        newIndexUserAnswer.push(indexOption)
+                                    } else {
+                                        newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
+                                    }
+                                    indexUserAnswer.current = newIndexUserAnswer
                                 }}>
                                 {
                                     option.img !== "" ?
@@ -185,6 +210,16 @@ const AnswerMultiChoice = ({ question }) => {
                                         newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
                                     }
                                     setUserAnswer(newUserAnswer)
+                                    refUserAnswer.current = newUserAnswer
+
+
+                                    var newIndexUserAnswer = [...indexUserAnswer.current]
+                                    if (!newIndexUserAnswer.includes(indexOption)) {
+                                        newIndexUserAnswer.push(indexOption)
+                                    } else {
+                                        newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
+                                    }
+                                    indexUserAnswer.current = newIndexUserAnswer
                                 }}>
                                 <Text style={styles.txtOption}>{option.answer}</Text>
                                 {
@@ -243,7 +278,7 @@ const AnswerMultiChoice = ({ question }) => {
                 </TouchableOpacity>
             </View>
             {
-                activeSubmit ? <CustomViewScore score={score.current} isCorrect={isUserAnswerCorrect(userAnswer, arrCorrectAnswer)} /> : <></>
+                activeSubmit ? <CustomViewScore score={score.current} isCorrect={isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer)} /> : <></>
             }
         </>
     );

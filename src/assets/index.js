@@ -4,5 +4,6 @@ export const img = {
     loadingWhite: require("./imageActive/loading_white.json"),
     loadingCircle: require("./imageActive/loading_circle.json"),
     quizBGR: require("./image/quizBGR.jpg"),
-    noResult: require("./image/no-result.png")
+    noResult: require("./image/no-result.png"),
+    noData: require("./image/no_data.png")
 }

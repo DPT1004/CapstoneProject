@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ToastAndroid, LayoutAnimation } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { SIZES } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,21 +15,36 @@ const ItemListQuestion = ({ itemQuestion }) => {
     const dispatch = useDispatch()
     const quiz = useSelector((state) => state.newQuiz)
 
+    function isTwoArrayTheSame(array1, array2) {
+        if (JSON.stringify(array1) === JSON.stringify(array2)) {
+            return true
+        }
+        return false
+    }
+
+    function checkIfQuestionHaveAdded() {
+        return quiz.questionList.some(item => item.question == itemQuestion.question && isTwoArrayTheSame(item.answerList, itemQuestion.answerList))
+    }
+
     return (
         <View style={styles.rowItem}>
             <View style={styles.viewTop}>
-                <Text style={[styles.txt, { color: COLORS.error, marginLeft: 5 }]}>{itemQuestion.questionType} - {itemQuestion.time}s</Text>
+                <Text style={[styles.txt, { color: COLORS.error, marginLeft: 5 }]}>{`${itemQuestion.questionType} - ${itemQuestion.time}s - ${itemQuestion.difficulty}`}</Text>
                 {/*Add Question to your quiz*/}
                 <TouchableOpacity
                     activeOpacity={0.5}
                     onPress={() => {
-                        if (quiz.questionList.some(item => item._id == itemQuestion._id || item.tempQuestionId == itemQuestion._id)) {
+                        var newQuestion = {
+                            ...itemQuestion,
+                            tempQuestionId: "question" + quiz.numberOfQuestionsOrigin
+                        }
+                        delete newQuestion._id
+
+                        if (quiz.questionList.some(item => item.tempQuestionId == newQuestion.tempQuestionId)) {
                             ToastAndroid.show("This question have existed in your quiz", ToastAndroid.SHORT)
                         } else {
-                            dispatch(addNewQuestion({
-                                ...itemQuestion,
-                                tempQuestionId: itemQuestion._id
-                            }))
+                            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+                            dispatch(addNewQuestion(newQuestion))
                             ToastAndroid.show("Add question success", ToastAndroid.SHORT)
                         }
                     }}
@@ -37,8 +52,8 @@ const ItemListQuestion = ({ itemQuestion }) => {
                     <Icon
                         name={"plus-circle"}
                         size={18}
-                        color={COLORS.black} />
-                    <Text style={{ color: COLORS.black }}>Add question</Text>
+                        color={checkIfQuestionHaveAdded() ? "orange" : COLORS.black} />
+                    <Text style={{ color: checkIfQuestionHaveAdded() ? "orange" : COLORS.black }}>{checkIfQuestionHaveAdded() ? "Add again" : "Add question"}</Text>
                 </TouchableOpacity>
             </View>
             {/*Question detail*/}
@@ -122,7 +137,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         width: sizeViewItemAnswerChoice,
-        height: sizeViewItemAnswerChoice * 2 / 3
+        height: sizeViewItemAnswerChoice * 2 / 3,
     },
     containerHeader: {
         flexDirection: "row",
@@ -140,7 +155,7 @@ const styles = StyleSheet.create({
     },
     containerAnswerChoice: {
         flexDirection: "row",
-        flexWrap: "wrap"
+        flexWrap: "wrap",
     },
     lineHorizon: {
         borderWidth: 0.8,

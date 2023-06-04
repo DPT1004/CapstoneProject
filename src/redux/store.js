@@ -17,4 +17,8 @@ export const store = configureStore({
         game: gameSlice,
         listQuiz: listQuizSlice
     },
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware({
+            serializableCheck: false,
+        }),
 })

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Animated, TouchableOpacity, StyleSheet, LayoutAnimation } from 'react-native'
+import { Animated, TouchableOpacity, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const CustomTabBTN = (props) => {

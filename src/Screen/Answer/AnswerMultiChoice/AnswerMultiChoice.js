@@ -15,15 +15,16 @@ const AnswerMultiChoice = ({ question }) => {
     const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
     const game = useSelector((state) => state.game)
     const user = useSelector((state) => state.user)
-    const score = React.useRef()
     const [userAnswer, setUserAnswer] = React.useState([])
     const [time, setTime] = React.useState(question.time)
     const [showViewScore, setShowViewScore] = React.useState(false)
-
     const [sizeContainerOption, setSizeContainerOption] = React.useState({
         width: 0,
         height: 0
     })
+    const indexUserAnswer = React.useRef([])
+    const score = React.useRef()
+    const timeUserAnswer = React.useRef(time)
 
 
     const isCorrectAnswer = () => {
@@ -48,7 +49,14 @@ const AnswerMultiChoice = ({ question }) => {
             var userId = user.userId
             var pin = game.pin
             var scoreRecieve = isCorrectAnswer() ? score.current : 0
-            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion })
+            var playerResult = {
+                question: question,
+                indexPlayerAnswer: indexUserAnswer.current,
+                score: scoreRecieve,
+                timeAnswer: timeUserAnswer.current
+            }
+
+            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
 
             dispatch(nextQuestion())
         }, timeWaitToPreviewAndLeaderBoard)
@@ -63,7 +71,9 @@ const AnswerMultiChoice = ({ question }) => {
     }
 
     const handleUpdate = (currentTime) => {
+
         var timeUserResponed = time - currentTime
+        timeUserAnswer.current = timeUserResponed
         var takenScore = 1 - (timeUserResponed / time) / 2
         score.current = Number(takenScore).toFixed(3) * 1000
     }
@@ -91,7 +101,7 @@ const AnswerMultiChoice = ({ question }) => {
     }
 
     React.useEffect(() => {
-        if (userAnswer.length !== 0 && userAnswer !== { isCorrect: false }) {
+        if (userAnswer.length !== 0 && JSON.stringify(userAnswer[0]) !== JSON.stringify({ isCorrect: false })) {
             handleAfterDone()
         }
     }, [userAnswer])
@@ -119,6 +129,7 @@ const AnswerMultiChoice = ({ question }) => {
                                     height: (sizeContainerOption.height - 16) / 2,
                                 }]}
                                 onPress={() => {
+                                    indexUserAnswer.current = [indexOption]
                                     setUserAnswer([option])
                                 }}>
                                 {
@@ -160,6 +171,7 @@ const AnswerMultiChoice = ({ question }) => {
                                     backgroundColor: getOptionBgColor(option, indexOption),
                                 }]}
                                 onPress={() => {
+                                    indexUserAnswer.current = [indexOption]
                                     setUserAnswer([option])
                                 }}>
                                 <Text style={styles.txtOption}>{option.answer}</Text>
