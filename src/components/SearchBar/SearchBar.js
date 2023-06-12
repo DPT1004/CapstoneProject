@@ -40,17 +40,14 @@ const SearchBar = ({ more, style }) => {
         if (txtSearch == "" && chooseQuestionType.length == 0) {
             ToastAndroid.show("Type something to search", ToastAndroid.SHORT)
         } else {
-            setIsLoading(true)
-            setTimeout(() => {
-                Get_SearchQuiz()
-                setIsLoading(false)
-            }, 1500)
+            Get_SearchQuiz()
         }
     }
 
     const Get_SearchQuiz = async () => {
-        var url = BASE_URL + "/questionBank/search"
         try {
+            setIsLoading(true)
+            var url = BASE_URL + "/questionBank/search"
             await fetch(url, {
                 method: "POST",
                 headers: {
@@ -76,9 +73,13 @@ const SearchBar = ({ more, style }) => {
                                 ToastAndroid.show(data.message, ToastAndroid.SHORT)
                             })
                     }
-                }).finally(() => setModalVisible(true))
+                }).finally(() => {
+                    setIsLoading(false)
+                    setModalVisible(true)
+                })
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            setIsLoading(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -170,7 +171,7 @@ const SearchBar = ({ more, style }) => {
 
             {/*remove text in search */}
             {
-                txtSearch !== "" &&
+                txtSearch !== "" && !showQuestionType &&
                 <TouchableOpacity
                     onPress={() => setTxtSearch("")}
                     style={styles.btnRemoveTxtInSearch}

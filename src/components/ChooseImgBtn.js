@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, StyleSheet, TouchableOpacity, Image, LayoutAnimation } from 'react-native'
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-crop-picker'
 import { COLORS } from '../common/theme'
 
 const ChooseImgBTN = ({ setImageUri, imageUri }) => {
@@ -9,7 +9,8 @@ const ChooseImgBTN = ({ setImageUri, imageUri }) => {
     const selectImage = async () => {
         try {
             await ImagePicker.openPicker({
-                cropping: false
+                cropping: false,
+                mediaType: "photo",
             }).then(image => {
                 setImageUri(image.path)
             });
@@ -27,7 +28,7 @@ const ChooseImgBTN = ({ setImageUri, imageUri }) => {
                 <TouchableOpacity
                     activeOpacity={0.8}
                     style={styles.btnChooseIMG}
-                    onLongPress={() => selectImage()}>
+                    onPress={() => selectImage()}>
                     <Text style={styles.txtChooseIMG}>
                         + choose image
                     </Text>

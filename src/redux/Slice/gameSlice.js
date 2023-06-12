@@ -14,24 +14,30 @@ const initialState = {
     isLoading: false,
 }
 
-export const POST_createGame = createAsyncThunk("createGame", async (newGame, { rejectWithValue }) => {
-    const response = await fetch(BASE_URL + "/game", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify(newGame),
-    })
+export const POST_createGame = createAsyncThunk("createGame", async (params, { rejectWithValue }) => {
+    const { newGame, onPress } = params
     try {
+        const response = await fetch(BASE_URL + "/game", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newGame),
+        })
+
         const result = await response.json()
         if (result.message) {
             ToastAndroid.show(result.message, ToastAndroid.SHORT)
         } else {
-            socketServcies.emit("init-game", result)
+            if (socketServcies.socket.connected) {
+                socketServcies.emit("init-game", result)
+                onPress()
+            }
         }
         return result
     } catch (error) {
         state.isLoading = false
+        ToastAndroid.show(result.message, ToastAndroid.SHORT)
         return rejectWithValue(error)
     }
 })
@@ -53,15 +59,6 @@ export const gameSlice = createSlice({
         updatePlayerList: (state, actions) => {
             state.playerList = actions.payload
         },
-        clearGame: (state) => {
-            state._id = ""
-            state.hostId = ""
-            state.quizId = ""
-            state.date = ""
-            state.pin = ""
-            state.isLive = false
-            state.playerList = []
-        }
     },
     extraReducers: builder => {
         builder.addCase(POST_createGame.pending, (state, actions) => {
@@ -84,6 +81,6 @@ export const gameSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateGame, updatePlayerList, setIsLoading, clearGame } = gameSlice.actions
+export const { updateGame, updatePlayerList, setIsLoading } = gameSlice.actions
 
 export default gameSlice.reducer

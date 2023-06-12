@@ -9,8 +9,6 @@ export const COLORS = {
 
   success: '#72FF0D',
   error: '#FF001B',
-  blue: "#12B391",
-  blue1: "#0DFFCD",
 
   answerA: "#e31a3c",
   answerB: "#1267ce",

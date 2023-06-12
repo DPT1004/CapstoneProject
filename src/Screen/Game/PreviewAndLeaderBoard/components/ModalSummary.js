@@ -1,15 +1,14 @@
 import React from 'react'
-import { View, StyleSheet, TouchableOpacity, Modal, FlatList, Text, Image } from 'react-native'
+import { View, StyleSheet, TouchableOpacity, Modal, FlatList, Text, Image, ToastAndroid } from 'react-native'
 import { COLORS } from '../../../../common/theme'
-import { useSelector } from 'react-redux'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import VideoPlayer from 'react-native-video-controls'
+import YoutubePlayer from "react-native-youtube-iframe"
 
 const commonBorderRadius = 5
 const spaceVerticalBetweenItem = 20
 
-const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
-
-    const userCompetitive = useSelector((state) => state.userCompetitive)
+const ModalSummary = ({ modalVisible, onPressVisible, player, isViewForHostScreen = false }) => {
 
     const renderItem = ({ item, index }) => {
         return (
@@ -18,13 +17,34 @@ const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
                 <View style={styles.viewDetailQuestion}>
                     <Text style={styles.txt}>{`${index + 1}. ${item.question.question}`}</Text>
                     {
-                        item.question.backgroundImage !== "" ?
-                            <Image
-                                style={styles.imgQuestion}
-                                source={{ uri: item.question.backgroundImage }}
+                        item.question.backgroundImage !== "" &&
+                        <Image
+                            style={styles.imgQuestion}
+                            source={{ uri: item.question.backgroundImage }}
+                        />
+                    }
+                    {
+                        item.question.video != "" &&
+                        <View style={styles.video}>
+                            <VideoPlayer
+                                disableBack={true}
+                                disableFullscreen={true}
+                                style={{ flex: 1 }}
+                                source={{ uri: item.question.video }}
+                                onError={error => ToastAndroid.show(String(error), ToastAndroid.SHORT)}
+                                paused={true}
+                                resizeMode="stretch"
                             />
-                            :
-                            <></>
+                        </View>
+                    }
+                    {
+                        item.question.youtube != "" &&
+                        <YoutubePlayer
+                            webViewStyle={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }}
+                            play={false}
+                            allowWebViewZoom={true}
+                            videoId={item.question.youtube}
+                        />
                     }
 
                     {/*Line break Question and Answer */}
@@ -36,7 +56,7 @@ const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
                                 {
                                     item.indexPlayerAnswer.includes(index) &&
                                     <View style={styles.viewYourAnswer}>
-                                        <Text style={styles.txtYourAnswer}>Your Answer</Text>
+                                        <Text style={styles.txtYourAnswer}>{isViewForHostScreen ? "Player Answer" : "Your Answer"}</Text>
                                     </View>
                                 }
 
@@ -66,6 +86,11 @@ const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
                             <Text style={styles.txtScoreAndTimeAnswer}>{` ${item.score} pts`}</Text>
                         </View>
 
+                        {/* Difficulty */}
+                        <View style={styles.viewDifficultyQuestion}>
+                            <Text style={styles.txtScoreAndTimeAnswer}>{item.question.difficulty}</Text>
+                        </View>
+
                         {/* Time Answer */}
                         <View style={styles.viewTimeAnswer}>
                             <Icon
@@ -89,7 +114,7 @@ const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
             <View style={styles.containerModal}>
                 <View style={styles.childModal}>
                     <View style={styles.viewTop}>
-                        <Text style={[styles.txt, { fontSize: 22, fontWeight: "bold", color: COLORS.black }]}>YOUR SUMMARY</Text>
+                        <Text style={[styles.txt, { fontSize: 22, fontWeight: "bold", color: COLORS.black }]}>{isViewForHostScreen ? "PLAYER SUMMARY" : "YOUR SUMMARY"}</Text>
 
                         {/*Button close modal */}
                         <TouchableOpacity
@@ -104,28 +129,31 @@ const ModalSummary = ({ modalVisible, onPressVisible, playerResult }) => {
                         </TouchableOpacity>
                     </View>
 
-                    <FlatList
-                        data={playerResult}
-                        style={{
-                            paddingTop: spaceVerticalBetweenItem,
-                            paddingHorizontal: 10
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        renderItem={renderItem}
-                        ListHeaderComponent={
-                            <View style={styles.containerCorrectAndIncorrect}>
-                                <View style={styles.viewCorrect}>
-                                    <Text style={styles.txtCorrectAndIncorrect}>{`Correct ${userCompetitive.correctCount}`} </Text>
+                    {
+                        player !== undefined &&
+                        <FlatList
+                            data={player.playerResult}
+                            style={{
+                                paddingTop: spaceVerticalBetweenItem,
+                                paddingHorizontal: 10
+                            }}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={renderItem}
+                            ListHeaderComponent={
+                                <View style={styles.containerCorrectAndIncorrect}>
+                                    <View style={styles.viewCorrect}>
+                                        <Text style={styles.txtCorrectAndIncorrect}>{`Correct ${player.numberOfCorrect}`} </Text>
+                                    </View>
+                                    <View style={styles.viewIncorrect}>
+                                        <Text style={styles.txtCorrectAndIncorrect}>{`Incorrect ${player.numberOfInCorrect}`}</Text>
+                                    </View>
                                 </View>
-                                <View style={styles.viewIncorrect}>
-                                    <Text style={styles.txtCorrectAndIncorrect}>{`Incorrect ${userCompetitive.incorrectCount}`}</Text>
-                                </View>
-                            </View>
-                        }
-                        ListFooterComponent={
-                            <View style={{ height: spaceVerticalBetweenItem }} />
-                        }
-                    />
+                            }
+                            ListFooterComponent={
+                                <View style={{ height: spaceVerticalBetweenItem }} />
+                            }
+                        />
+                    }
 
                 </View>
             </View>
@@ -158,6 +186,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginBottom: spaceVerticalBetweenItem
+    },
+    video: {
+        height: 200,
+        width: "100%"
     },
     viewTop: {
         height: 40,
@@ -215,7 +247,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: -24,
         right: 0,
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.gray,
     },
     viewTrueOrWrong: {
         height: "100%",
@@ -235,7 +267,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         paddingVertical: 3,
         backgroundColor: COLORS.gray,
-        marginRight: 2,
         borderTopLeftRadius: commonBorderRadius,
         borderBottomLeftRadius: commonBorderRadius
     },
@@ -247,6 +278,14 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.gray,
         borderTopRightRadius: commonBorderRadius,
         borderBottomRightRadius: commonBorderRadius
+    },
+    viewDifficultyQuestion: {
+        flexDirection: "row",
+        alignItems: "center",
+        paddingHorizontal: 10,
+        paddingVertical: 3,
+        backgroundColor: COLORS.gray,
+        marginHorizontal: 1.5
     },
     imgQuestion: {
         height: 90,
@@ -288,7 +327,7 @@ const styles = StyleSheet.create({
     },
     txtYourAnswer: {
         fontWeight: "bold",
-        color: COLORS.white,
+        color: COLORS.black,
         fontSize: 12
     },
     btnCloseModal: {
@@ -300,4 +339,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default ModalSummary
+export default React.memo(ModalSummary) 

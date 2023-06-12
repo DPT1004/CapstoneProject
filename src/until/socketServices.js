@@ -1,5 +1,6 @@
 import io from 'socket.io-client'
 import { SOCKET_URL } from '../common/shareVarible'
+import { Alert } from 'react-native'
 var socketId = ""
 
 class SocketService {
@@ -17,11 +18,21 @@ class SocketService {
             })
 
             this.socket.on('disconnect', () => {
+                Alert.alert(
+                    "OOPS !!!",
+                    "socket disconnected to server, check your network connection",
+                    [
+                        {
+                            text: "Ok",
+                        }
+                    ],
+                )
                 console.log("=== socket disconnected ====")
             })
 
-            this.socket.on('error', (data) => {
-                console.log("socket error", data)
+            this.socket.on('error', (error) => {
+                ToastAndroid.show("socket error " + error, ToastAndroid.SHORT)
+                console.log("socket error", error)
             })
 
         } catch (error) {

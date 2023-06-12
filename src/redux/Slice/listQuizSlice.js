@@ -13,48 +13,53 @@ const initialState = {
 
 export const GET_refreshListQuiz = createAsyncThunk("refreshListQuiz", async (params, { rejectWithValue }) => {
     const { token } = params
-    const response = await fetch(BASE_URL + "/quiz/search?page=" + 1, {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            searchQuery: "",
-            categories: []
-        })
-    })
     try {
+        const response = await fetch(BASE_URL + "/quiz/search?page=" + 1, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                searchQuery: "",
+                categories: []
+            })
+        })
+
         const result = await response.json()
         if (result.message) {
             ToastAndroid.show(result.message, ToastAndroid.SHORT)
         }
         return result
     } catch (error) {
+        ToastAndroid.show(String(error), ToastAndroid.SHORT)
         return rejectWithValue(error)
     }
 })
 
 export const GET_getQuizBySearch = createAsyncThunk("getQuizBySearch", async (params, { rejectWithValue }) => {
     const { token, currentPage, txtSearch, chooseCategories } = params
-    const response = await fetch(BASE_URL + "/quiz/search?page=" + currentPage, {
-        method: "POST",
-        headers: {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            searchQuery: txtSearch,
-            categories: chooseCategories
-        })
-    })
+
     try {
+        const response = await fetch(BASE_URL + "/quiz/search?page=" + currentPage, {
+            method: "POST",
+            headers: {
+                "Authorization": "Bearer " + token,
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                searchQuery: txtSearch,
+                categories: chooseCategories
+            })
+        })
+
         const result = await response.json()
         if (result.message) {
             ToastAndroid.show(result.message, ToastAndroid.SHORT)
         }
         return result
     } catch (error) {
+        ToastAndroid.show(String(error), ToastAndroid.SHORT)
         return rejectWithValue(error)
     }
 })

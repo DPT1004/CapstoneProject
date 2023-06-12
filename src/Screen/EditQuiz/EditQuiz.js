@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, ToastAndroid, ScrollView, Tou
 import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
+import { img } from '../../assets/index'
 import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBackgroundImage, updateQuestionList } from '../../redux/Slice/newQuizSlice'
@@ -12,6 +13,7 @@ import FormButton from '../../components/FormButton'
 import ChooseImgBTN from '../../components/ChooseImgBTN'
 import Icon from "react-native-vector-icons/FontAwesome"
 import Icon1 from "react-native-vector-icons/Octicons"
+import Lottie from "lottie-react-native"
 
 const maxChooseCategory = 3
 
@@ -20,6 +22,8 @@ const EditQuiz = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const quiz = useSelector((state) => state.newQuiz)
+    const internet = useSelector((state) => state.internet)
+
 
     const [title, setTitle] = React.useState(quiz.name)
     const [description, setDescription] = React.useState(quiz.description)
@@ -28,12 +32,12 @@ const EditQuiz = () => {
     const [chooseCategory, setChooseCategory] = React.useState(quiz.categories)
     const [display, setDisplay] = React.useState(quiz.isPublic)
     const [isLoading, setIsLoading] = React.useState(false)
-
+    const [isLoadingCategories, setIsLoadingCategories] = React.useState(false)
 
     const GET_AllCategory = async () => {
-        setIsLoading(true)
-        var url = BASE_URL + "/category"
         try {
+            setIsLoadingCategories(true)
+            var url = BASE_URL + "/category"
             await fetch(url, {
                 method: "GET"
             })
@@ -46,9 +50,9 @@ const EditQuiz = () => {
                                 })
                         }
                     }
-                }).finally(() => setIsLoading(false))
+                }).finally(() => setIsLoadingCategories(false))
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -77,30 +81,50 @@ const EditQuiz = () => {
         } else if (chooseCategory.length == 0) {
             ToastAndroid.show("Please choose Category", ToastAndroid.SHORT)
         } else {
+            if (internet.isOnlineStatus) {
 
-            // Upload Image and get UrlImage for Quiz
-            try {
+                // Upload Image and get UrlImage for Quiz
                 var imageUrl = ''
                 if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
+                    setIsLoading(true)
                     const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
-                    await reference.putFile(imageUri)
+                    await reference.putFile(imageUri).catch(error => {
+                        setIsLoading(false)
+                        ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                    })
                     //Get url of image was upload on Firebase
-                    imageUrl = await reference.getDownloadURL()
+                    imageUrl = await reference.getDownloadURL().catch(error => {
+                        setIsLoading(false)
+                        ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                    })
                 } else {
                     imageUrl = imageUri
                 }
-            } catch (error) { }
 
-            const changeQuestionList = quiz.questionList.map((item, index) => ({
-                ...item,
-                tempQuestionId: "question" + index
-            }))
+                const changeQuestionList = quiz.questionList.map((item, index) => ({
+                    ...item,
+                    tempQuestionId: "question" + index
+                }))
 
-            dispatch(updateQuestionList(changeQuestionList))
-            dispatch(updateBackgroundImage(imageUrl))
-            navigation.navigate(screenName.ListQuestion)
+                setIsLoading(false)
+                dispatch(updateQuestionList(changeQuestionList))
+                dispatch(updateBackgroundImage(imageUrl))
+                navigation.navigate(screenName.ListQuestion)
+
+            } else {
+                ToastAndroid.show('No network connection', ToastAndroid.SHORT)
+            }
         }
     }
+
+    React.useEffect(() => {
+        if (internet.isOnlineStatus == false) {
+            if (isLoading) {
+                setIsLoading(false)
+                ToastAndroid.show('Network connection suddenly lost', ToastAndroid.SHORT)
+            }
+        }
+    }, [internet])
 
     React.useEffect(() => {
         GET_AllCategory()
@@ -110,71 +134,80 @@ const EditQuiz = () => {
         <TouchableWithoutFeedback
             onPress={() => { Keyboard.dismiss() }}
             accessible={false}>
-            <ScrollView
-                style={styles.scrollView}
-                showsVerticalScrollIndicator={false}
-            >
-                <View style={styles.container}>
-
-                    <Text style={styles.title}>Edit Quiz</Text>
-                    <FormInput
-                        labelText="Title"
-                        placeholderText='Type at least 3 char'
-                        onChangeText={val => setTitle(val)}
-                        value={title}
-                        showCharCount={true}
-                    />
-                    <FormInput
-                        labelText="Description"
-                        onChangeText={val => setDescription(val)}
-                        value={description}
-                        showCharCount={true}
-                    />
-
-                    {/* Image upload */}
-                    <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
-
-                    <Text style={styles.txt}>Display</Text>
-                    <View>
-                        <View style={styles.viewCheckBox}>
-                            <TouchableOpacity
-                                style={[styles.checkBoxDisplay, { borderColor: display == false ? COLORS.success : COLORS.gray }]}
-                                onPress={() => setDisplay(false)}
-                            >
-                                {
-                                    display == false ?
-                                        <Icon
-                                            name={"check-circle"}
-                                            size={15}
-                                            color={COLORS.success}
-                                        />
-                                        :
-                                        <></>
-                                }
-                            </TouchableOpacity>
-                            <Text style={styles.txtCategory}>Private, only you can see it</Text>
-                        </View>
-                        <View style={styles.viewCheckBox}>
-                            <TouchableOpacity
-                                style={[styles.checkBoxDisplay, { borderColor: display == true ? COLORS.success : COLORS.gray }]}
-                                onPress={() => setDisplay(true)}
-                            >
-                                {
-                                    display == true ?
-                                        <Icon
-                                            name={"check-circle"}
-                                            size={15}
-                                            color={COLORS.success}
-                                        />
-                                        :
-                                        <></>
-                                }
-                            </TouchableOpacity>
-                            <Text style={styles.txtCategory}>Public, everyone can see it</Text>
-                        </View>
+            {
+                isLoading ?
+                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center", backgroundColor: COLORS.white }}>
+                        <Lottie
+                            source={img.loadingPrimary}
+                            autoPlay
+                            style={{ flex: 1 }} />
                     </View>
+                    :
+                    <ScrollView
+                        style={styles.scrollView}
+                        showsVerticalScrollIndicator={false}
+                    >
+                        <View style={styles.container}>
 
-                    {/* <Text style={styles.txt}>Choose category is relate</Text>
+                            <Text style={styles.title}>Edit Quiz</Text>
+                            <FormInput
+                                labelText="Title"
+                                placeholderText='Type at least 3 char'
+                                onChangeText={val => setTitle(val)}
+                                value={title}
+                                showCharCount={true}
+                            />
+                            <FormInput
+                                labelText="Description"
+                                onChangeText={val => setDescription(val)}
+                                value={description}
+                                showCharCount={true}
+                            />
+
+                            {/* Image upload */}
+                            <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
+
+                            <Text style={styles.txt}>Display</Text>
+                            <View>
+                                <View style={styles.viewCheckBox}>
+                                    <TouchableOpacity
+                                        style={[styles.checkBoxDisplay, { borderColor: display == false ? COLORS.success : COLORS.gray }]}
+                                        onPress={() => setDisplay(false)}
+                                    >
+                                        {
+                                            display == false ?
+                                                <Icon
+                                                    name={"check-circle"}
+                                                    size={15}
+                                                    color={COLORS.success}
+                                                />
+                                                :
+                                                <></>
+                                        }
+                                    </TouchableOpacity>
+                                    <Text style={styles.txtCategory}>Private, only you can see it</Text>
+                                </View>
+                                <View style={styles.viewCheckBox}>
+                                    <TouchableOpacity
+                                        style={[styles.checkBoxDisplay, { borderColor: display == true ? COLORS.success : COLORS.gray }]}
+                                        onPress={() => setDisplay(true)}
+                                    >
+                                        {
+                                            display == true ?
+                                                <Icon
+                                                    name={"check-circle"}
+                                                    size={15}
+                                                    color={COLORS.success}
+                                                />
+                                                :
+                                                <></>
+                                        }
+                                    </TouchableOpacity>
+                                    <Text style={styles.txtCategory}>Public, everyone can see it</Text>
+                                </View>
+                            </View>
+
+                            {/* <Text style={styles.txt}>Choose category is relate</Text>
                     <View style={styles.containerCategory}>
 
                         <Text style={styles.txtAlert}>
@@ -184,7 +217,7 @@ const EditQuiz = () => {
                                 color={COLORS.error} /> Choose at least 1 category and max {maxChooseCategory} category
                         </Text>
                         {
-                            isLoading ?
+                            isLoadingCategories ?
                                 <ActivityIndicator size={20} color={COLORS.primary} />
                                 :
                                 categories.map((item, index) => (
@@ -210,15 +243,26 @@ const EditQuiz = () => {
                                     </TouchableOpacity>))
                         }
                     </View> */}
-                    <FormButton
-                        labelText="Continue"
-                        style={{
-                            marginVertical: 20,
-                        }}
-                        handleOnPress={handleContinue}
-                    />
-                </View>
-            </ScrollView>
+                            <FormButton
+                                labelText="Continue"
+                                style={{
+                                    marginVertical: 20,
+                                }}
+                                handleOnPress={handleContinue}
+                            />
+                            <FormButton
+                                labelText="Cancel"
+                                isPrimary={false}
+                                style={{
+                                    marginBottom: 20,
+                                }}
+                                handleOnPress={() => {
+                                    navigation.navigate(screenName.ManageQuiz);
+                                }}
+                            />
+                        </View>
+                    </ScrollView>
+            }
         </TouchableWithoutFeedback >
     );
 };

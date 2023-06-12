@@ -15,9 +15,10 @@ const ModalFilter = ({ modalVisible, onPressVisible }) => {
     const [isLoadingCateogries, setIsLoadingCateogries] = React.useState(false)
 
     const GET_AllCategory = async () => {
-        setIsLoadingCateogries(true)
-        var url = BASE_URL + "/category"
+
         try {
+            setIsLoadingCateogries(true)
+            var url = BASE_URL + "/category"
             await fetch(url, {
                 method: "GET"
             })
@@ -32,7 +33,8 @@ const ModalFilter = ({ modalVisible, onPressVisible }) => {
                     }
                 }).finally(() => setIsLoadingCateogries(false))
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            setIsLoadingCateogries(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 

@@ -10,6 +10,7 @@ import { COLORS, SIZES } from '../../../../../common/theme'
 import { screenName } from '../../../../../navigator/screens-name'
 import FormButton from '../../../../../components/FormButton'
 import Icon from 'react-native-vector-icons/Octicons'
+import Icon1 from 'react-native-vector-icons/FontAwesome'
 
 const paddingHorizonContainerDraggle = 20
 const paddingHorizonViewBottom = 10
@@ -20,6 +21,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const dispatch = useDispatch()
     const navigation = useNavigation()
     const quiz = useSelector((state) => state.newQuiz)
+    const [isShowDetail, setIsShowDetail] = React.useState(Array(quiz.numberOfQuestions).fill(false))
 
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
@@ -40,6 +42,22 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </TouchableOpacity>
 
                         <Text style={[styles.txt, { color: COLORS.error, marginLeft: 40 }]}>{"Question " + String(getIndex() + 1) + " / " + quiz.numberOfQuestions}</Text>
+
+                        {/*Set show or not show Detail Question*/}
+                        <TouchableOpacity
+                            activeOpacity={0.5}
+                            onPress={() => {
+                                LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
+                                var newIsShowDetail = [...isShowDetail]
+                                newIsShowDetail[getIndex()] = !newIsShowDetail[getIndex()]
+                                setIsShowDetail(newIsShowDetail)
+                            }}
+                            style={[styles.btnIcon, { right: 75 }]}>
+                            <Icon1
+                                name={"info-circle"}
+                                size={22}
+                                color={COLORS.black} />
+                        </TouchableOpacity>
 
                         {/*Delete Question*/}
                         <TouchableOpacity
@@ -97,61 +115,88 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         </TouchableOpacity>
                     </View>
                     {/*Question detail*/}
-                    <View style={styles.viewMiddle}>
-                        <Text style={styles.txt}>{item.question}</Text>
-                        {
-                            item.backgroundImage !== "" ?
-                                <Image
-                                    style={styles.quizBGR}
-                                    source={{ uri: item.backgroundImage }}
-                                />
-                                :
-                                null
-                        }
-                        <View style={styles.containerLineHorizon}>
-                            <View style={[styles.lineHorizon, { marginRight: 5, flex: 1 }]} />
-                            <Text>answer choice</Text>
-                            <View style={[styles.lineHorizon, { marginLeft: 5, flex: 5 }]} />
-                        </View>
-                        <View style={styles.containerAnswerChoice}>
+                    {
+                        isShowDetail[getIndex()] &&
+                        <View style={styles.viewMiddle}>
+                            <Text style={styles.txt}>{item.question}</Text>
                             {
-                                item.answerList.map((item, index) => (
-                                    <View key={item._id} style={styles.viewItemAnswerChoice}>
-                                        {
-                                            item.isCorrect ?
-                                                <Icon
-                                                    name={"check-circle-fill"}
-                                                    size={20}
-                                                    style={{ marginRight: 5 }}
-                                                    color={COLORS.success}
-                                                />
-                                                :
-                                                <Icon
-                                                    name={"x-circle-fill"}
-                                                    size={20}
-                                                    style={{ marginRight: 5 }}
-                                                    color={COLORS.error}
-                                                />
-                                        }
-                                        {
-                                            item.img !== "" ?
-                                                <Image
-                                                    style={styles.quizBGR}
-                                                    source={{ uri: item.img }}
-                                                />
-                                                :
-                                                <Text style={styles.txt}>{item.answer}</Text>
-                                        }
-                                    </View>
-                                ))
+                                item.backgroundImage !== "" ?
+                                    <Image
+                                        style={styles.quizBGR}
+                                        source={{ uri: item.backgroundImage }}
+                                    />
+                                    :
+                                    null
                             }
+                            <View style={styles.containerLineHorizon}>
+                                <View style={[styles.lineHorizon, { marginRight: 5, flex: 1 }]} />
+                                <Text>answer choice</Text>
+                                <View style={[styles.lineHorizon, { marginLeft: 5, flex: 5 }]} />
+                            </View>
+                            <View style={styles.containerAnswerChoice}>
+                                {
+                                    item.answerList.map((item, index) => (
+                                        <View key={item._id} style={styles.viewItemAnswerChoice}>
+                                            {
+                                                item.isCorrect ?
+                                                    <Icon
+                                                        name={"check-circle-fill"}
+                                                        size={20}
+                                                        style={{ marginRight: 5 }}
+                                                        color={COLORS.success}
+                                                    />
+                                                    :
+                                                    <Icon
+                                                        name={"x-circle-fill"}
+                                                        size={20}
+                                                        style={{ marginRight: 5 }}
+                                                        color={COLORS.error}
+                                                    />
+                                            }
+                                            {
+                                                item.img !== "" ?
+                                                    <Image
+                                                        style={styles.quizBGR}
+                                                        source={{ uri: item.img }}
+                                                    />
+                                                    :
+                                                    <Text style={styles.txt}>{item.answer}</Text>
+                                            }
+                                        </View>
+                                    ))
+                                }
+                            </View>
+
                         </View>
+                    }
 
-                    </View>
-
-                    {/*Question order and Level of hard */}
+                    {/*Question time, typeQuestion and Level of hard, have image/video/youtube */}
                     <View style={styles.viewBottom}>
-                        <Text style={[styles.txt, { color: COLORS.error, flex: 0 }]}>{item.questionType} - {item.time}s - {item.difficulty}</Text>
+                        <Text style={[styles.txt, { color: COLORS.error, flex: 0 }]}>
+                            {`${item.questionType} - ${item.time} - ${item.difficulty} - `}
+                            {
+                                item.video == "" && item.backgroundImage == "" && item.youtube == "" ?
+                                    <Icon1
+                                        size={20}
+                                        color={COLORS.error}
+                                        name={"file-text-o"}
+                                    />
+                                    :
+                                    <Icon1
+                                        size={20}
+                                        color={COLORS.error}
+                                        name={
+                                            item.backgroundImage !== "" ?
+                                                "file-picture-o"
+                                                :
+                                                item.video !== "" ?
+                                                    "file-video-o"
+                                                    :
+                                                    "youtube"
+                                        }
+                                    />
+                            }
+                        </Text>
                     </View>
                 </View>
             </OpacityDecorator >

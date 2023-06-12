@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, StatusBar, FlatList, Alert, ToastAndroid, RefreshControl, ActivityIndicator, Image } from 'react-native'
+import { View, Text, StyleSheet, StatusBar, TouchableOpacity, Animated, FlatList, Alert, ToastAndroid, RefreshControl, ActivityIndicator, Image } from 'react-native'
 import { COLORS } from '../../common/theme'
 import { BASE_URL, webClientId } from '../../common/shareVarible'
 import { screenName } from '../../navigator/screens-name'
@@ -7,8 +7,10 @@ import { useNavigation } from "@react-navigation/native"
 import { useSelector, useDispatch } from 'react-redux'
 import { handleUserLogOut } from '.././../redux/Slice/userSlice'
 import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import Icon from 'react-native-vector-icons/Octicons'
 import Icon1 from 'react-native-vector-icons/AntDesign'
+import Icon2 from 'react-native-vector-icons/FontAwesome'
 import FormButton from '../../components/FormButton'
 import ItemQuiz from './components/ItemQuiz'
 import ModalLoading from '../../components/ModalLoading'
@@ -25,6 +27,7 @@ const ManageQuiz = () => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
+    const internet = useSelector((state) => state.internet)
     const whenToFetchApi = useSelector((state) => state.whenToFetchApi)
 
     const [page, setPage] = React.useState(1)
@@ -33,6 +36,10 @@ const ManageQuiz = () => {
     const [refreshing, setRefreshing] = React.useState(false)
     const [isLoading, setIsLoading] = React.useState(false)
     const [isLoadingOut, setIsLoadingOut] = React.useState(false)
+    const [isShowBtnScrollUp, setIsShowBtnScrollUp] = React.useState(false)
+    const flatlistRef = React.useRef()
+    const currentOffset = React.useRef()
+    const animBtn = React.useRef(new Animated.Value(1)).current
 
     const handleRefreshing = () => {
         setPage(1)
@@ -46,43 +53,47 @@ const ManageQuiz = () => {
     }
 
     const Post_Logout = async () => {
-        setIsLoadingOut(true)
-        var url = BASE_URL + "/user/logout"
-        try {
+        if (internet.isOnlineStatus) {
+            try {
+                setIsLoadingOut(true)
+                var url = BASE_URL + "/user/logout"
+                if (user.isLoginBySocial) {
+                    await GoogleSignin.revokeAccess()
+                    await GoogleSignin.signOut()
+                    await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId: user.userId
+                        }),
+                    })
+                }
+                else {
+                    await fetch(url, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            userId: user.userId
+                        }),
+                    })
+                }
 
-            setTimeout(() => {
+                await AsyncStorage.setItem('@userInfo', JSON.stringify(null))
                 setIsLoadingOut(false)
                 navigation.navigate(screenName.SignIn)
-            }, 1500)
 
-            if (user.isLoginBySocial) {
-                await GoogleSignin.revokeAccess()
-                await GoogleSignin.signOut()
-                await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: user.userId
-                    }),
-                })
+            } catch (error) {
+                setIsLoadingOut(false)
+                ToastAndroid.show(String(error), ToastAndroid.SHORT)
             }
-            else {
-                await fetch(url, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        userId: user.userId
-                    }),
-                })
-            }
-
-        } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+        } else {
+            ToastAndroid.show("No network connection", ToastAndroid.SHORT)
         }
+
     }
 
     const getUserQuizzes = async () => {
@@ -113,7 +124,7 @@ const ManageQuiz = () => {
                     }
                 }).finally(() => setIsLoading(false))
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -146,7 +157,7 @@ const ManageQuiz = () => {
 
                 }).finally(() => setRefreshing(false))
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -163,6 +174,24 @@ const ManageQuiz = () => {
             handleRefreshing()
         }
     }, [whenToFetchApi.afterUpdateQuiz, whenToFetchApi.afterCreateQuiz, user])
+
+
+    React.useEffect(() => {
+        if (isShowBtnScrollUp) {
+            Animated.timing(animBtn, {
+                toValue: 1,
+                duration: 100,
+                useNativeDriver: true,
+            }).start()
+        } else {
+            Animated.timing(animBtn, {
+                toValue: 0,
+                duration: 100,
+                useNativeDriver: true,
+            }).start()
+        }
+    }, [isShowBtnScrollUp])
+
 
     return (
         <View style={styles.container}>
@@ -187,8 +216,27 @@ const ManageQuiz = () => {
                     }}
                 />
             </View>
+
+            {/**Button scroll to top and appear when scroll down */}
+            <Animated.View style={[styles.btnScrollUp, {
+                transform: [{ scale: animBtn }]
+            }]}>
+                <TouchableOpacity
+                    style={{ padding: 10, borderRadius: 20 }}
+                    disabled={!isShowBtnScrollUp}
+                    onPress={() => flatlistRef.current.scrollToOffset({ animated: true, offset: 0 })} >
+                    <Icon2
+                        name={"arrow-up"}
+                        color={COLORS.white}
+                        size={20}
+                    />
+                </TouchableOpacity>
+            </Animated.View>
+
+
             {/* Quiz list */}
             <FlatList
+                ref={flatlistRef}
                 data={allQuizzes}
                 refreshControl={
                     <RefreshControl
@@ -209,9 +257,21 @@ const ManageQuiz = () => {
                         onRefreshing={handleRefreshing}
                     />
                 )}
+                onScroll={(event) => {
+                    let direction = Math.abs(event.nativeEvent.contentOffset.y) > currentOffset.current ? 'down' : 'up'
+                    currentOffset.current = event.nativeEvent.contentOffset.y
+                    if (currentOffset.current == 0) {
+                        setIsShowBtnScrollUp(false)
+                    }
+                    else if (direction == "up") {
+                        setIsShowBtnScrollUp(true)
+                    } else {
+                        setIsShowBtnScrollUp(false)
+                    }
+                }}
                 ListHeaderComponent={
                     <View style={{ width: "100%", backgroundColor: COLORS.bgrForPrimary, alignItems: "center", borderRadius: 10, paddingVertical: 15, paddingHorizontal: 10, marginBottom: 35 }}>
-                        <View style={{ marginBottom: 15, flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%" }}>
+                        <View style={{ marginBottom: 15, flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%", flexWrap: "wrap" }}>
                             {
                                 user.photo !== "" &&
                                 <Image
@@ -220,12 +280,13 @@ const ManageQuiz = () => {
                                     source={{ uri: user.photo }}
                                 />
                             }
-                            <Text style={{ fontSize: 20, fontWeight: "600", color: COLORS.primary, marginLeft: 10 }}>{user.name}</Text>
+                            <Text style={{ fontSize: 18, fontWeight: "600", color: COLORS.primary, marginLeft: 10 }}>{user.name}</Text>
                         </View>
 
                         <FormButton
                             labelText="LOG OUT"
-                            style={{ width: "100%" }}
+                            disabled={!internet.isOnlineStatus}
+                            style={{ width: "100%", backgroundColor: internet.isOnlineStatus ? COLORS.primary : COLORS.gray, borderColor: internet.isOnlineStatus ? COLORS.primary : COLORS.white }}
                             isPrimary={true}
                             children={
                                 <View style={{
@@ -310,6 +371,18 @@ const styles = StyleSheet.create({
         height: 60,
         paddingHorizontal: 20,
         elevation: 4
+    },
+    btnScrollUp: {
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        backgroundColor: COLORS.primary,
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        bottom: 80,
+        right: 20,
+        zIndex: 1,
     },
     title: {
         color: COLORS.black,

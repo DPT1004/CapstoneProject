@@ -5,7 +5,7 @@ import { BASE_URL, uriImgQuiz } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { updateQuiz } from '../../../redux/Slice/newQuizSlice'
-import { POST_createGame, updateGame } from '../../../redux/Slice/gameSlice'
+import { POST_createGame } from '../../../redux/Slice/gameSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import {
     BottomSheetModal,
@@ -13,14 +13,12 @@ import {
 import FormButton from '../../../components/FormButton'
 import Icon from 'react-native-vector-icons/Feather'
 import Icon1 from 'react-native-vector-icons/Octicons'
-import socketServcies, { socketId } from '../../../until/socketServices'
 
 const ItemQuiz = ({ item, onRefreshing }) => {
 
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
-    const game = useSelector((state) => state.game)
     const imgQuiz = item.backgroundImage !== "" ? item.backgroundImage : uriImgQuiz
 
     const bottomSheetModalRef = React.useRef(null)
@@ -54,7 +52,7 @@ const ItemQuiz = ({ item, onRefreshing }) => {
 
                 }).finally(() => onRefreshing())
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -68,13 +66,13 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                 />
                 <View style={styles.containerQuizNameAndDesc}>
                     <Text numberOfLines={3} style={[styles.txt, { fontSize: 18 }]}>{item.name}</Text>
-                    {item.description != '' ? (
+                    {item.description != '' &&
                         <Text style={{ opacity: 0.5 }}>{item.description}</Text>
-                    ) : null}
+                    }
                 </View>
                 <Icon
                     name={"more-horizontal"}
-                    style={{ position: "absolute", top: 2, right: 5 }}
+                    style={{ position: "absolute", top: 2, right: 5, paddingVertical: 3, paddingLeft: 10, paddingRight: 5 }}
                     size={25}
                     color={COLORS.gray}
                     onPress={() => bottomSheetModalRef.current?.present()}
@@ -108,19 +106,14 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                                 quizId: item._id,
                                 pin: Math.floor(100000 + Math.random() * 900000),
                                 isLive: false,
-                                playerList: [{
-                                    userId: user.userId,
-                                    userName: user.name,
-                                    socketId: socketId,
-                                    photo: user.photo
-                                }]
+                                playerList: []
                             }
 
-                            dispatch(POST_createGame(newGame)).then(() => {
-                                socketServcies.emit("init-game", game)
-                                navigation.navigate(screenName.WaitingRoom)
+                            const onPress = () => {
                                 bottomSheetModalRef.current?.close()
-                            })
+                                navigation.navigate(screenName.WaitingRoom)
+                            }
+                            dispatch(POST_createGame({ newGame: newGame, onPress: onPress }))
 
                         }}
                     />

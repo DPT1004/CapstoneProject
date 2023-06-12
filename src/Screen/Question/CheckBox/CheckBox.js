@@ -17,6 +17,7 @@ import { img } from '../../../assets/index'
 import { arrTime, arrDifficulty, firebaseHeaderUrl } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
 import ChooseImgBTN from '../../../components/ChooseImgBTN'
+import ChooseFileBTN from '../../../components/ChooseFileBTN'
 import FormInput from '../../../components/FormInput'
 import FormButton from '../../../components/FormButton'
 import Icon from "react-native-vector-icons/Entypo"
@@ -27,11 +28,15 @@ const CheckBox = () => {
 
     const route = useRoute()
     const dispatch = useDispatch()
-
     const navigation = useNavigation()
     const newQuiz = useSelector((state) => state.newQuiz)
+    const internet = useSelector((state) => state.internet)
+
     const [question, setQuestion] = React.useState('')
-    const [imageUri, setImageUri] = React.useState('')
+    const [fileUri, setFileUri] = React.useState({
+        type: "image",
+        path: ""
+    })
     const [timeAnswer, setTimeAnswer] = React.useState(10)
     const [difficulty, setDifficulty] = React.useState("easy")
     const [arrAnswer, setArrAnswer] = React.useState([{
@@ -39,37 +44,11 @@ const CheckBox = () => {
         answer: "",
         img: ""
     }])
-    {/*false is text, true is image */ }
+    {/*false is text, true is image/video/youtube */ }
     const [arrOptionAnswer, setArrOptionAnswer] = React.useState([{
-        isTextorImage: false
+        isTextorFile: false
     }])
     const [isLoading, setIsLoading] = React.useState(false)
-
-    React.useEffect(() => {
-        if (route.params?.question !== undefined) {
-
-            let arrAns = route.params.question.answerList
-            let arrOptionAns = []
-
-            setQuestion(route.params.question.question)
-            setImageUri(route.params.question.backgroundImage)
-            setTimeAnswer(route.params.question.time)
-            setArrAnswer(arrAns)
-            setDifficulty(route.params.question.difficulty)
-
-            arrAns.map((item) => {
-                item.answer !== "" ? arrOptionAns.push({
-                    isTextorImage: false
-                })
-                    :
-                    arrOptionAns.push({
-                        isTextorImage: true
-                    })
-            })
-
-            setArrOptionAnswer(arrOptionAns)
-        }
-    }, [])
 
     const handleNavigation = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
@@ -95,28 +74,55 @@ const CheckBox = () => {
         else if (arrAnswer.some(element => element.isCorrect == true) == false) {
             ToastAndroid.show("Choose at least 1 correct answer", ToastAndroid.SHORT)
         } else {
-            setIsLoading(true)
 
-            // Upload Image and get UrlImage for Question
-            try {
+            if (internet.isOnlineStatus) {
+                setIsLoading(true)
+
+                // Upload Image/Video/Youtube and get UrlImage/UrlVideo for Question
+                var path = fileUri.path
                 var imageUrl = ''
-                if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
-                    const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
-                    await reference.putFile(imageUri)
-                    //Get url of image was upload on Firebase
-                    imageUrl = await reference.getDownloadURL()
-                } else {
-                    imageUrl = imageUri
-                }
-            } catch (error) { }
+                var videoUrl = ''
+                var youtubeUrl = ''
 
-            // Upload Image and get UrlImage for Answer
-            try {
+                if (path != '' && path.includes(firebaseHeaderUrl) == false && fileUri.type != "youtube") {
+                    const reference = storage().ref(path.slice(path.lastIndexOf("/") + 1, path.length));
+                    await reference.putFile(path).catch(error => {
+                        setIsLoading(false)
+                        ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                    })
+                    if (fileUri.type == "image") {
+                        //Get url of image was upload on Firebase
+                        imageUrl = await reference.getDownloadURL().catch(error => {
+                            setIsLoading(false)
+                            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                        })
+                    } else if (fileUri.type == "video") {
+                        //Get url of Video was upload on Firebase
+                        videoUrl = await reference.getDownloadURL().catch(error => {
+                            setIsLoading(false)
+                            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                        })
+                    }
+                } else {
+                    if (fileUri.type == "image") {
+                        imageUrl = path
+                    } else if (fileUri.type == "video") {
+                        videoUrl = path
+                    } else if (fileUri.type == "youtube") {
+                        youtubeUrl = path
+                    }
+                }
+
+
+                // Upload Image and get UrlImage for Answer
                 var newArrAnswer = []
                 for (let item of arrAnswer) {
                     if (item.img !== '' && item.img.includes(firebaseHeaderUrl) == false) {
                         const reference = storage().ref(item.img.slice(item.img.lastIndexOf("/") + 1, item.img.length));
-                        await reference.putFile(item.img)
+                        await reference.putFile(item.img).catch(error => {
+                            setIsLoading(false)
+                            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                        })
 
                         //Get url of image was upload on Firebase
                         await reference.getDownloadURL().then((imgUrl) => {
@@ -124,58 +130,133 @@ const CheckBox = () => {
                                 ...item,
                                 img: imgUrl
                             })
+                        }).catch(error => {
+                            setIsLoading(false)
+                            ToastAndroid.show(String(error), ToastAndroid.SHORT)
                         })
                     } else {
                         newArrAnswer.push(item)
                     }
                 }
-            } catch (error) { }
 
 
-            //if route.params?.question !== undefine then just update questionList else add new question
-            if (route.params?.question !== undefined) {
-                // update question
-                let newQuestionList = [...newQuiz.questionList]
-                newQuestionList[route.params.indexQuestion] = {
-                    ...newQuestionList[route.params.indexQuestion],
-                    question: question,
-                    time: timeAnswer,
-                    backgroundImage: imageUrl,
-                    answerList: newArrAnswer,
-                    difficulty: difficulty,
+                try {
+                    //if route.params?.question !== undefine then just update questionList else add new question
+                    if (route.params?.question !== undefined) {
+                        // update question
+                        let newQuestionList = [...newQuiz.questionList]
+                        newQuestionList[route.params.indexQuestion] = {
+                            ...newQuestionList[route.params.indexQuestion],
+                            question: question,
+                            time: timeAnswer,
+                            backgroundImage: imageUrl,
+                            video: videoUrl,
+                            youtube: youtubeUrl,
+                            answerList: newArrAnswer,
+                            difficulty: difficulty,
+                        }
+                        dispatch(updateQuestionList(newQuestionList))
+                        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                        handleNavigation()
+                    } else {
+                        //Add new Question
+                        dispatch(addNewQuestion({
+                            questionType: "CheckBox",
+                            question: question,
+                            time: timeAnswer,
+                            backgroundImage: imageUrl,
+                            video: videoUrl,
+                            youtube: youtubeUrl,
+                            answerList: newArrAnswer,
+                            difficulty: difficulty,
+                            category: newQuiz.categories[0],
+                            tempQuestionId: "question" + newQuiz.numberOfQuestionsOrigin
+                        }))
+                        ToastAndroid.show('Add success', ToastAndroid.SHORT)
+                        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                        handleNavigation()
+                    }
+
+                    // Reset
+                    setQuestion('')
+                    setArrAnswer([{
+                        isCorrect: false,
+                        answer: "",
+                        img: ""
+                    }])
+                    setFileUri({
+                        type: "image",
+                        path: ""
+                    })
+
+                    setIsLoading(false)
+                } catch (error) {
+                    ToastAndroid.show(String(error), ToastAndroid.SHORT)
                 }
-                dispatch(updateQuestionList(newQuestionList))
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                handleNavigation()
             } else {
-                //Add new Question
-                dispatch(addNewQuestion({
-                    questionType: "CheckBox",
-                    question: question,
-                    time: timeAnswer,
-                    backgroundImage: imageUrl,
-                    answerList: newArrAnswer,
-                    difficulty: difficulty,
-                    category: newQuiz.categories[0],
-                    tempQuestionId: "question" + newQuiz.numberOfQuestionsOrigin
-                }))
-                ToastAndroid.show('Add success', ToastAndroid.SHORT)
-                LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-                handleNavigation()
+                ToastAndroid.show('No network connection', ToastAndroid.SHORT)
             }
 
-            // Reset
-            setQuestion('')
-            setArrAnswer([{
-                isCorrect: false,
-                answer: "",
-                img: ""
-            }])
-            setImageUri('')
-
-            setIsLoading(false)
         }
     }
+
+    React.useEffect(() => {
+        if (internet.isOnlineStatus == false) {
+            if (isLoading) {
+                setIsLoading(false)
+                ToastAndroid.show('Network connection suddenly lost', ToastAndroid.SHORT)
+            }
+        }
+    }, [internet])
+
+    React.useEffect(() => {
+        if (route.params?.question !== undefined) {
+
+            let arrAns = route.params.question.answerList
+            let arrOptionAns = []
+
+            setQuestion(route.params.question.question)
+            setTimeAnswer(route.params.question.time)
+            setArrAnswer(arrAns)
+            setDifficulty(route.params.question.difficulty)
+            if (route.params.question.backgroundImage != "") {
+                setFileUri({
+                    type: "image",
+                    path: route.params.question.backgroundImage
+                })
+            }
+            else if (route.params.question.video != "") {
+                setFileUri({
+                    type: "video",
+                    path: route.params.question.video
+                })
+            }
+            else if (route.params.question.youtube != "") {
+                setFileUri({
+                    type: "youtube",
+                    path: route.params.question.youtube
+                })
+            }
+            else {
+                setFileUri({
+                    type: "image",
+                    path: ""
+                })
+            }
+
+            arrAns.map((item) => {
+                item.answer !== "" ? arrOptionAns.push({
+                    isTextorFile: false
+                })
+                    :
+                    arrOptionAns.push({
+                        isTextorFile: true
+                    })
+            })
+
+            setArrOptionAnswer(arrOptionAns)
+        }
+    }, [])
 
     return (
         <View style={styles.container}>
@@ -200,8 +281,8 @@ const CheckBox = () => {
                             value={question}
                         />
 
-                        {/* Image upload */}
-                        <ChooseImgBTN setImageUri={setImageUri} imageUri={imageUri} />
+                        {/* Image/Video/Youtube for Question upload */}
+                        <ChooseFileBTN setFileUri={setFileUri} fileUri={fileUri} />
 
                         {/*Break line between Question and Option */}
                         <View style={styles.containerLineHorizon}>
@@ -245,7 +326,7 @@ const CheckBox = () => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
 
                                                     let newArrOptionAnswer = [...arrOptionAnswer]
-                                                    newArrOptionAnswer[index] = { isTextorImage: true }
+                                                    newArrOptionAnswer[index] = { isTextorFile: true }
                                                     setArrOptionAnswer(newArrOptionAnswer)
 
                                                     let newArrAnswer = [...arrAnswer]
@@ -267,7 +348,7 @@ const CheckBox = () => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
 
                                                     let newArrOptionAnswer = [...arrOptionAnswer]
-                                                    newArrOptionAnswer[index] = { isTextorImage: false }
+                                                    newArrOptionAnswer[index] = { isTextorFile: false }
                                                     setArrOptionAnswer(newArrOptionAnswer)
 
                                                     let newArrAnswer = [...arrAnswer]
@@ -297,7 +378,7 @@ const CheckBox = () => {
                                             />
                                         </View>
                                         {
-                                            arrOptionAnswer[index].isTextorImage ?
+                                            arrOptionAnswer[index].isTextorFile ?
                                                 // Button choose image for answer 
                                                 <ChooseImgBTN setImageUri={(imgPath) => {
                                                     let newArrAnswer = [...arrAnswer]
@@ -384,7 +465,7 @@ const CheckBox = () => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 
                                 let newArrOptionAnswer = [...arrOptionAnswer, {
-                                    isTextorImage: false
+                                    isTextorFile: false
                                 }]
                                 let newArrAnswer = [...arrAnswer, {
                                     isCorrect: false,

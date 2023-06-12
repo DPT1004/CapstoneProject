@@ -2,14 +2,14 @@ import React from 'react'
 import { Text, View, StyleSheet, FlatList, ActivityIndicator, Image } from 'react-native'
 import { timeWaitToNextQuestion } from '../../../common/shareVarible'
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import { COLORS } from '../../../common/theme'
+import { COLORS, SIZES } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
 import { clearInfoCompetitive, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
 import { useNavigation } from "@react-navigation/native"
 import { screenName } from '../../../navigator/screens-name'
 import socketServcies from '../../../until/socketServices'
-import FormButton from '../../../components/FormButton'
 import ModalSummary from './components/ModalSummary'
+import ThreeDButton from '../../../components/ThreeDButton'
 
 const PreviewAndLeaderBoard = () => {
 
@@ -20,6 +20,7 @@ const PreviewAndLeaderBoard = () => {
     const user = useSelector((state) => state.user)
     const quiz = useSelector((state) => state.newQuiz)
     const [leaderBoard, setLeaderBoard] = React.useState([])
+    const [player, setPlayer] = React.useState()
     const [indexPlayer, setIndexPlayer] = React.useState(0)
     const [isLoading, setIsLoading] = React.useState(true)
     const [modalVisible, setModalVisible] = React.useState(false)
@@ -31,9 +32,12 @@ const PreviewAndLeaderBoard = () => {
     React.useEffect(() => {
 
         socketServcies.on("players-get-finalLeaderBoard", ({ leaderBoard }) => {
+
             var indexPlayerInPlayerList = leaderBoard.findIndex(player => player.userId == user.userId)
             setIndexPlayer(indexPlayerInPlayerList)
             setLeaderBoard(leaderBoard)
+            setPlayer(leaderBoard[indexPlayerInPlayerList])
+
             if (leaderBoard.every(player => player.currentIndexQuestion + 1 == quiz.numberOfQuestions)) {
                 setIsLoading(false)
             }
@@ -46,18 +50,7 @@ const PreviewAndLeaderBoard = () => {
             }
         })
 
-
     }, [])
-
-    // React.useEffect(() => {
-    //     if (refFlatList.current && indexPlayer !== -1) {
-    //         refFlatList.current.scrollToIndex({
-    //             animated: true,
-    //             index: indexPlayer,
-    //             viewPosition: 0.5
-    //         })
-    //     }
-    // }, [indexPlayer])
 
     const renderItem = ({ item, index }) => {
         if (index == indexPlayer) {
@@ -131,7 +124,9 @@ const PreviewAndLeaderBoard = () => {
     }
 
     const renderView = () => {
+
         if (userCompetitive.isShowLeaderBoard && userCompetitive.currentIndexQuestion == 0) {
+            //Screen count to start a game
             return (
                 <View style={styles.containerCountDownToStartGame}>
                     <CountdownCircleTimer
@@ -155,6 +150,7 @@ const PreviewAndLeaderBoard = () => {
             )
         }
         else if (userCompetitive.isShowLeaderBoard && userCompetitive.currentIndexQuestion >= quiz.numberOfQuestions && leaderBoard.length == 1) {
+            //Screen LeaderBoard after game finish with only one player
             return (
                 <View style={styles.container}>
                     <View style={styles.containerLeaderBoard}>
@@ -184,40 +180,27 @@ const PreviewAndLeaderBoard = () => {
                         />
                     </View>
 
-                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} playerResult={leaderBoard[indexPlayer].playerResult} />
 
-                    <FormButton
-                        labelText="Summary"
-                        activeOpacity={0.5}
-                        isPrimary={false}
-                        style={{
-                            height: 90,
-                            width: 90,
-                            borderRadius: 45,
-                            borderWidth: 1.5,
-                            marginVertical: 10,
-                            alignSelf: "center"
-                        }}
-                        handleOnPress={() => {
-                            setModalVisible(true)
-                        }} />
+                    <View style={styles.containerBtnGoHomeAndSummary}>
+                        <ThreeDButton
+                            label={"GO HOME"}
+                            widthBtn={(SIZES.windowWidth - 10) / 2}
+                            onPress={() => {
+                                navigation.navigate(screenName.Home)
+                                dispatch(clearInfoCompetitive())
+                            }} />
+                        <ThreeDButton
+                            label={"SUMMARY"}
+                            widthBtn={(SIZES.windowWidth - 10) / 2}
+                            onPress={() => setModalVisible(true)} />
+                    </View>
 
-                    <FormButton
-                        labelText="Go Home"
-                        activeOpacity={0.8}
-                        style={{
-                            height: 45,
-                            borderRadius: 0
-                        }}
-                        handleOnPress={() => {
-                            dispatch(clearInfoCompetitive())
-                            navigation.navigate(screenName.Home)
-                        }}
-                    />
+                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} player={player} />
                 </View>
             )
         }
         else if (userCompetitive.isShowLeaderBoard && userCompetitive.currentIndexQuestion >= quiz.numberOfQuestions) {
+            //Screen LeaderBoard after game finish with many player
             return (
                 <View style={styles.container}>
                     <View style={styles.containerLeaderBoard}>
@@ -247,53 +230,40 @@ const PreviewAndLeaderBoard = () => {
                         />
                     </View>
                     <View style={styles.viewTimeCounter}>
-                        {
-                            isLoading ?
-                                <View>
-                                    <ActivityIndicator size={80} color={COLORS.gray} />
-                                    <Text style={styles.txtNextQuestion}>Waiting for another player finish the game</Text>
-                                </View>
-                                :
-                                <>
-                                    <FormButton
-                                        labelText="Summary"
-                                        activeOpacity={0.5}
-                                        isPrimary={false}
-                                        style={{
-                                            height: 90,
-                                            width: 90,
-                                            borderRadius: 45,
-                                            borderWidth: 1.5,
-                                            marginVertical: 10,
-                                            alignSelf: "center"
-                                        }}
-                                        handleOnPress={() => {
-                                            setModalVisible(true)
-                                        }} />
-                                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} playerResult={leaderBoard[indexPlayer].playerResult} />
-                                    {/* <Text style={styles.txtNextQuestion}>Game finish</Text> */}
-                                </>
-                        }
+                        <View>
+                            {
+                                isLoading ?
+                                    <>
+                                        <ActivityIndicator size={80} color={COLORS.gray} />
+                                        <Text style={styles.txtNextQuestion}>Waiting for another player finish the game</Text>
+                                    </>
+                                    :
+                                    <Text style={styles.txtNextQuestion}>Game finish</Text>
+                            }
+                        </View>
                     </View>
 
+                    <View style={styles.containerBtnGoHomeAndSummary}>
+                        <ThreeDButton
+                            label={"GO HOME"}
+                            widthBtn={(SIZES.windowWidth - 10) / 2}
+                            onPress={() => {
+                                navigation.navigate(screenName.Home)
+                                dispatch(clearInfoCompetitive())
+                            }} />
+                        <ThreeDButton
+                            label={"SUMMARY"}
+                            widthBtn={(SIZES.windowWidth - 10) / 2}
+                            onPress={() => setModalVisible(true)} />
+                    </View>
 
-                    <FormButton
-                        labelText="Go Home"
-                        activeOpacity={0.8}
-                        style={{
-                            height: 45,
-                            borderRadius: 0
-                        }}
-                        handleOnPress={() => {
-                            dispatch(clearInfoCompetitive())
-                            navigation.navigate(screenName.Home)
-                        }}
-                    />
+                    <ModalSummary modalVisible={modalVisible} onPressVisible={closeModal} player={player} />
                 </View>
             )
         }
         else {
             return (
+                //Screen LeaderBoard after finish each question
                 <View style={styles.container}>
                     <View style={styles.containerLeaderBoard}>
 
@@ -345,6 +315,8 @@ const PreviewAndLeaderBoard = () => {
         }
     }
 
+
+
     return (
         <>
             {
@@ -382,6 +354,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         backgroundColor: COLORS.primary,
         paddingVertical: 5
+    },
+    containerBtnGoHomeAndSummary: {
+        flexDirection: "row",
+        justifyContent: "space-around",
+        marginVertical: 5
     },
     viewTitleColumn: {
         flex: 1,

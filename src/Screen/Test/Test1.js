@@ -2,7 +2,6 @@ import React from 'react'
 import { Button, Text, View, ActivityIndicator, TouchableOpacity, StyleSheet, Modal, Image, Alert, StatusBar } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { COLORS } from '../../common/theme'
-import auth from '@react-native-firebase/auth'
 import { GoogleSignin, statusCodes } from '@react-native-google-signin/google-signin';
 
 GoogleSignin.configure({

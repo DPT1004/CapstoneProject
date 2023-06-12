@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-id/values-id.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-42:/values-id/values-id.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\2086b5a6c491cac5e14bd5b2d046898e\\transformed\\jetified-facebook-common-15.2.0\\res\\values-id\\values-id.xml",

@@ -23,9 +23,10 @@ const ModalOptionAddQuestion = ({ modalVisible, onPressVisible }) => {
     const [searchQuery, setSearchQuery] = React.useState("")
 
     const GET_AllCategory = async () => {
-        setIsLoadingCateogries(true)
-        var url = BASE_URL + "/category"
+
         try {
+            setIsLoadingCateogries(true)
+            var url = BASE_URL + "/category"
             await fetch(url, {
                 method: "GET"
             })
@@ -40,23 +41,28 @@ const ModalOptionAddQuestion = ({ modalVisible, onPressVisible }) => {
                     }
                 }).finally(() => setIsLoadingCateogries(false))
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            setIsLoadingCateogries(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
     const handleAsyncDispatch = (data) => {
-        data.map((question, index) => {
-            question.tempQuestionId = "question" + Number(quiz.numberOfQuestionsOrigin + index)
-            delete question._id
-        })
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
-        dispatch(addManyNewQuestion(data))
+        try {
+            data.map((question, index) => {
+                question.tempQuestionId = "question" + Number(quiz.numberOfQuestionsOrigin + index)
+                delete question._id
+            })
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+            dispatch(addManyNewQuestion(data))
+        } catch (error) {
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+        }
     }
 
     const Post_GetRandomQuestionWithCondition = async () => {
-        setIsLoading(true)
-        var url = BASE_URL + "/questionBank/getRandomQuestion"
         try {
+            setIsLoading(true)
+            var url = BASE_URL + "/questionBank/getRandomQuestion"
             await fetch(url, {
                 method: "POST",
                 headers: {
@@ -84,9 +90,13 @@ const ModalOptionAddQuestion = ({ modalVisible, onPressVisible }) => {
                                 })
                         }
                     }
+                }).finally(() => {
+                    setIsLoading(false)
+                    onPressVisible()
                 })
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            setIsLoading(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -217,10 +227,6 @@ const ModalOptionAddQuestion = ({ modalVisible, onPressVisible }) => {
                                 ToastAndroid.show("Please choose category", ToastAndroid.SHORT)
                             } else {
                                 Post_GetRandomQuestionWithCondition()
-                                setTimeout(() => {
-                                    setIsLoading(false)
-                                    onPressVisible()
-                                }, 1500)
                             }
                         }}
                     />

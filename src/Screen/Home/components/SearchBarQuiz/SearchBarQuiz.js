@@ -85,7 +85,7 @@ const SearchBarQuiz = () => {
             <FlatList
                 data={listQuiz.chooseCategories}
                 horizontal
-                style={{ marginTop: 10 }}
+                style={{ marginVertical: 5 }}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item, index }) =>
                     <TouchableOpacity

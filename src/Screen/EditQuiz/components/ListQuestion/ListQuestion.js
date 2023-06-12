@@ -25,9 +25,9 @@ const ListQuestion = () => {
     const bottomSheetModalRef = React.useRef(null)
 
     const Patch_Quiz = async () => {
-        setIsLoading(true)
-        var url = BASE_URL + "/quiz/" + quiz.id
         try {
+            setIsLoading(true)
+            var url = BASE_URL + "/quiz/" + quiz.id
             await fetch(url, {
                 method: "PATCH",
                 headers: {
@@ -57,7 +57,7 @@ const ListQuestion = () => {
                     navigation.navigate(screenName.ManageQuiz)
                 })
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 

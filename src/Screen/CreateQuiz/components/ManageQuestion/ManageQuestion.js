@@ -25,9 +25,9 @@ const ManageQuestion = () => {
     const bottomSheetModalRef = React.useRef(null)
 
     const Post_CreateQuiz = async () => {
-        setIsLoading(true)
-        var url = BASE_URL + "/quiz"
         try {
+            setIsLoading(true)
+            var url = BASE_URL + "/quiz"
             await fetch(url, {
                 method: "POST",
                 headers: {
@@ -57,7 +57,7 @@ const ManageQuestion = () => {
                     navigation.navigate(screenName.ManageQuiz)
                 })
         } catch (error) {
-            ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
         }
     }
 
@@ -93,12 +93,13 @@ const ManageQuestion = () => {
                                         </View>
                                     }
                                     handleOnPress={() => {
-                                        // if (newQuiz.questionList.length < 3) {
-                                        //     ToastAndroid.show("You need to add at least 3 question", ToastAndroid.SHORT)
-                                        // } else {
-                                        Post_CreateQuiz()
-                                        // }
-                                    }}
+                                        if (newQuiz.questionList.length < 3) {
+                                            ToastAndroid.show("You need to add at least 3 question", ToastAndroid.SHORT)
+                                        } else {
+                                            Post_CreateQuiz()
+                                        }
+                                    }
+                                    }
                                 />
                             </View>
                             {/*Search*/}

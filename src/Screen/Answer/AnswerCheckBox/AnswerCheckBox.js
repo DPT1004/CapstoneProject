@@ -1,13 +1,15 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
-import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
+import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard, addPlayerResult } from '../../../redux/Slice/userCompetitiveSlice'
 import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
+import { WebView } from 'react-native-webview'
 import TopBar from '../../Game/PlayQuiz/components/TopBar'
 import CustomViewScore from '../../Game/PlayQuiz/components/CustomViewScore'
-import socketServcies from '../../../until/socketServices'
 import Icon from "react-native-vector-icons/FontAwesome"
+import YoutubePlayer from "react-native-youtube-iframe"
+import socketServcies from '../../../until/socketServices'
 
 const AnswerMultiChoice = ({ question }) => {
 
@@ -15,6 +17,7 @@ const AnswerMultiChoice = ({ question }) => {
     const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
     const game = useSelector((state) => state.game)
     const user = useSelector((state) => state.user)
+    const userCompetitive = useSelector((state) => state.userCompetitive)
     const [userAnswer, setUserAnswer] = React.useState([])
     const arrCorrectAnswer = React.useMemo(() => {
         var arrCorrect = []
@@ -60,17 +63,25 @@ const AnswerMultiChoice = ({ question }) => {
 
         setTimeout(() => {
             dispatch(showLeaderBoard(true))
+            var scoreRecieve = 600
+            if (userCompetitive.isActiveTimeCounter) {
+                scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? score.current : 0
+            } else {
+                scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? 600 : 0
+            }
             var userId = user.userId
             var pin = game.pin
-            var scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? score.current : 0
             var playerResult = {
                 question: question,
                 indexPlayerAnswer: indexUserAnswer.current,
                 score: scoreRecieve,
                 timeAnswer: timeUserAnswer.current
             }
-            socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
+            if (socketServcies.socket.connected) {
+                socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
+            }
 
+            dispatch(addPlayerResult(playerResult))
             dispatch(nextQuestion())
         }, timeWaitToPreviewAndLeaderBoard)
 
@@ -252,16 +263,31 @@ const AnswerMultiChoice = ({ question }) => {
                 />
                 {/* Container Question */}
                 <View style={styles.containerQuestion}>
-                    <Text style={styles.txtQuestion}>{currentIndexQuestion + 1 + "." + question.question}</Text>
+                    <Text style={styles.txtQuestion}>{question.question}</Text>
                     {
-                        question.backgroundImage != '' ?
-                            <Image
-                                source={{ uri: question.backgroundImage }}
-                                resizeMode={"stretch"}
-                                style={styles.imgQuestion}
-                            />
-                            :
-                            <></>
+                        question.backgroundImage != '' &&
+                        <Image
+                            source={{ uri: question.backgroundImage }}
+                            resizeMode={"stretch"}
+                            style={styles.imgQuestion}
+                        />
+                    }
+                    {
+                        question.video != "" &&
+                        <View style={{ flex: 1, width: "100%", marginBottom: 5 }}>
+                            <WebView
+                                allowsFullscreenVideo={true}
+                                source={{ uri: question.video }} />
+                        </View>
+                    }
+                    {
+                        question.youtube != "" &&
+                        <YoutubePlayer
+                            webViewStyle={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }}
+                            play={true}
+                            allowWebViewZoom={true}
+                            videoId={question.youtube}
+                        />
                     }
                 </View>
                 {/* Render answer/option */}
@@ -273,8 +299,8 @@ const AnswerMultiChoice = ({ question }) => {
                     onPress={() => {
                         setActiveSubmit(true)
                     }}
-                    style={{ alignSelf: "flex-end", paddingHorizontal: 15, paddingVertical: 10, backgroundColor: COLORS.primary, marginBottom: 5, borderRadius: 10 }} >
-                    <Text style={{ color: COLORS.white, fontSize: 16, fontWeight: "bold" }}>Submit</Text>
+                    style={styles.btnSubmit} >
+                    <Text style={styles.txtSubmit}>Submit</Text>
                 </TouchableOpacity>
             </View>
             {
@@ -291,7 +317,10 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.white
     },
     containerQuestion: {
-        flex: 1
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingTop: 3
     },
     containerOptionOnlyText: {
         flex: 1.5,
@@ -340,16 +369,29 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    btnSubmit: {
+        alignSelf: "flex-end",
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        backgroundColor: COLORS.primary,
+        marginBottom: 5,
+        borderRadius: 10
+    },
     txtQuestion: {
         fontWeight: "bold",
-        fontSize: 18,
+        fontSize: 16,
         color: COLORS.black,
     },
     txtOption: {
         fontWeight: "bold",
         fontSize: 16,
         color: COLORS.white,
-    }
+    },
+    txtSubmit: {
+        color: COLORS.white,
+        fontSize: 16,
+        fontWeight: "bold"
+    },
 })
 
 export default AnswerMultiChoice

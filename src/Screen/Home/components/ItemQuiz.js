@@ -11,7 +11,6 @@ import {
 } from '@gorhom/bottom-sheet'
 import FormButton from '../../../components/FormButton'
 import Icon1 from 'react-native-vector-icons/Octicons'
-import socketServcies, { socketId } from '../../../until/socketServices'
 import { TouchableOpacity, FlatList } from 'react-native-gesture-handler'
 
 const spaceBetweenItem = 10
@@ -23,7 +22,6 @@ const ItemQuiz = ({ item, index }) => {
     const navigation = useNavigation()
     const dispatch = useDispatch()
     const user = useSelector((state) => state.user)
-    const game = useSelector((state) => state.game)
     const imgQuiz = item.backgroundImage !== "" ? item.backgroundImage : uriImgQuiz
 
     const bottomSheetModalRef = React.useRef(null)
@@ -121,19 +119,14 @@ const ItemQuiz = ({ item, index }) => {
                                     quizId: item._id,
                                     pin: Math.floor(100000 + Math.random() * 900000),
                                     isLive: false,
-                                    playerList: [{
-                                        userId: user.userId,
-                                        userName: user.name,
-                                        socketId: socketId,
-                                        photo: user.photo
-                                    }]
+                                    playerList: []
                                 }
-                                dispatch(POST_createGame(newGame)).then(() => {
-                                    socketServcies.emit("init-game", game)
-                                    navigation.navigate(screenName.WaitingRoom)
-                                    bottomSheetModalRef.current?.close()
-                                })
 
+                                const onPress = () => {
+                                    bottomSheetModalRef.current?.close()
+                                    navigation.navigate(screenName.WaitingRoom)
+                                }
+                                dispatch(POST_createGame({ newGame: newGame, onPress: onPress }))
                             }}
                         />
                         <FormButton
@@ -190,7 +183,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     category: {
-        backgroundColor: COLORS.primary,
+        backgroundColor: COLORS.gray,
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 5,

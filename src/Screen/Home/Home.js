@@ -1,23 +1,18 @@
 import React from 'react'
 import { View, Text, StyleSheet, StatusBar, FlatList, RefreshControl, TouchableOpacity, TextInput, ToastAndroid, ActivityIndicator, Button } from 'react-native'
 import { COLORS } from '../../common/theme'
-import { onlyNumber, webClientId } from '../../common/shareVarible'
+import { onlyNumber } from '../../common/shareVarible'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { useDispatch, useSelector } from 'react-redux'
 import { updateGame } from '../../redux/Slice/gameSlice'
 import { GET_getQuizBySearch, GET_refreshListQuiz, setPage } from '../../redux/Slice/listQuizSlice'
 import socketServcies, { socketId } from '../../until/socketServices'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import FormButton from '../../components/FormButton'
 import ItemQuiz from './components/ItemQuiz'
 import SearchBarQuiz from './components/SearchBarQuiz/SearchBarQuiz'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
-GoogleSignin.configure({
-    scopes: ['email'],
-    webClientId: webClientId,
-    offlineAccess: true
-})
 
 const HomeScreen = () => {
 
@@ -51,6 +46,7 @@ const HomeScreen = () => {
                 dispatch(updateGame(game._doc))
                 ToastAndroid.show(message, ToastAndroid.SHORT)
                 navigation.navigate(screenName.WaitingRoom)
+                setPin("")
             }
         })
     }, [])
@@ -93,19 +89,36 @@ const HomeScreen = () => {
                 renderItem={({ item, index }) => <ItemQuiz item={item} index={index} />}
                 ListHeaderComponent={
                     <View style={{ width: "100%", backgroundColor: COLORS.bgrForPrimary, alignItems: "center", borderRadius: 10, padding: 10, marginBottom: 35 }}>
-                        <TextInput
-                            placeholder='Type pin room'
-                            maxLength={6}
-                            keyboardType="numeric"
-                            value={pin}
-                            onChangeText={(txt) => setPin(onlyNumber(txt))}
-                            style={{ height: 60, width: "100%", backgroundColor: COLORS.white, fontSize: 22, borderRadius: 5, paddingHorizontal: 15, marginBottom: 10 }}
-                        />
+                        <View style={{ flexDirection: "row", height: 60, width: "100%", backgroundColor: COLORS.white, borderRadius: 5, paddingHorizontal: 15, marginBottom: 10 }}>
+                            <TextInput
+                                placeholder='Type pin room'
+                                keyboardType="numeric"
+                                value={pin}
+                                onChangeText={(txt) => setPin(onlyNumber(txt))}
+                                style={{ flex: 1, fontSize: 22 }}
+                            />
+                            {/*remove text in search */}
+                            {
+                                pin !== "" &&
+                                <TouchableOpacity
+                                    onPress={() => setPin("")}
+                                    style={{ alignItems: "center", justifyContent: "center", padding: 10 }}
+                                >
+                                    <Icon
+                                        size={20}
+                                        color={COLORS.black}
+                                        name={"remove"}
+                                    />
+                                </TouchableOpacity>
+                            }
+                        </View>
                         <TouchableOpacity
                             activeOpacity={0.9}
                             style={{ height: 60, width: "100%", alignItems: "center", justifyContent: "center", borderRadius: 5, backgroundColor: COLORS.primary }}
                             onPress={() => {
-                                socketServcies.emit("player-join", { user, socketId, pin })
+                                if (socketServcies.socket.connected) {
+                                    socketServcies.emit("player-join", { user, socketId, pin })
+                                }
                             }}>
                             <Text style={{ color: COLORS.white, fontSize: "600", fontSize: 20 }}>Join a game</Text>
                         </TouchableOpacity>
@@ -142,9 +155,7 @@ const styles = StyleSheet.create({
     },
     viewTopBar: {
         backgroundColor: COLORS.white,
-        elevation: 4,
         paddingHorizontal: 20,
-        paddingBottom: 10,
     }
 })
 

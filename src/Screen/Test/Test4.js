@@ -1,255 +1,107 @@
-import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
-import { COLORS } from '../../common/theme'
-import { timeWaitToNextQuestion } from '../../common/shareVarible'
-import Icon from "react-native-vector-icons/FontAwesome"
-import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
-import CustomViewScore from '../Game/PlayQuiz/components/CustomViewScore'
-import TopBar from '../Game/PlayQuiz/components/TopBar'
-import { useDispatch } from 'react-redux'
-import { moreCorrect, moreIncorrect } from '../../redux/Slice/userCompetitiveSlice'
-
-const Test4 = ({ quest, indexQuestion, handleNextQuestion }) => {
-
-    question = {
-        ...quest,
-        arrOption: [...quest.incorrect_answers, ...quest.correct_answer]
-    }
-    const [userAnswer, setUserAnswer] = React.useState([])
-    const [activeSubmit, setActiveSubmit] = React.useState(false)
-    const [rerender, setReRender] = React.useState(0)
-    const score = React.useRef()
-    const dispatch = useDispatch()
-
-    function isUserAnswerCorrect(array1, array2) {
-        if (array1.length === array2.length) {
-            return array1.every((element, index) => {
-                if (element === array2[index]) {
-                    return true;
-                }
-                return false;
-            });
-        }
-        return false;
-    }
-
-    const handleAfterDone = () => {
-        setTimeout(() => {
-            handleNextQuestion(indexQuestion + 1)
-            setUserAnswer([])
-            if (isUserAnswerCorrect(userAnswer, question.correct_answer)) {
-                dispatch(moreCorrect(score.current))
-            } else {
-                dispatch(moreIncorrect())
-            }
-        }, timeWaitToNextQuestion)
-    }
-
-    const getOptionBgColor = (option, indexOption) => {
-        if (activeSubmit) {
-            if (question.correct_answer.includes(option)) {
-                return COLORS.success
-            } else {
-                return COLORS.error
-            }
-        }
-        else {
-            switch (indexOption) {
-                case 0:
-                    return COLORS.answerA
-                case 1:
-                    return COLORS.answerB
-                case 2:
-                    return COLORS.answerC
-                case 3:
-                    return COLORS.answerD
-            }
-        }
-    };
-
-    const getOptionIcon = (indexOption) => {
-        switch (indexOption) {
-            case 0:
-                return "hand-grab-o"
-            case 1:
-                return "hand-pointer-o"
-            case 2:
-                return "hand-peace-o"
-            case 3:
-                return "hand-spock-o"
-        }
-    }
-
-    React.useEffect(() => {
-        if (activeSubmit === true) {
-            handleAfterDone()
-        }
-    }, [activeSubmit])
+import React from "react"
+import { COLORS, SIZES } from '../../common/theme'
+import { StyleSheet, Text, View, Button, TextInput, TouchableOpacity } from "react-native"
+import ChooseFileBTN from '../../components/ChooseFileBTN'
+import { WebView } from 'react-native-webview'
+import YoutubePlayer from "react-native-youtube-iframe"
+const Test4 = () => {
+    const playerRef = React.useRef();
+    const [timeStart, setTimeStart] = React.useState(0)
+    const [timeEnd, setTimeEnd] = React.useState(0)
+    const [duration, setDuration] = React.useState(0)
+    const [fileUri, setFileUri] = React.useState({
+        type: "image",
+        path: ""
+    })
+    const handleValueChange = React.useCallback((low, high) => {
+        setTimeStart(low);
+        timeEnd(high);
+    }, [])
 
     return (
-        <View style={styles.viewFlex1}>
-            <View style={styles.container}>
-                <TopBar children={
-                    <CountdownCircleTimer
-                        isPlaying={activeSubmit ? false : true}
-                        duration={question.time}
-                        size={40}
-                        strokeWidth={5}
-                        colors={[COLORS.success, COLORS.answerC, COLORS.error]}
-                        colorsTime={[question.time, question.time / 3, 0]}
-                        onUpdate={(currentTime) => {
-                            var timeUserResponed = question.time - currentTime
-                            var takenScore = 1 - (timeUserResponed / question.time) / 2
-                            score.current = Number(takenScore).toFixed(3) * 1000
-                        }}
-                        onComplete={() => {
-                            handleAfterDone()
-                            setActiveSubmit(true)
-                        }}
-                    >
-                        {({ remainingTime, color }) => <Text style={{ fontSize: 20, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
-                    </CountdownCircleTimer>
-                } />
-                <View style={styles.containerQuestion}>
-                    <Text style={styles.txtQuestion}> {indexQuestion + 1}. {question.question} </Text>
-                    {question.imageUrl != '' ? (
-                        <Image
-                            source={{
-                                uri: question.imageUrl,
-                            }}
-                            resizeMode={'contain'}
-                            style={styles.img}
-                        />
-                    ) : <></>}
+        <View style={styles.container}>
+            {/* Image/Video/Youtube for Question upload */}
+            {/* <ChooseFileBTN setFileUri={setFileUri} fileUri={fileUri} /> */}
+            {/* {
+                fileUri.path !== "" &&
+                <View style={{ width: "100%", height: 180 }}>
+
+                    <WebView source={{ uri: fileUri.path }} />
                 </View>
-                <View style={styles.containerOption}>
-                    {question.arrOption.map((option, indexOption) => {
-                        return (
-                            <TouchableOpacity
-                                key={indexOption}
-                                disabled={activeSubmit}
-                                style={[styles.btnOption, { backgroundColor: getOptionBgColor(option, indexOption) }]}
-                                onPress={() => {
-                                    var newUserAnswer = userAnswer
-                                    if (!newUserAnswer.includes(option)) {
-                                        newUserAnswer.push(option);
-                                    } else {
-                                        newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
-                                    }
-                                    setReRender(Math.random())
-                                    setUserAnswer(newUserAnswer)
-                                }}>
-                                <Icon
-                                    name={getOptionIcon(indexOption)}
-                                    size={25}
-                                    color={COLORS.white}
-                                />
-                                <Text style={styles.txtOption}>{option}</Text>
-                                {
-                                    userAnswer.includes(option) ?
-                                        <View style={styles.iconChoose}>
-                                            <Icon
-                                                name={"check-circle"}
-                                                size={20}
-                                                color={COLORS.white} />
-                                        </View>
-                                        :
-                                        <View style={styles.circleUnchoose} />
-                                }
-                            </TouchableOpacity>
-                        );
-                    })}
-                    <TouchableOpacity style={styles.btnSubmit}
-                        disabled={activeSubmit}
-                        onPress={() => setActiveSubmit(true)}>
-                        <Icon
-                            name="arrow-right"
-                            color={COLORS.white}
-                            size={20}
-                        />
-                    </TouchableOpacity>
-                </View>
-            </View>
+            } */}
             {
-                activeSubmit ? <CustomViewScore score={score.current} isCorrect={isUserAnswerCorrect(userAnswer, question.correct_answer)} /> : <></>
+                fileUri.path !== "" &&
+                <View style={{ width: "100%", height: 200 }} pointerEvents="none">
+                    <YoutubePlayer
+                        height={200}
+                        ref={playerRef}
+                        initialPlayerParams={{ start: timeStart, end: timeEnd, iv_load_policy: 3, controls: false, showInfo: false }}
+                        play={true}
+                        // videoId={fileUri.path}
+                        playList={[fileUri.path]}
+                        onReady={() => {
+                            playerRef.current.seekTo(timeStart, true)
+                            playerRef.current?.getDuration().then(
+                                getDuration => setDuration(getDuration)
+                            )
+                        }}
+                    />
+
+                </View>
             }
+            <TextInput
+                placeholder="Url"
+                onChangeText={(txt) => setFileUri({
+                    type: "youtube",
+                    path: txt
+                })}
+                value={fileUri.path}
+                style={{ width: "90%", height: 40, borderWidth: 2, borderColor: COLORS.gray, alignSelf: "center", marginVertical: 5 }}
+            />
+            {/* <TextInput
+                placeholder="Start time"
+                onChangeText={(txt) => setTimeStart(txt)}
+                value={timeStart}
+                style={{ width: "90%", height: 40, borderWidth: 2, borderColor: COLORS.gray, alignSelf: "center", marginVertical: 5 }}
+            />
+            <TextInput
+                placeholder="End time"
+                onChangeText={(txt) => setTimeEnd(txt)}
+                value={timeEnd}
+                style={{ width: "90%", height: 40, borderWidth: 2, borderColor: COLORS.gray, alignSelf: "center", marginVertical: 5 }}
+            /> */}
+            {/* <Button
+                title="Apply url"
+                onPress={() => setFileUri({
+                    type: "video",
+                    path: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/VID20230602181217.mp4?alt=media&token=be8ffbf7-7afa-475a-ab1d-046b0e28d0e8"
+                })}
+            /> */}
+            <Button
+                title="Reset url"
+                onPress={() => setFileUri({
+                    type: "image",
+                    path: ""
+                })}
+            />
         </View>
-    );
-};
+    )
+}
+
+export default Test4
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingHorizontal: 10,
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.white,
     },
-    containerQuestion: {
-        flex: 0.45
-    },
-    containerOption: {
-        flex: 0.55,
-    },
-    viewFlex1: {
-        flex: 1
-    },
-    circleUnchoose: {
-        height: 15,
-        width: 15,
+    btnSetting: {
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 10,
-        backgroundColor: COLORS.white,
+        flexDirection: "row",
         position: "absolute",
-        bottom: 5,
-        right: 5
+        top: 19,
+        left: 10
     },
-    iconChoose: {
-        position: "absolute",
-        bottom: 5,
-        right: 5
-    },
-    img: {
-        width: '80%',
-        height: 150,
-        marginTop: 20,
-        marginLeft: '10%',
-        borderRadius: 5,
-    },
-    btnSubmit: {
-        borderRadius: 10,
-        marginVertical: 10,
-        backgroundColor: COLORS.primary,
-        alignSelf: "flex-end",
-        padding: 10,
-        paddingHorizontal: 30,
-        justifyContent: "center",
-        alignItems: "center"
-    },
-    btnOption: {
-        flex: 1,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
-        borderTopWidth: 1,
-        borderRadius: 10,
-        marginBottom: 5,
-        borderColor: COLORS.border,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    txtQuestion: {
-        fontWeight: "bold",
-        fontSize: 18,
-        color: COLORS.black,
-    },
-    txtOption: {
-        fontWeight: "bold",
-        fontSize: 18,
-        color: COLORS.white,
-        marginLeft: 10
-    }
 
-
-})
-
-export default Test4
+});

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
+import { ScrollView, ToastAndroid, TouchableOpacity, View, Alert, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { COLORS, SIZES } from '../../common/theme'
@@ -16,13 +16,14 @@ const SignUp = () => {
     const [email, setEmail] = React.useState('')
     const [password, setPassword] = React.useState('')
     const [confirmPassword, setConfirmPassword] = React.useState('')
+    const [userName, setUserName] = React.useState('')
     const [isLoading, setIsLoading] = React.useState(false)
     const [isSecure, setIsSecure] = React.useState(false)
     const [isSecure1, setIsSecure1] = React.useState(false)
 
     const handleRegister = () => {
-        if (email == '' || password == '' || confirmPassword == '') {
-            ToastAndroid.show("Empty Email or Password or ConfirmPassword", ToastAndroid.SHORT)
+        if (email == '' || password == '' || confirmPassword == '' || userName == '') {
+            ToastAndroid.show("Empty Email or Password or ConfirmPassword or UserName", ToastAndroid.SHORT)
         } else if (checkEmailIsInvalid(email)) {
             ToastAndroid.show("Email invalid", ToastAndroid.SHORT)
         }
@@ -33,34 +34,62 @@ const SignUp = () => {
             ToastAndroid.show("Password need at least 8 char", ToastAndroid.SHORT)
         }
         else {
-            Post_Register()
+            Post_Register1()
         }
     };
 
-    const Post_Register = async () => {
-        setIsLoading(true)
-        var url = BASE_URL + "/user/register"
-        await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        })
-            .then((response) => {
-                if (response.status == 200) {
-                    Promise.resolve(response.json())
-                        .then((obj) => {
-                            console.log(obj)
-                        })
-                } else {
-                    ToastAndroid.show("Wrong Email or Password")
-                }
-            }).finally(() => setIsLoading(false))
+    const Post_Register1 = async () => {
 
+        try {
+            setIsLoading(true)
+            var url = BASE_URL + "/user/register"
+            await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                    name: userName
+                }),
+            }).then(response => {
+                if (response.ok) {
+                    if (response.status == 200) {
+                        Promise.resolve(response.json())
+                            .then((data) => {
+                                Alert.alert(
+                                    "New Account",
+                                    "Your new account:  " + email + "\n" + "Password:  " + password,
+                                    [
+                                        {
+                                            text: "OK",
+                                            onPress: () => {
+                                                navigation.navigate(screenName.SignIn, {
+                                                    newEmail: email,
+                                                    newPassword: password
+                                                })
+                                            }
+                                        },
+                                    ],
+                                )
+                            })
+                    }
+                } else {
+                    Promise.resolve(response.json())
+                        .then((data) => {
+                            ToastAndroid.show(data.message, ToastAndroid.SHORT)
+                        })
+                }
+
+            }).finally(() => {
+                setIsLoading(false)
+            })
+
+        } catch (error) {
+            setIsLoading(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+        }
     }
 
     return (
@@ -79,14 +108,21 @@ const SignUp = () => {
                     />
                     <FormInput
                         labelText="Email"
-                        maxLength={40}
                         onChangeText={txt => setEmail(txt)}
                         value={email}
-                        keyboardType={'email-address'}
+                        showCharCount={true}
+                    />
+                    <FormInput
+                        labelText="Username"
+                        onChangeText={txt => setUserName(txt)}
+                        value={userName}
+                        showCharCount={true}
+                        maxLength={30}
                     />
                     <FormInput
                         labelText="Password"
-                        maxLength={40}
+                        maxLength={30}
+                        showCharCount={true}
                         onChangeText={txt => setPassword(txt)}
                         children={
                             <TouchableOpacity
@@ -101,7 +137,7 @@ const SignUp = () => {
                             </TouchableOpacity>
                         }
                         value={password}
-                        secureTextEntry={true}
+                        secureTextEntry={isSecure}
                     />
                     <FormInput
                         labelText="Confirm Password"
@@ -119,7 +155,7 @@ const SignUp = () => {
                             </TouchableOpacity>
                         }
                         value={confirmPassword}
-                        secureTextEntry={true}
+                        secureTextEntry={isSecure1}
                     />
                     <FormButton
                         labelText="Register"

@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.mobilecapstone.app-mergeDebugResources-41:/values-v24/values-v24.xml",
+            "outputFile": "com.mobilecapstone.app-mergeDebugResources-42:/values-v24/values-v24.xml",
             "map": [
                 {
                     "source": "C:\\Users\\USER\\.gradle\\caches\\transforms-3\\448b2fb176b95e4983b9c279fec0cb75\\transformed\\media-1.0.0\\res\\values-v24\\values-v24.xml",

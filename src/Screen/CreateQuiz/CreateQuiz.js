@@ -5,7 +5,7 @@ import { screenName } from '../../navigator/screens-name'
 import { COLORS } from '../../common/theme'
 import { img } from '../../assets/index'
 import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addNewQuiz } from '../../redux/Slice/newQuizSlice'
 import storage from '@react-native-firebase/storage'
 import FormInput from '../../components/FormInput'
@@ -21,6 +21,7 @@ const CreateQuiz = () => {
 
   const navigation = useNavigation()
   const dispatch = useDispatch()
+  const internet = useSelector((state) => state.internet)
 
   const [title, setTitle] = React.useState('')
   const [description, setDescription] = React.useState('')
@@ -49,7 +50,7 @@ const CreateQuiz = () => {
           }
         }).finally(() => setIsLoadingCateogries(false))
     } catch (error) {
-      ToastAndroid.show("error: " + error, ToastAndroid.SHORT)
+      ToastAndroid.show(String(error), ToastAndroid.SHORT)
     }
   }
 
@@ -79,93 +80,115 @@ const CreateQuiz = () => {
       ToastAndroid.show("Please choose Category", ToastAndroid.SHORT)
     } else {
 
-      // Upload Image and get UrlImage for Quiz
-      try {
+      if (internet.isOnlineStatus) {
+        // Upload Image and get UrlImage for Quiz
         var imageUrl = ''
         if (imageUri != '' && imageUri.includes(firebaseHeaderUrl) == false) {
           setIsLoading(true)
           const reference = storage().ref(imageUri.slice(imageUri.lastIndexOf("/") + 1, imageUri.length));
-          await reference.putFile(imageUri)
+          await reference.putFile(imageUri).catch(error => {
+            setIsLoading(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+          })
+
           //Get url of image was upload on Firebase
-          imageUrl = await reference.getDownloadURL()
+          imageUrl = await reference.getDownloadURL().catch(error => {
+            setIsLoading(false)
+            ToastAndroid.show(String(error), ToastAndroid.SHORT)
+          })
+          setIsLoading(false)
         }
-      } catch (error) { }
 
-      dispatch(addNewQuiz({
-        name: title,
-        description: description,
-        backgroundImage: imageUrl,
-        isPublic: display,
-        categories: chooseCategory,
-        numberOfQuestions: 2,
-        questionList: [{
-          questionType: "MultipleChoice",
-          question: "Toi la ai trong em ??",
-          time: 10,
-          backgroundImage: "",
-          answerList: [
-            {
-              answer: "Toi",
-              isCorrect: false,
-              img: ""
-            },
-            {
-              answer: "Em",
-              isCorrect: true,
-              img: ""
-            },
-            {
-              answer: "Em & Toi",
-              isCorrect: false,
-              img: ""
-            },
-            {
-              answer: "Nobody",
-              isCorrect: false,
-              img: ""
-            },
-          ],
-          difficulty: "easy",
-          category: chooseCategory[0],
-          tempQuestionId: "answer0"
-        },
-        {
-          questionType: "CheckBox",
-          question: "B ??",
-          time: 10,
-          backgroundImage: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb",
-          answerList: [
-            {
-              answer: "",
-              isCorrect: true,
-              img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
-            },
-            {
-              answer: "",
-              isCorrect: true,
-              img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
-            },
-            {
-              answer: "C",
-              isCorrect: false,
-              img: ""
-            },
-            {
-              answer: "D",
-              isCorrect: false,
-              img: ""
-            },
-          ],
-          difficulty: "easy",
-          category: chooseCategory[0],
-          tempQuestionId: "answer1"
-        }]
-      }))
+        dispatch(addNewQuiz({
+          name: title,
+          description: description,
+          backgroundImage: imageUrl,
+          isPublic: display,
+          categories: chooseCategory,
+          numberOfQuestions: 2,
+          questionList: [{
+            questionType: "MultipleChoice",
+            question: "Toi la ai trong em ??",
+            time: 10,
+            backgroundImage: "",
+            video: "",
+            youtube: "",
+            answerList: [
+              {
+                answer: "Toi",
+                isCorrect: false,
+                img: ""
+              },
+              {
+                answer: "Em",
+                isCorrect: true,
+                img: ""
+              },
+              {
+                answer: "Em & Toi",
+                isCorrect: false,
+                img: ""
+              },
+              {
+                answer: "Nobody",
+                isCorrect: false,
+                img: ""
+              },
+            ],
+            difficulty: "easy",
+            category: chooseCategory[0],
+            tempQuestionId: "answer0"
+          },
+          {
+            questionType: "CheckBox",
+            question: "B ??",
+            time: 10,
+            backgroundImage: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb",
+            video: "",
+            youtube: "",
+            answerList: [
+              {
+                answer: "",
+                isCorrect: true,
+                img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
+              },
+              {
+                answer: "",
+                isCorrect: true,
+                img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
+              },
+              {
+                answer: "C",
+                isCorrect: false,
+                img: ""
+              },
+              {
+                answer: "D",
+                isCorrect: false,
+                img: ""
+              },
+            ],
+            difficulty: "easy",
+            category: chooseCategory[0],
+            tempQuestionId: "answer1"
+          }]
+        }))
 
-      setIsLoading(false)
-      navigation.navigate(screenName.ManageQuestion)
+        navigation.navigate(screenName.ManageQuestion)
+      } else {
+        ToastAndroid.show('No network connection', ToastAndroid.SHORT)
+      }
     }
   }
+
+  React.useEffect(() => {
+    if (internet.isOnlineStatus == false) {
+      if (isLoading) {
+        setIsLoading(false)
+        ToastAndroid.show('Network connection suddenly lost', ToastAndroid.SHORT)
+      }
+    }
+  }, [internet])
 
   React.useEffect(() => {
     GET_AllCategory()

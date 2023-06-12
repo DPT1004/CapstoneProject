@@ -4,11 +4,13 @@ import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { store } from '../redux/store'
-import { Provider } from 'react-redux'
+import { Provider, useDispatch } from 'react-redux'
+import { setIsOnlineStatus } from '../redux/Slice/internetSlice'
 import { screenName } from './screens-name'
 import { COLORS } from '../common/theme'
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import NetInfo from "@react-native-community/netinfo"
 import socketServcies from '../until/socketServices'
 import CustomTabBTN from '../components/CustomTabBTN'
 import SignIn from '../Screen/SignIn/SignIn'
@@ -25,7 +27,8 @@ import MultipleChoice from '../Screen/Question/MultipleChoice/MultipleChoice'
 import CheckBox from '../Screen/Question/CheckBox/CheckBox'
 import AnswerMultiChoice from '../Screen/Answer/AnswerMultiChoice/AnswerMultiChoice'
 import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
-import Test1 from '../Screen/Test/Test1'
+import HostScreen from '../Screen/Game/HostScreen/HostScreen'
+import Test4 from '../Screen/Test/Test4'
 
 
 const arrTab = [
@@ -34,8 +37,8 @@ const arrTab = [
 ]
 
 const Tab = createBottomTabNavigator();
-
 function BottomTab() {
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -51,7 +54,8 @@ function BottomTab() {
           borderRadius: 30,
           backgroundColor: COLORS.white,
           elevation: 1
-        }
+        },
+
       }}
     >
       {
@@ -72,8 +76,15 @@ function BottomTab() {
 }
 
 const Stack = createNativeStackNavigator()
-
 const MainStack = () => {
+  const dispatch = useDispatch()
+
+  React.useEffect(() => {
+    NetInfo.addEventListener(networkState => {
+      var isOnline = networkState.isConnected && networkState.isInternetReachable
+      dispatch(setIsOnlineStatus(isOnline))
+    });
+  }, [])
 
   return (
 
@@ -81,8 +92,9 @@ const MainStack = () => {
       screenOptions={{
         headerShown: false,
       }}
+
     >
-      {/* <Stack.Screen name={screenName.Test} component={Test1} /> */}
+      {/* <Stack.Screen name={screenName.Test} component={Test4} /> */}
       <Stack.Screen name={screenName.SignIn} component={SignIn} />
       <Stack.Screen name={screenName.SignUp} component={SignUp} />
       <Stack.Screen name={screenName.BottomTab} component={BottomTab} />
@@ -96,10 +108,13 @@ const MainStack = () => {
       <Stack.Screen name={screenName.CheckBox} component={CheckBox} />
       <Stack.Screen name={screenName.AnswerCheckBox} component={AnswerCheckBox} />
       <Stack.Screen name={screenName.AnswerMultiChoice} component={AnswerMultiChoice} />
+      <Stack.Screen name={screenName.HostScreen} component={HostScreen} />
     </Stack.Navigator>
 
   )
 }
+
+
 
 const MainNavigator = () => {
 
@@ -115,8 +130,8 @@ const MainNavigator = () => {
     return () => backHandler.remove();
   }, [])
 
-  // Initial socket connect with server
   React.useEffect(() => {
+    // Initial socket connect with server
     socketServcies.initializeSocket()
   }, [])
 
