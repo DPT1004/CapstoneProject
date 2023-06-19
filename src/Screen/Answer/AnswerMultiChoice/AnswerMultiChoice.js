@@ -12,7 +12,6 @@ import YoutubePlayer from "react-native-youtube-iframe"
 import socketServcies from '../../../until/socketServices'
 
 const AnswerMultiChoice = ({ question }) => {
-
     const dispatch = useDispatch()
     const currentIndexQuestion = useSelector((state) => state.userCompetitive.currentIndexQuestion)
     const game = useSelector((state) => state.game)
@@ -51,14 +50,14 @@ const AnswerMultiChoice = ({ question }) => {
             dispatch(moreIncorrect())
         }
 
+        var scoreRecieve = 600
+        if (userCompetitive.isActiveTimeCounter == false) {
+            scoreRecieve = isCorrectAnswer() ? 600 : 0
+        }
+
         setTimeout(() => {
             dispatch(showLeaderBoard(true))
-            var scoreRecieve = 600
-            if (userCompetitive.isActiveTimeCounter) {
-                scoreRecieve = isCorrectAnswer() ? score.current : 0
-            } else {
-                scoreRecieve = isCorrectAnswer() ? 600 : 0
-            }
+
             var userId = user.userId
             var pin = game.pin
             var playerResult = {
@@ -238,12 +237,16 @@ const AnswerMultiChoice = ({ question }) => {
                     }
                     {
                         question.youtube != "" &&
-                        <YoutubePlayer
-                            webViewStyle={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }}
-                            play={true}
-                            allowWebViewZoom={true}
-                            videoId={question.youtube}
-                        />
+                        <View style={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }} pointerEvents='none'>
+                            <YoutubePlayer
+                                height={"100%"}
+                                width={"100%"}
+                                initialPlayerParams={{ start: question.startTime, end: question.endTime, controls: false, iv_load_policy: 3 }}
+                                play={true}
+                                allowWebViewZoom={true}
+                                videoId={question.youtube}
+                            />
+                        </View>
                     }
                 </View>
                 {/* Render answer/option */}

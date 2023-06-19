@@ -10,11 +10,12 @@ const FormInput = ({
   value = "",
   maxLength = 65,
   showCharCount = false,
+  style,
   children,
   ...more
 }) => {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { ...style }]}>
       <View style={{ flexDirection: "row" }}>
         <Text style={styles.txtLabel}>{labelText}</Text>
         <View style={styles.viewFlex1} />

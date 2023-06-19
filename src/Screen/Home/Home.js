@@ -41,12 +41,14 @@ const HomeScreen = () => {
         socketServcies.on("player-joined", (message, game) => {
             if (message == "Game not found") {
                 ToastAndroid.show(message, ToastAndroid.SHORT)
+            } else if (message == "You have been kicked out of this room so you can't join again") {
+                ToastAndroid.show(message, ToastAndroid.SHORT)
             }
             else {
                 dispatch(updateGame(game._doc))
                 ToastAndroid.show(message, ToastAndroid.SHORT)
                 navigation.navigate(screenName.WaitingRoom)
-                setPin("")
+                // setPin("")
             }
         })
     }, [])

@@ -36,7 +36,9 @@ const MultipleChoice = () => {
     const [question, setQuestion] = React.useState('')
     const [fileUri, setFileUri] = React.useState({
         type: "image",
-        path: ""
+        path: "",
+        start: 0,
+        end: 0
     })
     const [timeAnswer, setTimeAnswer] = React.useState(10)
     const [difficulty, setDifficulty] = React.useState("easy")
@@ -83,25 +85,33 @@ const MultipleChoice = () => {
             if (route.params.question.backgroundImage != "") {
                 setFileUri({
                     type: "image",
-                    path: route.params.question.backgroundImage
+                    path: route.params.question.backgroundImage,
+                    start: 0,
+                    end: 0
                 })
             }
             else if (route.params.question.video != "") {
                 setFileUri({
                     type: "video",
-                    path: route.params.question.video
+                    path: route.params.question.video,
+                    start: 0,
+                    end: 0
                 })
             }
             else if (route.params.question.youtube != "") {
                 setFileUri({
                     type: "youtube",
-                    path: route.params.question.youtube
+                    path: route.params.question.youtube,
+                    start: route.params.question.startTime,
+                    end: route.params.question.endTime
                 })
             }
             else {
                 setFileUri({
                     type: "image",
-                    path: ""
+                    path: "",
+                    startTime: 0,
+                    endTime: 0
                 })
             }
 
@@ -215,9 +225,12 @@ const MultipleChoice = () => {
                             backgroundImage: imageUrl,
                             video: videoUrl,
                             youtube: youtubeUrl,
+                            startTime: fileUri.start,
+                            endTime: fileUri.end,
                             answerList: newArrAnswer,
                             difficulty: difficulty,
                         }
+                        ToastAndroid.show('Update success', ToastAndroid.SHORT)
                         dispatch(updateQuestionList(newQuestionList))
                         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                         handleNavigation()
@@ -232,6 +245,8 @@ const MultipleChoice = () => {
                             backgroundImage: imageUrl,
                             video: videoUrl,
                             youtube: youtubeUrl,
+                            startTime: fileUri.start,
+                            endTime: fileUri.end,
                             answerList: newArrAnswer,
                             difficulty: difficulty,
                             category: newQuiz.categories[0],
@@ -251,7 +266,9 @@ const MultipleChoice = () => {
                     }])
                     setFileUri({
                         type: "image",
-                        path: ""
+                        path: "",
+                        start: 0,
+                        end: 0
                     })
 
                     setIsLoading(false)

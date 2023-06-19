@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, FlatList, ActivityIndicator, Image, TouchableOpacity, LayoutAnimation, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Alert, ActivityIndicator, Image, TouchableOpacity, LayoutAnimation, ToastAndroid, TouchableHighlight } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { screenName } from '../../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
@@ -22,6 +22,7 @@ const WaitingRoom = () => {
     const userCompetitive = useSelector((state) => state.userCompetitive)
     const [isShowSettingView, setIsShowSettingView] = React.useState(false)
     const [isStartGame, setIsStartGame] = React.useState(false)
+    const [userIdWasKicked, setUserIdWasKicked] = React.useState("")
 
     React.useEffect(() => {
 
@@ -39,12 +40,19 @@ const WaitingRoom = () => {
             dispatch(updateGame(game))
         })
 
+        socketServcies.on("host-kicked-player", (game, userIdWasKicked) => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+            setUserIdWasKicked(userIdWasKicked)
+            dispatch(updateGame(game))
+        })
+
         socketServcies.on("start-game", (quiz, isActiveTimeCounter, isActiveShuffleQuestion, typeActiveShuffle) => {
             let quizApplySetting = JSON.parse(JSON.stringify(quiz))
             if (isActiveShuffleQuestion && typeActiveShuffle == 1) {
                 quizApplySetting.questionList.forEach(question => question.answerList.sort(() => Math.random() - 0.5))
                 quizApplySetting.questionList.sort(() => Math.random() - 0.5)
             }
+
             dispatch(updateQuiz(quizApplySetting))
             dispatch(setIsActiveTimeCounter(isActiveTimeCounter))
             dispatch(setIsActiveShuffleQuestion(isActiveShuffleQuestion))
@@ -65,6 +73,13 @@ const WaitingRoom = () => {
             }
         }
     }, [isStartGame])
+
+    React.useEffect(() => {
+        if (user.userId == userIdWasKicked) {
+            ToastAndroid.show("You was kicked out", ToastAndroid.SHORT)
+            navigation.navigate(screenName.Home)
+        }
+    }, [userIdWasKicked])
 
     return (
         <View style={styles.container}>
@@ -155,6 +170,8 @@ const WaitingRoom = () => {
                                                     }
                                                     socketServcies.emit("host-start-game", { quizId, pin, isActiveTimeCounter, isActiveShuffleQuestion, typeActiveShuffle, isHostJoinGame, hostInfo })
                                                 }
+                                            } else {
+                                                ToastAndroid.show("No network connection", ToastAndroid.SHORT)
                                             }
                                         } catch (error) {
                                             ToastAndroid.show(String(error), ToastAndroid.SHORT)
@@ -176,7 +193,7 @@ const WaitingRoom = () => {
                                     borderTopLeftRadius: 20
                                 }}
                                 renderItem={({ item }) =>
-                                    <View style={styles.rowItem}>
+                                    <View style={[styles.rowItem, { justifyContent: user.userId == game.hostId ? "space-between" : "center" }]}>
                                         {
                                             item.photo !== "" &&
                                             <Image
@@ -186,6 +203,49 @@ const WaitingRoom = () => {
                                             />
                                         }
                                         <Text numberOfLines={1} style={styles.txtUserName}>{item.userName}</Text>
+                                        {
+                                            user.userId == game.hostId &&
+                                            //button kick player out of room
+                                            <TouchableHighlight
+                                                underlayColor={COLORS.primary}
+                                                onPress={() => {
+                                                    Alert.alert(
+                                                        "OOPS !!!",
+                                                        `You really want to kick \n "${item.userName}" ?`,
+                                                        [
+                                                            {
+                                                                text: "Sure",
+                                                                onPress: () => {
+                                                                    try {
+                                                                        if (socketServcies.socket.connected) {
+                                                                            var userId = item.userId
+                                                                            var socketId = item.socketId
+                                                                            var pin = game.pin
+                                                                            socketServcies.emit("host-kick-player", { userId, pin, socketId })
+                                                                        } else {
+                                                                            ToastAndroid.show("No network connection", ToastAndroid.SHORT)
+                                                                        }
+                                                                    } catch (error) {
+                                                                        ToastAndroid.show(String(error), ToastAndroid.SHORT)
+                                                                    }
+                                                                }
+                                                            },
+                                                            {
+                                                                text: " I've thought again "
+                                                            }
+                                                        ],
+                                                    )
+
+                                                }}
+                                                style={styles.btnKickPlayer}
+                                            >
+                                                <Icon
+                                                    name={"trash"}
+                                                    color={COLORS.gray}
+                                                    size={15}
+                                                />
+                                            </TouchableHighlight>
+                                        }
                                     </View>
                                 }
                                 ListFooterComponent={
@@ -236,18 +296,23 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         flexWrap: "wrap",
         paddingVertical: 5,
-        paddingHorizontal: 5,
+        paddingHorizontal: 3,
         backgroundColor: COLORS.white,
         borderRadius: 10,
         marginBottom: 10,
         alignItems: "center",
-        justifyContent: "center"
     },
     imgAvatarPlayer: {
         width: 40,
         height: 40,
         borderRadius: 20,
         marginRight: 10,
+    },
+    btnKickPlayer: {
+        padding: 5,
+        borderRadius: 30,
+        alignItems: "center",
+        justifyContent: "center"
     },
     btnQuit: {
         alignItems: "center",

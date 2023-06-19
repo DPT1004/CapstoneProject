@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, TouchableOpacity, Modal, FlatList, Text, Image, ToastAndroid } from 'react-native'
 import { COLORS } from '../../../../common/theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import VideoPlayer from 'react-native-video-controls'
+import { WebView } from 'react-native-webview'
 import YoutubePlayer from "react-native-youtube-iframe"
 
 const commonBorderRadius = 5
@@ -26,21 +26,16 @@ const ModalSummary = ({ modalVisible, onPressVisible, player, isViewForHostScree
                     {
                         item.question.video != "" &&
                         <View style={styles.video}>
-                            <VideoPlayer
-                                disableBack={true}
-                                disableFullscreen={true}
-                                style={{ flex: 1 }}
-                                source={{ uri: item.question.video }}
-                                onError={error => ToastAndroid.show(String(error), ToastAndroid.SHORT)}
-                                paused={true}
-                                resizeMode="stretch"
-                            />
+                            <WebView
+                                allowsFullscreenVideo={true}
+                                source={{ uri: item.question.video }} />
                         </View>
                     }
                     {
                         item.question.youtube != "" &&
                         <YoutubePlayer
                             webViewStyle={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }}
+                            initialPlayerParams={{ start: item.question.startTime, end: item.question.endTime, iv_load_policy: 3 }}
                             play={false}
                             allowWebViewZoom={true}
                             videoId={item.question.youtube}

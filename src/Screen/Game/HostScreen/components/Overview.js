@@ -30,7 +30,7 @@ const Overview = () => {
             <>
                 <TouchableHighlight
                     underlayColor={COLORS.primary}
-                    disabled={isLoading}
+                    // disabled={isLoading}
                     onPress={() => setModalVisible(true)}>
                     <View style={styles.containerContentColumn}>
                         <View style={[styles.viewTitleColumn, { flex: 0.5 }]}>

@@ -3,7 +3,7 @@ import { Text, ScrollView, ToastAndroid, TouchableOpacity, View, StyleSheet, Ima
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { COLORS, SIZES } from '../../common/theme'
-import { BASE_URL, webClientId, checkEmailIsInvalid } from '../../common/shareVarible'
+import { BASE_URL, webClientId } from '../../common/shareVarible'
 import { img } from '../../assets/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { handleUserLogin } from '../../redux/Slice/userSlice'
@@ -69,8 +69,6 @@ const SignIn = () => {
     const handleLogin = () => {
         if (email == '' || password == '') {
             ToastAndroid.show("Empty Email or Password", ToastAndroid.SHORT)
-        } else if (checkEmailIsInvalid(email)) {
-            ToastAndroid.show("Email invalid", ToastAndroid.SHORT)
         }
         else {
             Post_Login()
@@ -231,7 +229,7 @@ const SignIn = () => {
                         resizeMode='contain'
                     />
                     <FormInput
-                        labelText="Email"
+                        labelText="Account"
                         editable={!isLoading}
                         maxLength={40}
                         onChangeText={txt => setEmail(txt)}

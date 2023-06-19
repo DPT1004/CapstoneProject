@@ -235,7 +235,7 @@ const PreviewAndLeaderBoard = () => {
                                 isLoading ?
                                     <>
                                         <ActivityIndicator size={80} color={COLORS.gray} />
-                                        <Text style={styles.txtNextQuestion}>Waiting for another player finish the game</Text>
+                                        <Text style={[styles.txtNextQuestion, { fontSize: 16 }]}>Waiting for another player finish the game</Text>
                                     </>
                                     :
                                     <Text style={styles.txtNextQuestion}>Game finish</Text>

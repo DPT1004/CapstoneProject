@@ -198,23 +198,26 @@ const ManageQuiz = () => {
             <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
             <View style={styles.topBar}>
                 <Text style={styles.title}>MANAGE QUIZ</Text>
-                <FormButton
-                    labelText="Create quiz"
-                    isPrimary={true}
-                    children={
-                        <View style={styles.viewIcon}>
-                            <Icon
-                                name={"plus-circle"}
-                                size={18}
-                                color={COLORS.white}
-                            />
-                        </View>
-                    }
-                    style={{ paddingLeft: 35, paddingRight: 20, borderRadius: 30 }}
-                    handleOnPress={() => {
-                        navigation.navigate(screenName.CreateQuiz)
-                    }}
-                />
+                {
+                    user.isLoginBySocial &&
+                    <FormButton
+                        labelText="Create quiz"
+                        isPrimary={true}
+                        children={
+                            <View style={styles.viewIcon}>
+                                <Icon
+                                    name={"plus-circle"}
+                                    size={18}
+                                    color={COLORS.white}
+                                />
+                            </View>
+                        }
+                        style={{ paddingLeft: 35, paddingRight: 20, borderRadius: 30 }}
+                        handleOnPress={() => {
+                            navigation.navigate(screenName.CreateQuiz)
+                        }}
+                    />
+                }
             </View>
 
             {/**Button scroll to top and appear when scroll down */}

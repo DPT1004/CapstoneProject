@@ -51,6 +51,15 @@ export const newQuizSlice = createSlice({
             state.numberOfQuestions += actions.payload.length
             state.numberOfQuestionsOrigin += actions.payload.length
         },
+        updateTitle: (state, actions) => {
+            state.name = actions.payload
+        },
+        updateDesc: (state, actions) => {
+            state.description = actions.payload
+        },
+        updateDisplay: (state, actions) => {
+            state.isPublic = actions.payload
+        },
         updateQuestionList: (state, actions) => {
             state.questionList = actions.payload
         },
@@ -81,6 +90,6 @@ export const newQuizSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addNewQuiz, updateQuiz, updateBackgroundImage, addNewQuestion, addManyNewQuestion, updateQuestionList, deleteQuestionByIndex, clearQuizInfo, updateNumberOfQuestionsOrigin } = newQuizSlice.actions
+export const { addNewQuiz, updateQuiz, updateBackgroundImage, updateTitle, updateDesc, updateDisplay, addNewQuestion, addManyNewQuestion, updateQuestionList, deleteQuestionByIndex, clearQuizInfo, updateNumberOfQuestionsOrigin } = newQuizSlice.actions
 
 export default newQuizSlice.reducer

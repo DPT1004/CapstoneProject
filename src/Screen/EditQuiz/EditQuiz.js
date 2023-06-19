@@ -6,7 +6,7 @@ import { COLORS } from '../../common/theme'
 import { img } from '../../assets/index'
 import { BASE_URL, firebaseHeaderUrl } from '../../common/shareVarible'
 import { useSelector, useDispatch } from 'react-redux'
-import { updateBackgroundImage, updateQuestionList } from '../../redux/Slice/newQuizSlice'
+import { updateBackgroundImage, updateQuestionList, updateTitle, updateDesc, updateDisplay } from '../../redux/Slice/newQuizSlice'
 import storage from '@react-native-firebase/storage'
 import FormInput from '../../components/FormInput'
 import FormButton from '../../components/FormButton'
@@ -107,6 +107,9 @@ const EditQuiz = () => {
                 }))
 
                 setIsLoading(false)
+                dispatch(updateTitle(title))
+                dispatch(updateDesc(description))
+                dispatch(updateDisplay(display))
                 dispatch(updateQuestionList(changeQuestionList))
                 dispatch(updateBackgroundImage(imageUrl))
                 navigation.navigate(screenName.ListQuestion)

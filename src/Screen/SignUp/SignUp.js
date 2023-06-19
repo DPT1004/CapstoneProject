@@ -1,9 +1,9 @@
 import React from 'react'
-import { ScrollView, ToastAndroid, TouchableOpacity, View, Alert, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
+import { ScrollView, ToastAndroid, TouchableOpacity, View, Alert, Text, StyleSheet, Image, TouchableWithoutFeedback, Keyboard, StatusBar } from 'react-native'
 import { screenName } from '../../navigator/screens-name'
 import { useNavigation } from "@react-navigation/native"
 import { COLORS, SIZES } from '../../common/theme'
-import { BASE_URL, checkEmailIsInvalid } from '../../common/shareVarible'
+import { BASE_URL, onlyOneSpaceBetweenString } from '../../common/shareVarible'
 import { img } from '../../assets/index'
 import Icon from "react-native-vector-icons/Entypo"
 import FormButton from '../../components/FormButton'
@@ -24,14 +24,14 @@ const SignUp = () => {
     const handleRegister = () => {
         if (email == '' || password == '' || confirmPassword == '' || userName == '') {
             ToastAndroid.show("Empty Email or Password or ConfirmPassword or UserName", ToastAndroid.SHORT)
-        } else if (checkEmailIsInvalid(email)) {
-            ToastAndroid.show("Email invalid", ToastAndroid.SHORT)
+        } else if (email.includes("@")) {
+            ToastAndroid.show(`Please no char "@" in Account`, ToastAndroid.SHORT)
         }
         else if (password !== confirmPassword) {
             ToastAndroid.show("Password and ConfirmPassword is not the same", ToastAndroid.SHORT)
         }
-        else if (password.length < 8) {
-            ToastAndroid.show("Password need at least 8 char", ToastAndroid.SHORT)
+        else if (password.length < 6 || email.length < 6 || userName.length < 6) {
+            ToastAndroid.show("Account, Username, Password need at least 6 char", ToastAndroid.SHORT)
         }
         else {
             Post_Register1()
@@ -96,24 +96,28 @@ const SignUp = () => {
         <TouchableWithoutFeedback
             onPress={() => { Keyboard.dismiss() }}
             accessible={false}>
-            <View style={styles.container}>
+            <ScrollView
+                style={{ width: "100%" }}
+                showsVerticalScrollIndicator={false}
+            >
                 <StatusBar backgroundColor={COLORS.primary} barStyle={"light-content"} />
-                <ScrollView
-                    style={{ width: "100%" }}
-                    showsVerticalScrollIndicator={false}
-                >
+                <View style={styles.container}>
                     <Image
                         style={styles.quizLogo}
                         source={img.quizLogo}
+                        resizeMode='contain'
                     />
+                    <Text style={styles.txtWarning}>If you register like this, you will not be able to create your own Quiz</Text>
                     <FormInput
-                        labelText="Email"
-                        onChangeText={txt => setEmail(txt)}
+                        labelText="Account"
+                        placeholderText={'No char "@" in Account, Atleast 6 char'}
+                        onChangeText={txt => setEmail(txt.replaceAll(/\s/g, ''))}
                         value={email}
                         showCharCount={true}
                     />
                     <FormInput
                         labelText="Username"
+                        placeholderText={'Atleast 6 char'}
                         onChangeText={txt => setUserName(txt)}
                         value={userName}
                         showCharCount={true}
@@ -121,6 +125,7 @@ const SignUp = () => {
                     />
                     <FormInput
                         labelText="Password"
+                        placeholderText={'Atleast 6 char'}
                         maxLength={30}
                         showCharCount={true}
                         onChangeText={txt => setPassword(txt)}
@@ -161,17 +166,17 @@ const SignUp = () => {
                         labelText="Register"
                         handleOnPress={handleRegister}
                         isLoading={isLoading}
-                        style={{ width: '100%', marginVertical: 27 }}
+                        style={{ width: '100%', marginTop: 25 }}
                     />
                     <FormButton
                         labelText="Go back"
                         handleOnPress={() => {
                             navigation.navigate(screenName.SignIn)
                         }}
-                        style={{ width: '100%' }}
+                        style={{ width: '100%', marginVertical: 25 }}
                     />
-                </ScrollView>
-            </View>
+                </View>
+            </ScrollView>
         </TouchableWithoutFeedback >
     );
 };
@@ -180,9 +185,7 @@ const styles = StyleSheet.create({
     container: {
         backgroundColor: COLORS.white,
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        padding: 20,
+        paddingHorizontal: 20,
     },
     containerBottom: {
         alignItems: "center",
@@ -214,6 +217,17 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         fontSize: 15,
         marginLeft: 10
+    },
+    txtWarning: {
+        backgroundColor: COLORS.gray,
+        borderRadius: 5,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        marginBottom: 15,
+        textAlign: "center",
+        fontSize: 14,
+        color: COLORS.error,
+        fontWeight: "700"
     },
     txt: {
         fontSize: 15,

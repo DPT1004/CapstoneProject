@@ -1,10 +1,10 @@
 const timeWaitToNextQuestion = 3 //s
 const timeWaitToPreviewAndLeaderBoard = 3000 //ms
-const BASE_URL = "http://192.168.1.3:3000/api"
-const SOCKET_URL = "http://192.168.1.3:3001"
+const BASE_URL = "http://192.168.1.5:3000/api"
+const SOCKET_URL = "http://192.168.1.5:3001"
 const webClientId = "17379159055-d7h444d8l7tdpeqkttu6rc3ltse5eb7n.apps.googleusercontent.com"
 const firebaseHeaderUrl = "https://firebasestorage.googleapis.com"
-const arrTime = [10, 20, 30, 60, 90]
+const arrTime = [10, 20, 30, 60, 90, 120, 180, 300, 600, 1200]
 const arrDifficulty = ["easy", "normal", "hard"]
 const arrQuestionType = ["MultipleChoice", "CheckBox"]
 const arrQuantityQuestion = ["1", "2", "3", "4", "5"]

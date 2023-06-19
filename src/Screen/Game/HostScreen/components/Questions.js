@@ -3,8 +3,8 @@ import { Text, View, StyleSheet, Image, FlatList } from 'react-native'
 import { useSelector } from 'react-redux'
 import { COLORS, SIZES } from '../../../../common/theme'
 import { img } from '../../../../assets/index'
+import { WebView } from 'react-native-webview'
 import YoutubePlayer from "react-native-youtube-iframe"
-import Video from 'react-native-video'
 import Icon from 'react-native-vector-icons/Octicons'
 import Icon1 from 'react-native-vector-icons/FontAwesome'
 
@@ -40,21 +40,20 @@ const Questions = () => {
                             />
                         }
                         {
-                            item.video != "" && <></>
-                            // <Video
-                            //     source={{ uri: item.video }}
-                            //     controls={true}
-                            //     paused={true}
-                            //     style={{ height: heightMedia, width: widthMedia, marginBottom: 5 }}
-                            //     resizeMode={"stretch"}
-                            //     poster={img.isLoadingVideo}
-                            // />
+                            item.video != "" &&
+                            <View style={{ height: heightMedia * 1.6, width: widthMedia, marginBottom: 5 }}>
+                                <WebView
+                                    allowsFullscreenVideo={true}
+                                    resizeMode={"stretch"}
+                                    source={{ uri: item.video }} />
+                            </View>
                         }
                         {
                             item.youtube != "" &&
                             <YoutubePlayer
                                 height={heightMedia}
                                 width={widthMedia}
+                                initialPlayerParams={{ start: item.startTime, end: item.endTime, iv_load_policy: 3 }}
                                 webViewStyle={{ marginVertical: 5 }}
                                 play={false}
                                 allowWebViewZoom={false}

@@ -3,29 +3,50 @@ import { Text, TextInput, StyleSheet, TouchableOpacity, Image, ToastAndroid, Lay
 import { COLORS } from '../common/theme'
 import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import { useSelector } from 'react-redux'
+import { img } from '../assets/index'
 import FormButton from "./FormButton"
 import ImagePicker from 'react-native-image-crop-picker'
 import YoutubePlayer from "react-native-youtube-iframe"
-import VideoPlayer from 'react-native-video-controls'
 import Video from 'react-native-video'
+import RangeSlider from './RangeSlider/RangeSlider'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 
 const ChooseFileBTN = ({ setFileUri, fileUri }) => {
-
     const internet = useSelector((state) => state.internet)
 
     const lastTap = React.useRef(0)
+    const youtubeRef = React.useRef()
+    const [startTime, setStartTime] = React.useState(0)
+    const [endTime, setEndTime] = React.useState(0)
+    const urlYoutubeRef = React.useRef("")
     const bottomSheetModalRef = React.useRef(null)
     const snapPoints = React.useMemo(() => ["60%", "60%"], [])
     const [showInputUrlYoutube, setShowInputUrlYoutube] = React.useState(false)
     const [urlYoutube, setUrlYoutube] = React.useState("")
+    const [duration, setDuration] = React.useState(0)
+    const handleSliderTouchEnd = React.useCallback((low, high) => {
+        youtubeRef.current.seekTo(low, false)
+        setStartTime(Math.round(low))
+        setEndTime(Math.round(high))
+        setFileUri({
+            type: "youtube",
+            path: urlYoutubeRef.current,
+            start: low,
+            end: high
+        })
+    }, [])
 
     React.useEffect(() => {
-        if (fileUri.path != "") {
+        if (fileUri.path != "" && fileUri.type == "youtube") {
             setUrlYoutube(fileUri.path)
+            setStartTime(fileUri.start)
+            setEndTime(fileUri.end)
+            urlYoutubeRef.current = fileUri.path
         }
+
     }, [fileUri])
+
 
     const checkValidTypeFile = (file) => {
         var path
@@ -61,7 +82,9 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
             }).then(file => {
                 var newFile = {
                     type: "image",
-                    path: file.path
+                    path: file.path,
+                    start: 0,
+                    end: 0
                 }
 
                 if (checkValidTypeFile(newFile)) {
@@ -85,7 +108,9 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
             }).then(file => {
                 var newFile = {
                     type: "video",
-                    path: file.path
+                    path: file.path,
+                    start: 0,
+                    end: 0
                 }
 
                 if (checkValidTypeFile(newFile)) {
@@ -103,7 +128,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
     }
 
     const renderFile = () => {
-        if (fileUri == undefined) {
+        if (fileUri.path == "") {
             return (<></>)
         }
         else if (fileUri.type == "image") {
@@ -120,7 +145,9 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                             LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                             setFileUri({
                                 type: "image",
-                                path: ""
+                                path: "",
+                                start: 0,
+                                end: 0
                             })
                         } else {
                             lastTap.current = now
@@ -138,24 +165,13 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
         } else if (fileUri.type == "video") {
             return (
                 <View style={styles.video}>
-                    <VideoPlayer
-                        disableBack={true}
-                        disableFullscreen={true}
-                        style={{ flex: 1, alignSelf: "center" }}
-                        source={{ uri: fileUri.path }}
-                        onError={error => ToastAndroid.show(String(error), ToastAndroid.SHORT)}
-                        paused={true}
-                        resizeMode={"stretch"}
-                    />
-                    {/* <Video
+                    <Video
                         source={{ uri: fileUri.path }}
                         controls={true}
                         style={{ flex: 1 }}
+                        poster={img.isLoadingVideo}
                         resizeMode={"stretch"}
-                        onLoad={({ naturalSize }) => {
-                            console.log(naturalSize.width, naturalSize.height);
-                        }}
-                    /> */}
+                    />
                     <View style={styles.containerBtnVideo}>
                         <TouchableOpacity
                             activeOpacity={0.8}
@@ -164,7 +180,9 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                 setFileUri({
                                     type: "video",
-                                    path: ""
+                                    path: "",
+                                    start: 0,
+                                    end: 0
                                 })
                             }}
                         >
@@ -187,22 +205,61 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
         } else if (fileUri.type == "youtube") {
             return (
                 <>
+                    {
+                        duration !== 0 &&
+                        // Trim time start and end in Youtube 
+                        <View style={{ paddingVertical: 10 }}>
+                            <RangeSlider duration={duration} handleSliderTouchEnd={handleSliderTouchEnd} low={startTime} high={endTime} />
+                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                <Text style={styles.txtTimeYoutube}>{`Start Time \n ${startTime}s`}</Text>
+                                <Text style={styles.txtTimeYoutube}>{`End Time \n ${endTime}s`}</Text>
+                            </View>
+                        </View>
+                    }
                     <YoutubePlayer
-                        play={true}
+                        ref={youtubeRef}
+                        play={false}
                         videoId={urlYoutube}
+                        initialPlayerParams={{ end: 80 }}
                         webViewStyle={{ flex: 1, aspectRatio: 16 / 9 }}
                         allowWebViewZoom={true}
-                        onError={error => ToastAndroid.show(String(error), ToastAndroid.SHORT)}
+                        onChangeState={(e) => {
+                            if (e == "playing") {
+                                youtubeRef.current?.getDuration().then(
+                                    getDuration => {
+                                        if (duration == 0) {
+                                            setDuration(Math.round(getDuration))
+                                        }
+
+                                        if (getDuration !== 0 && fileUri.start == 0, fileUri.end == 0) {
+                                            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                                            setEndTime(getDuration)
+                                            setFileUri({
+                                                type: "youtube",
+                                                path: urlYoutube,
+                                                start: 0,
+                                                end: getDuration
+                                            })
+                                        }
+                                    }
+                                )
+                            }
+                        }}
+                        onError={error => console.log("youtube error", error)}
                     />
+
                     <View style={styles.containerBtnVideo}>
                         <TouchableOpacity
                             activeOpacity={0.8}
                             style={[styles.btnVideo, { marginRight: 1 }]}
                             onPress={() => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
+                                setDuration(0)
                                 setFileUri({
                                     type: "youtube",
-                                    path: ""
+                                    path: "",
+                                    start: 0,
+                                    end: 0
                                 })
                             }}
                         >
@@ -215,11 +272,11 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                             onPress={() => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                 setShowInputUrlYoutube(true)
+                                setDuration(0)
                             }}
                         >
                             <Text style={styles.txtVideo}>Change Video</Text>
                         </TouchableOpacity>
-
                     </View>
                 </>
             )
@@ -264,14 +321,17 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 onPress={() => {
                                     if (internet.isOnlineStatus) {
                                         if (takeIdInUrlYoutube(urlYoutube) !== false) {
-                                            LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                             var idUrlYoutube = takeIdInUrlYoutube(urlYoutube)
+
+                                            setUrlYoutube(idUrlYoutube)
+                                            urlYoutubeRef.current = idUrlYoutube
 
                                             setFileUri({
                                                 type: "youtube",
-                                                path: idUrlYoutube
+                                                path: idUrlYoutube,
+                                                start: 0,
+                                                end: 0
                                             })
-                                            setUrlYoutube(idUrlYoutube)
 
                                             setShowInputUrlYoutube(false)
                                         } else {
@@ -291,6 +351,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 onPress={() => {
                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                     setUrlYoutube("")
+                                    urlYoutubeRef.current = ""
                                     setShowInputUrlYoutube(false)
                                 }}
                             >
@@ -418,7 +479,14 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: COLORS.white
     },
+    txtTimeYoutube: {
+        fontSize: 8,
+        color: COLORS.black,
+        fontWeight: "600",
+    },
     btnRemoveTxtInTxtInput: {
+        position: "absolute",
+        right: 0,
         alignItems: "center",
         justifyContent: "center",
         padding: 10
