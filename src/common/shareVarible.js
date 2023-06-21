@@ -6,7 +6,7 @@ const webClientId = "17379159055-d7h444d8l7tdpeqkttu6rc3ltse5eb7n.apps.googleuse
 const firebaseHeaderUrl = "https://firebasestorage.googleapis.com"
 const arrTime = [10, 20, 30, 60, 90, 120, 180, 300, 600, 1200]
 const arrDifficulty = ["easy", "normal", "hard"]
-const arrQuestionType = ["MultipleChoice", "CheckBox"]
+const arrQuestionType = ["MultipleChoice", "CheckBox", "Fill-In-The-Blank"]
 const arrQuantityQuestion = ["1", "2", "3", "4", "5"]
 const uriImgQuiz = "https://media.istockphoto.com/id/1186386668/vi/vec-to/c%C3%A2u-%C4%91%E1%BB%91-theo-phong-c%C3%A1ch-ngh%E1%BB%87-thu%E1%BA%ADt-pop-truy%E1%BB%87n-tranh-%C4%91%E1%BB%91-vui-t%E1%BB%AB-tr%C3%B2-ch%C6%A1i-tr%C3%AD-tu%E1%BB%87-thi%E1%BA%BFt-k%E1%BA%BF-minh.jpg?s=2048x2048&w=is&k=20&c=A0-pZTdYwdb7YjP5swvQaTEdPV0BtriOSk3cp_uWa3Q="
 

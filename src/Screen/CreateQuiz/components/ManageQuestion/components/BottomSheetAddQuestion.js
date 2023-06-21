@@ -12,7 +12,7 @@ import ModalOptionAddQuestion from './ModalOptionAddQuestion'
 const BottomSheetAddQuestion = ({ bottomSheetModalRef }) => {
 
     const navigation = useNavigation()
-    const snapPoints = React.useMemo(() => ["50%", "50%"], [])
+    const snapPoints = React.useMemo(() => ["80%", "80%"], [])
     const [modalVisible, setModalVisible] = React.useState(false)
 
     const handleOnPressModalVisible = () => {
@@ -61,6 +61,24 @@ const BottomSheetAddQuestion = ({ bottomSheetModalRef }) => {
                     }
                     handleOnPress={() => {
                         navigation.navigate(screenName.MultipleChoice)
+                        bottomSheetModalRef.current?.close()
+                    }}
+                />
+                <FormButton
+                    labelText="Fill-in-the-Blank"
+                    isPrimary={true}
+                    style={{ marginBottom: 20 }}
+                    children={
+                        <View style={styles.viewIcon}>
+                            <Icon
+                                name={"file-document-edit-outline"}
+                                size={20}
+                                color={COLORS.white}
+                            />
+                        </View>
+                    }
+                    handleOnPress={() => {
+                        navigation.navigate(screenName.FillInTheBlank)
                         bottomSheetModalRef.current?.close()
                     }}
                 />

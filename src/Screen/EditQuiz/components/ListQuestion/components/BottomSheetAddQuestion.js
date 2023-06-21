@@ -71,6 +71,26 @@ const BottomSheetAddQuestion = ({ bottomSheetModalRef }) => {
                         }}
                     />
                     <FormButton
+                        labelText="Fill-in-the-Blank"
+                        isPrimary={true}
+                        style={{ marginBottom: 20 }}
+                        children={
+                            <View style={styles.viewIcon}>
+                                <Icon
+                                    name={"file-document-edit-outline"}
+                                    size={20}
+                                    color={COLORS.white}
+                                />
+                            </View>
+                        }
+                        handleOnPress={() => {
+                            navigation.navigate(screenName.FillInTheBlank, {
+                                fromScreen: "EditQuiz"
+                            })
+                            bottomSheetModalRef.current?.close()
+                        }}
+                    />
+                    <FormButton
                         labelText="Auto Add Question"
                         isPrimary={true}
                         style={{ marginBottom: 20 }}

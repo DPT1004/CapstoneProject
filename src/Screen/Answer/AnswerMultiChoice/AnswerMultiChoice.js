@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
-import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard, addPlayerResult } from '../../../redux/Slice/userCompetitiveSlice'
+import { nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
 import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
 import { WebView } from 'react-native-webview'
 import TopBar from '../../Game/PlayQuiz/components/TopBar'
@@ -38,22 +38,14 @@ const AnswerMultiChoice = ({ question }) => {
 
     const handleAfterDone = () => {
 
-        if (userCompetitive.isActiveTimeCounter == false) {
-            var recieveScore = isCorrectAnswer() ? 600 : 0
-            score.current = recieveScore
-        }
-        setShowViewScore(true)
-
-        if (isCorrectAnswer()) {
-            dispatch(moreCorrect(score.current))
-        } else {
-            dispatch(moreIncorrect())
-        }
-
         var scoreRecieve = 600
         if (userCompetitive.isActiveTimeCounter == false) {
             scoreRecieve = isCorrectAnswer() ? 600 : 0
+            score.current = scoreRecieve
+        } else {
+            scoreRecieve = isCorrectAnswer() ? score.current : 0
         }
+        setShowViewScore(true)
 
         setTimeout(() => {
             dispatch(showLeaderBoard(true))
@@ -71,7 +63,6 @@ const AnswerMultiChoice = ({ question }) => {
                 socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
             }
 
-            dispatch(addPlayerResult(playerResult))
             dispatch(nextQuestion())
         }, timeWaitToPreviewAndLeaderBoard)
 

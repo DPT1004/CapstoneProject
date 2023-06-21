@@ -1,8 +1,8 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image, ActivityIndicator } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
-import { moreCorrect, moreIncorrect, nextQuestion, showLeaderBoard, addPlayerResult } from '../../../redux/Slice/userCompetitiveSlice'
+import { nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
 import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
 import { WebView } from 'react-native-webview'
 import TopBar from '../../Game/PlayQuiz/components/TopBar'
@@ -53,24 +53,23 @@ const AnswerCheckBox = ({ question }) => {
         return false
     }
 
-    const handleAfterDone = () => {
-
-        if (isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer)) {
-            dispatch(moreCorrect(score.current))
-        } else {
-            dispatch(moreIncorrect())
-        }
-
+    const calculateScore = () => {
         var scoreRecieve = 600
         if (userCompetitive.isActiveTimeCounter == false) {
-            console.log(isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer))
             scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? 600 : 0
             score.current = scoreRecieve
+        } else {
+            scoreRecieve = isUserAnswerCorrect(refUserAnswer.current, arrCorrectAnswer) ? score.current : 0
         }
+        return scoreRecieve
+    }
+
+    const handleAfterDone = () => {
+
+        var scoreRecieve = calculateScore()
 
         setTimeout(() => {
             dispatch(showLeaderBoard(true))
-
 
             var userId = user.userId
             var pin = game.pin
@@ -84,7 +83,6 @@ const AnswerCheckBox = ({ question }) => {
                 socketServcies.emit("player-send-score-and-currentIndexQuestion", { userId, pin, scoreRecieve, currentIndexQuestion, playerResult })
             }
 
-            dispatch(addPlayerResult(playerResult))
             dispatch(nextQuestion())
         }, timeWaitToPreviewAndLeaderBoard)
 
@@ -304,6 +302,7 @@ const AnswerCheckBox = ({ question }) => {
                 <TouchableOpacity
                     disabled={activeSubmit}
                     onPress={() => {
+                        calculateScore()
                         setActiveSubmit(true)
                     }}
                     style={styles.btnSubmit} >

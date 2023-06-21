@@ -2,12 +2,8 @@ import { createSlice } from '@reduxjs/toolkit'
 
 //typeActiveShuffle = 1 is active for eachplayer have the different shuffle, =2 is active for allplayer the same shuffle
 const initialState = {
-    correctCount: 0,
-    incorrectCount: 0,
-    totalScore: 0,
     currentIndexQuestion: 0,
     isShowLeaderBoard: true,
-    playerResult: [],
     isActiveTimeCounter: true,
     isActiveShuffleQuestion: false,
     typeActiveShuffle: 2,
@@ -18,27 +14,13 @@ export const userCompetitiveSlice = createSlice({
     name: 'userCompetitive',
     initialState,
     reducers: {
-        moreCorrect: (state, actions) => {
-            state.correctCount += 1
-            state.totalScore += actions.payload
-        },
-        moreIncorrect: (state) => {
-            state.incorrectCount += 1
-        },
         clearInfoCompetitive: (state) => {
-            state.correctCount = 0
-            state.incorrectCount = 0
-            state.totalScore = 0
             state.currentIndexQuestion = 0
             state.isShowLeaderBoard = true
-            state.playerResult = []
             state.isActiveTimeCounter = true
             state.isActiveShuffleQuestion = false
             state.typeActiveShuffle = 2
             state.isHostJoinGame = false
-        },
-        addPlayerResult: (state, actions) => {
-            state.playerResult.push(actions.payload)
         },
         nextQuestion: (state) => {
             state.currentIndexQuestion += 1
@@ -62,6 +44,6 @@ export const userCompetitiveSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { moreCorrect, moreIncorrect, clearInfoCompetitive, addPlayerResult, nextQuestion, showLeaderBoard, setIsActiveTimeCounter, setIsActiveShuffleQuestion, setTypeActiveShuffle, setIsHostJoinGame } = userCompetitiveSlice.actions
+export const { clearInfoCompetitive, nextQuestion, showLeaderBoard, setIsActiveTimeCounter, setIsActiveShuffleQuestion, setTypeActiveShuffle, setIsHostJoinGame } = userCompetitiveSlice.actions
 
 export default userCompetitiveSlice.reducer

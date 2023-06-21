@@ -25,6 +25,7 @@ import EditQuiz from '../Screen/EditQuiz/EditQuiz'
 import PlayQuiz from '../Screen/Game/PlayQuiz/PlayQuiz'
 import MultipleChoice from '../Screen/Question/MultipleChoice/MultipleChoice'
 import CheckBox from '../Screen/Question/CheckBox/CheckBox'
+import FillInTheBlank from '../Screen/Question/FillInTheBlank/FillInTheBlank'
 import AnswerMultiChoice from '../Screen/Answer/AnswerMultiChoice/AnswerMultiChoice'
 import AnswerCheckBox from "../Screen/Answer/AnswerCheckBox/AnswerCheckBox"
 import HostScreen from '../Screen/Game/HostScreen/HostScreen'
@@ -106,6 +107,7 @@ const MainStack = () => {
       <Stack.Screen name={screenName.ManageQuestion} component={ManageQuestion} />
       <Stack.Screen name={screenName.MultipleChoice} component={MultipleChoice} />
       <Stack.Screen name={screenName.CheckBox} component={CheckBox} />
+      <Stack.Screen name={screenName.FillInTheBlank} component={FillInTheBlank} />
       <Stack.Screen name={screenName.AnswerCheckBox} component={AnswerCheckBox} />
       <Stack.Screen name={screenName.AnswerMultiChoice} component={AnswerMultiChoice} />
       <Stack.Screen name={screenName.HostScreen} component={HostScreen} />

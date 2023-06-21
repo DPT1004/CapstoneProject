@@ -78,7 +78,7 @@ const TopBar = ({ userAnswer, activeSubmit, time, handleUpdate, handleComplete }
                     colorsTime={[time, time / 3, 0]}
                     onUpdate={(currentTime) => handleUpdate(currentTime)}
                     onComplete={handleComplete}>
-                    {({ remainingTime, color }) => <Text style={{ fontSize: 18, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
+                    {({ remainingTime, color }) => <Text style={{ fontSize: 12, fontWeight: "bold", color: color }}>{remainingTime}</Text>}
                 </CountdownCircleTimer>
             }
 

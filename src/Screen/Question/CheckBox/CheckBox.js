@@ -6,7 +6,8 @@ import {
     ToastAndroid,
     StyleSheet,
     LayoutAnimation,
-    TouchableOpacity
+    TouchableOpacity,
+    TouchableHighlight
 } from 'react-native'
 import storage from '@react-native-firebase/storage'
 import { useDispatch, useSelector } from 'react-redux'
@@ -316,10 +317,9 @@ const CheckBox = () => {
                                     <View key={index} style={styles.rowItemAnswer}>
                                         <View style={styles.containerBtnIcons}>
                                             {/* Delete answer */}
-                                            <Icon
-                                                name="trash"
-                                                size={20}
-                                                color={COLORS.black}
+                                            <TouchableHighlight
+                                                style={styles.btnOption}
+                                                underlayColor={"rgba(0, 0, 0, 0.5)"}
                                                 onPress={() => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
 
@@ -330,14 +330,18 @@ const CheckBox = () => {
                                                     let newArrOptionAnswer = [...arrOptionAnswer]
                                                     newArrOptionAnswer.splice(index, 1)
                                                     setArrOptionAnswer(newArrOptionAnswer)
-                                                }}
-                                            />
+                                                }}>
+                                                <Icon
+                                                    name="trash"
+                                                    size={20}
+                                                    color={COLORS.black}
+                                                />
+                                            </TouchableHighlight>
+
                                             {/* Add image for answer */}
-                                            <Icon
-                                                name="image"
-                                                size={20}
-                                                color={COLORS.black}
-                                                style={{ marginHorizontal: 40 }}
+                                            <TouchableHighlight
+                                                style={[styles.btnOption, { marginHorizontal: 40 }]}
+                                                underlayColor={"rgba(0, 0, 0, 0.5)"}
                                                 disabled={item.img !== "" ? true : false}
                                                 onPress={() => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
@@ -353,13 +357,18 @@ const CheckBox = () => {
                                                         img: ""
                                                     }
                                                     setArrAnswer(newArrAnswer)
-                                                }}
-                                            />
+                                                }}>
+                                                <Icon
+                                                    name="image"
+                                                    size={20}
+                                                    color={COLORS.black}
+                                                />
+                                            </TouchableHighlight>
+
                                             {/* Add text for answer */}
-                                            <Icon
-                                                name="text-document"
-                                                size={20}
-                                                color={COLORS.black}
+                                            <TouchableHighlight
+                                                style={styles.btnOption}
+                                                underlayColor={"rgba(0, 0, 0, 0.5)"}
                                                 disabled={item.answer.length !== 0 ? true : false}
                                                 onPress={() => {
                                                     LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
@@ -375,8 +384,15 @@ const CheckBox = () => {
                                                         img: ""
                                                     }
                                                     setArrAnswer(newArrAnswer)
-                                                }}
-                                            />
+                                                }}>
+                                                <Icon
+                                                    name="text-document"
+                                                    size={20}
+                                                    color={COLORS.black}
+
+                                                />
+                                            </TouchableHighlight>
+
                                             {/* Choose correct answer */}
                                             <Icon1
                                                 name="check-square"
@@ -411,7 +427,7 @@ const CheckBox = () => {
                                                 // TextInput to type text for answer
                                                 <FormInput
                                                     key={index}
-                                                    labelText={"Option " + index}
+                                                    labelText={"Option " + Number(index + 1)}
                                                     onChangeText={val => {
                                                         let newArrAnswer = [...arrAnswer]
                                                         newArrAnswer[index] = {
@@ -599,6 +615,10 @@ const styles = StyleSheet.create({
         bottom: 0,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    btnOption: {
+        padding: 5,
+        borderRadius: 30
     },
     txtNameQuiz: {
         textAlign: 'center',

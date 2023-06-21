@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, StyleSheet, Image, Alert, ToastAndroid } from 'react-native'
+import { View, Text, StyleSheet, Image, Alert, ToastAndroid, TouchableHighlight } from 'react-native'
 import { COLORS } from '../../../common/theme'
 import { BASE_URL, uriImgQuiz } from '../../../common/shareVarible'
 import { screenName } from '../../../navigator/screens-name'
@@ -70,13 +70,20 @@ const ItemQuiz = ({ item, onRefreshing }) => {
                         <Text style={{ opacity: 0.5 }}>{item.description}</Text>
                     }
                 </View>
-                <Icon
-                    name={"more-horizontal"}
-                    style={{ position: "absolute", top: 2, right: 5, paddingVertical: 3, paddingLeft: 10, paddingRight: 5 }}
-                    size={25}
-                    color={COLORS.gray}
+
+                {/**Button more option */}
+                <TouchableHighlight
+                    style={styles.btnMoreOption}
+                    underlayColor={COLORS.primary}
                     onPress={() => bottomSheetModalRef.current?.present()}
-                />
+                >
+                    <Icon
+                        name={"more-horizontal"}
+                        size={25}
+                        color={COLORS.gray}
+                    />
+                </TouchableHighlight>
+
                 <View style={styles.viewNumQuestion}>
                     <Text style={[styles.txt, { fontWeight: "bold" }]}>{item.numberOfQuestions + " Qs"}</Text>
                 </View>
@@ -219,6 +226,15 @@ const styles = StyleSheet.create({
     contentContainer: {
         flex: 1,
         padding: 20,
+    },
+    btnMoreOption: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        padding: 5,
+        borderRadius: 30,
+        alignItems: "center",
+        justifyContent: "center"
     },
     txt: {
         fontSize: 15,

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image, Alert, LayoutAnimation } from 'react-native'
+import { Text, View, StyleSheet, Image, Alert, LayoutAnimation, TouchableHighlight } from 'react-native'
 import DraggableFlatList, {
     OpacityDecorator
 } from "react-native-draggable-flatlist"
@@ -29,8 +29,8 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                 <View style={styles.rowItem}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onLongPress={drag}
                             disabled={isActive}
                             style={[styles.btnIcon, { left: 5 }]}>
@@ -39,13 +39,13 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 size={20}
                                 color={COLORS.black}
                             />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
 
                         <Text style={[styles.txt, { color: COLORS.error, marginLeft: 40 }]}>{"Question " + String(getIndex() + 1) + " / " + quiz.numberOfQuestions}</Text>
 
                         {/*Set show or not show Detail Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
                                 var newIsShowDetail = [...isShowDetail]
@@ -57,11 +57,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"info-circle"}
                                 size={22}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
 
                         {/*Delete Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => Alert.alert(
                                 "OOPS !!!",
                                 "You really want to delete this question?",
@@ -83,13 +83,12 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"trash"}
                                 size={20}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
 
                         {/*Edit Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => {
-
                                 switch (item.questionType) {
                                     case "MultipleChoice":
                                         navigation.navigate(screenName.MultipleChoice, {
@@ -105,6 +104,13 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                             fromScreen: "EditQuiz"
                                         })
                                         break
+                                    case "Fill-In-The-Blank":
+                                        navigation.navigate(screenName.FillInTheBlank, {
+                                            question: item,
+                                            indexQuestion: getIndex(),
+                                            fromScreen: "EditQuiz"
+                                        })
+                                        break
                                 }
                             }}
                             style={[styles.btnIcon, { right: 5 }]}>
@@ -112,7 +118,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"pencil"}
                                 size={20}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
                     </View>
                     {/*Question detail*/}
                     {
@@ -324,7 +330,8 @@ const styles = StyleSheet.create({
         borderColor: COLORS.gray,
     },
     btnIcon: {
-        paddingHorizontal: 5,
+        padding: 5,
+        borderRadius: 30,
         position: 'absolute',
         top: 0,
         bottom: 0,

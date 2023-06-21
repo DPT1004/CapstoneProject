@@ -46,29 +46,54 @@ const ModalSummary = ({ modalVisible, onPressVisible, player, isViewForHostScree
                     <View style={styles.lineHorizon} />
 
                     {
-                        item.question.answerList.map((itemAnswer, index) => (
-                            <View key={index} style={styles.viewItemAnswer}>
-                                {
-                                    item.indexPlayerAnswer.includes(index) &&
-                                    <View style={styles.viewYourAnswer}>
-                                        <Text style={styles.txtYourAnswer}>{isViewForHostScreen ? "Player Answer" : "Your Answer"}</Text>
+                        item.question.questionType == "Fill-In-The-Blank" ?
+                            <View>
+                                {/**True answer */}
+                                <View>
+                                    <Text>True Answer </Text>
+                                    <View key={index} style={styles.containerTrueAnswer}>
+                                        {
+                                            item.question.answerList.map((itemAnswer, index) => (
+                                                <View key={index} style={styles.answerFillInTheBlank}>
+                                                    <Text style={styles.txt}>{itemAnswer.answer}</Text>
+                                                </View>
+
+                                            ))
+                                        }
                                     </View>
-                                }
+                                </View>
 
-                                <View style={[styles.circleTrueOrWrong, { backgroundColor: itemAnswer.isCorrect ? COLORS.success : COLORS.error }]} />
-                                {
-                                    itemAnswer.img !== "" ?
-                                        <Image
-                                            style={styles.imgAnswer}
-                                            source={{ uri: itemAnswer.img }}
-                                        />
-                                        :
-                                        <Text style={[styles.txt, { flex: 1 }]}>{itemAnswer.answer}</Text>
-                                }
+
+                                {/**Player answer */}
+                                <View>
+                                    <Text>{isViewForHostScreen ? "Player Answer" : "Your Answer"}  </Text>
+                                    <View key={index} style={styles.answerFillInTheBlank}>
+                                        <Text style={[styles.txt, { flex: 1 }]}>{item.playerAnswer}</Text>
+                                    </View>
+                                </View>
                             </View>
+                            :
+                            item.question.answerList.map((itemAnswer, index) => (
+                                <View key={index} style={styles.viewItemAnswer}>
+                                    {
+                                        item.indexPlayerAnswer.includes(index) &&
+                                        <View style={styles.viewYourAnswer}>
+                                            <Text style={styles.txtYourAnswer}>{isViewForHostScreen ? "Player Answer" : "Your Answer"}</Text>
+                                        </View>
+                                    }
 
-                        ))
-
+                                    <View style={[styles.circleTrueOrWrong, { backgroundColor: itemAnswer.isCorrect ? COLORS.success : COLORS.error }]} />
+                                    {
+                                        itemAnswer.img !== "" ?
+                                            <Image
+                                                style={styles.imgAnswer}
+                                                source={{ uri: itemAnswer.img }}
+                                            />
+                                            :
+                                            <Text style={[styles.txt, { flex: 1 }]}>{itemAnswer.answer}</Text>
+                                    }
+                                </View>
+                            ))
                     }
                     <View style={styles.containerScoreAndTimeAnswer}>
                         {/* Score */}
@@ -182,6 +207,12 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginBottom: spaceVerticalBetweenItem
     },
+    containerTrueAnswer: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        marginVertical: 5,
+        alignItems: "center",
+    },
     video: {
         height: 200,
         width: "100%"
@@ -288,6 +319,16 @@ const styles = StyleSheet.create({
         marginTop: 10,
         borderRadius: commonBorderRadius,
         alignSelf: "center"
+    },
+    answerFillInTheBlank: {
+        alignItems: "center",
+        justifyContent: "center",
+        flexGrow: 1,
+        paddingHorizontal: 10,
+        borderRadius: 5,
+        paddingVertical: 5,
+        margin: 1,
+        backgroundColor: COLORS.bgrForPrimary
     },
     imgAnswer: {
         height: 90,

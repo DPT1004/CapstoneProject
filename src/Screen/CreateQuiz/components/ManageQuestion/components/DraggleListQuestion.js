@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image, Alert, LayoutAnimation } from 'react-native'
+import { Text, View, TouchableOpacity, StyleSheet, Image, Alert, LayoutAnimation, TouchableHighlight } from 'react-native'
 import DraggableFlatList, {
     OpacityDecorator
 } from "react-native-draggable-flatlist"
@@ -44,8 +44,8 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         <Text style={[styles.txt, { color: COLORS.error, marginLeft: 40 }]}>{"Question " + String(getIndex() + 1) + " / " + newQuiz.numberOfQuestions}</Text>
 
                         {/*Set show or not show Detail Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut)
                                 var newIsShowDetail = [...isShowDetail]
@@ -57,11 +57,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"info-circle"}
                                 size={22}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
 
                         {/*Delete Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => Alert.alert(
                                 "OOPS !!!",
                                 "You really want to delete this question?",
@@ -83,11 +83,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"trash"}
                                 size={20}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
 
                         {/*Edit Question*/}
-                        <TouchableOpacity
-                            activeOpacity={0.5}
+                        <TouchableHighlight
+                            underlayColor={"rgba(0, 0, 0, 0.5)"}
                             onPress={() => {
 
                                 switch (item.questionType) {
@@ -103,6 +103,12 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                             indexQuestion: getIndex()
                                         })
                                         break
+                                    case "Fill-In-The-Blank":
+                                        navigation.navigate(screenName.FillInTheBlank, {
+                                            question: item,
+                                            indexQuestion: getIndex()
+                                        })
+                                        break
                                 }
                             }}
                             style={[styles.btnIcon, { right: 5 }]}>
@@ -110,7 +116,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 name={"pencil"}
                                 size={20}
                                 color={COLORS.black} />
-                        </TouchableOpacity>
+                        </TouchableHighlight>
                     </View>
 
                     {/*Question detail*/}
@@ -119,13 +125,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         <View style={styles.viewMiddle}>
                             <Text style={styles.txt}>{item.question}</Text>
                             {
-                                item.backgroundImage !== "" ?
-                                    <Image
-                                        style={styles.quizBGR}
-                                        source={{ uri: item.backgroundImage }}
-                                    />
-                                    :
-                                    null
+                                item.backgroundImage !== "" &&
+                                <Image
+                                    style={styles.quizBGR}
+                                    source={{ uri: item.backgroundImage }}
+                                />
                             }
                             <View style={styles.containerLineHorizon}>
                                 <View style={[styles.lineHorizon, { marginRight: 5, flex: 1 }]} />
@@ -323,6 +327,7 @@ const styles = StyleSheet.create({
     },
     btnIcon: {
         paddingHorizontal: 5,
+        borderRadius: 30,
         position: 'absolute',
         top: 0,
         bottom: 0,

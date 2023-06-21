@@ -48,7 +48,7 @@ const HomeScreen = () => {
                 dispatch(updateGame(game._doc))
                 ToastAndroid.show(message, ToastAndroid.SHORT)
                 navigation.navigate(screenName.WaitingRoom)
-                // setPin("")
+                setPin("")
             }
         })
     }, [])

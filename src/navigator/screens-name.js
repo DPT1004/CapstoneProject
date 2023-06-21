@@ -13,6 +13,7 @@ export const screenName = {
     PlayQuiz: "PlayQuiz",
     MultipleChoice: "MultipleChoice",
     CheckBox: "CheckBox",
+    FillInTheBlank: "FillInTheBlank",
     AnswerMultiChoice: "AnswerMultiChoice",
     AnswerCheckBox: "AnswerCheckBox",
     HostScreen: "HostScreen",
