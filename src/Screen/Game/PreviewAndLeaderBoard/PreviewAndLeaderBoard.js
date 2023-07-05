@@ -19,6 +19,7 @@ const PreviewAndLeaderBoard = () => {
     const userCompetitive = useSelector((state) => state.userCompetitive)
     const user = useSelector((state) => state.user)
     const quiz = useSelector((state) => state.newQuiz)
+    const game = useSelector((state) => state.game)
     const [leaderBoard, setLeaderBoard] = React.useState([])
     const [player, setPlayer] = React.useState()
     const [indexPlayer, setIndexPlayer] = React.useState(0)
@@ -186,6 +187,10 @@ const PreviewAndLeaderBoard = () => {
                             label={"GO HOME"}
                             widthBtn={(SIZES.windowWidth - 10) / 2}
                             onPress={() => {
+                                if (socketServcies.socket.connected) {
+                                    var pin = game.pin
+                                    socketServcies.emit("player-quit-room-when-game-finish", { pin })
+                                }
                                 navigation.navigate(screenName.Home)
                                 dispatch(clearInfoCompetitive())
                             }} />
@@ -248,6 +253,10 @@ const PreviewAndLeaderBoard = () => {
                             label={"GO HOME"}
                             widthBtn={(SIZES.windowWidth - 10) / 2}
                             onPress={() => {
+                                if (socketServcies.socket.connected) {
+                                    var pin = game.pin
+                                    socketServcies.emit("player-quit-room-when-game-finish", { pin })
+                                }
                                 navigation.navigate(screenName.Home)
                                 dispatch(clearInfoCompetitive())
                             }} />

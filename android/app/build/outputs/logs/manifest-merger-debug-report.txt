@@ -16,6 +16,7 @@ MERGED from [:react-native-community_netinfo] I:\Source code\CapstoneProject\Mob
 MERGED from [:react-native-google-signin_google-signin] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-google-signin\google-signin\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-picker_picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-11:12
+MERGED from [:react-native-document-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-document-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:21:1-28:12
 MERGED from [:react-native-gesture-handler] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-9:12
 MERGED from [:react-native-image-crop-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-image-crop-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-33:12
@@ -412,6 +413,8 @@ MERGED from [:react-native-picker_picker] I:\Source code\CapstoneProject\MobileC
 MERGED from [:react-native-picker_picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\@react-native-picker\picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:lottie-react-native] I:\Source code\CapstoneProject\MobileCapstone\node_modules\lottie-react-native\src\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-document-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-document-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
+MERGED from [:react-native-document-picker] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-document-picker\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:5-26:41
 MERGED from [:react-native-fbsdk-next] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-fbsdk-next\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:24:5-26:41
 MERGED from [:react-native-gesture-handler] I:\Source code\CapstoneProject\MobileCapstone\node_modules\react-native-gesture-handler\android\build\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-7:41

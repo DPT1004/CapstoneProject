@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.4.5",
+    "@mgcrea/react-native-dnd": "^1.2.0",
     "@react-native-async-storage/async-storage": "^1.18.1",
     "@react-native-community/netinfo": "^9.3.10",
     "@react-native-firebase/app": "^17.4.2",
@@ -26,6 +27,7 @@
     "react": "18.2.0",
     "react-native": "0.71.6",
     "react-native-countdown-circle-timer": "^3.2.1",
+    "react-native-document-picker": "^9.0.1",
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-fbsdk-next": "^11.2.1",
     "react-native-gesture-handler": "^2.9.0",

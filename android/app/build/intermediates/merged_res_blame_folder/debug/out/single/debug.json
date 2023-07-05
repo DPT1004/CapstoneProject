@@ -4,22 +4,6 @@
         "source": "com.mobilecapstone.app-main-46:/mipmap-mdpi/ic_launcher.png"
     },
     {
-        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher_round.png.flat",
-        "source": "com.mobilecapstone.app-main-46:/mipmap-xhdpi/ic_launcher_round.png"
-    },
-    {
-        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher.png.flat",
-        "source": "com.mobilecapstone.app-main-46:/mipmap-xxxhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher.png.flat",
-        "source": "com.mobilecapstone.app-main-46:/mipmap-xhdpi/ic_launcher.png"
-    },
-    {
-        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher.png.flat",
-        "source": "com.mobilecapstone.app-main-46:/mipmap-xxhdpi/ic_launcher.png"
-    },
-    {
         "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
         "source": "com.mobilecapstone.app-main-46:/mipmap-xxxhdpi/ic_launcher_round.png"
     },
@@ -28,8 +12,8 @@
         "source": "com.mobilecapstone.app-main-46:/mipmap-mdpi/ic_launcher_round.png"
     },
     {
-        "merged": "com.mobilecapstone.app-merged_res-44:/drawable_rn_edit_text_material.xml.flat",
-        "source": "com.mobilecapstone.app-main-46:/drawable/rn_edit_text_material.xml"
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-hdpi/ic_launcher_foreground.png"
     },
     {
         "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher_round.png.flat",
@@ -40,7 +24,43 @@
         "source": "com.mobilecapstone.app-main-46:/mipmap-hdpi/ic_launcher.png"
     },
     {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.mobilecapstone.app-main-46:/drawable/rn_edit_text_material.xml"
+    },
+    {
         "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-hdpi_ic_launcher_round.png.flat",
         "source": "com.mobilecapstone.app-main-46:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.mobilecapstone.app-main-46:/mipmap-mdpi/ic_launcher_foreground.png"
     }
 ]

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, StyleSheet, TextInput, TouchableOpacity, Text, ActivityIndicator, LayoutAnimation } from 'react-native'
-import { COLORS } from '../../../../common/theme'
+import { COLORS, SIZES } from '../../../../common/theme'
 import { GET_getQuizBySearch, clearQuizList, setTxtSearch, setPage, setChooseCategories } from '../../../../redux/Slice/listQuizSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import Icon from 'react-native-vector-icons/FontAwesome'
@@ -20,7 +20,7 @@ const SearchBarQuiz = () => {
     }
 
     return (
-        <View>
+        <>
             <View style={styles.container}>
                 <TouchableOpacity
                     onPress={() => setModalVisible(true)}
@@ -109,7 +109,7 @@ const SearchBarQuiz = () => {
 
             {/**Modal to choose category */}
             <ModalFilter modalVisible={modalVisible} onPressVisible={handleOnPressModalVisible} />
-        </View>
+        </>
     );
 };
 
@@ -119,6 +119,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: COLORS.gray,
         borderRadius: 30,
+        borderBottomWidth: 6,
+        backgroundColor: COLORS.white,
     },
     txtInput: {
         flex: 1,
@@ -135,8 +137,6 @@ const styles = StyleSheet.create({
     btnSearch: {
         backgroundColor: COLORS.primary,
         borderRadius: 30,
-        elevation: 20,
-        shadowColor: COLORS.primary,
         padding: 15
     },
     btnRemoveTxtInSearch: {

@@ -1,6 +1,6 @@
 import React from 'react'
-import { Text, View, TouchableOpacity, StyleSheet, Image } from 'react-native'
-import { COLORS } from '../../../common/theme'
+import { Text, View, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native'
+import { COLORS, SIZES } from '../../../common/theme'
 import { useDispatch, useSelector } from 'react-redux'
 import { nextQuestion, showLeaderBoard } from '../../../redux/Slice/userCompetitiveSlice'
 import { timeWaitToPreviewAndLeaderBoard } from '../../../common/shareVarible'
@@ -49,7 +49,6 @@ const AnswerCheckBox = ({ question }) => {
                 return false
             });
         }
-
         return false
     }
 
@@ -148,34 +147,14 @@ const AnswerCheckBox = ({ question }) => {
                     }}>
                     {
                         question.answerList.map((option, indexOption) => (
-                            <TouchableOpacity
+                            <View
                                 key={indexOption}
-                                activeOpacity={0.8}
-                                disabled={activeSubmit}
                                 style={[styles.btnOptionImage, {
                                     backgroundColor: getOptionBgColor(option, indexOption),
                                     width: (sizeContainerOption.width - 16) / 2,
                                     height: (sizeContainerOption.height - 16) / 2,
                                 }]}
-                                onPress={() => {
-                                    var newUserAnswer = [...userAnswer]
-                                    if (!newUserAnswer.includes(option)) {
-                                        newUserAnswer.push(option);
-                                    } else {
-                                        newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
-                                    }
-                                    setUserAnswer(newUserAnswer)
-                                    refUserAnswer.current = newUserAnswer
-
-
-                                    var newIndexUserAnswer = [...indexUserAnswer.current]
-                                    if (!newIndexUserAnswer.includes(indexOption)) {
-                                        newIndexUserAnswer.push(indexOption)
-                                    } else {
-                                        newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
-                                    }
-                                    indexUserAnswer.current = newIndexUserAnswer
-                                }}>
+                            >
                                 {
                                     option.img !== "" ?
                                         <Image
@@ -184,68 +163,101 @@ const AnswerCheckBox = ({ question }) => {
                                             source={{ uri: option.img }}
                                         />
                                         :
-                                        <Text style={styles.txtOption}>{option.answer}</Text>
+                                        <ScrollView>
+                                            <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                                <Text style={styles.txtOption}>{option.answer}</Text>
+                                            </View>
+                                        </ScrollView>
                                 }
-                                {
-                                    userAnswer.includes(option) ?
-                                        <View style={styles.iconChoose}>
+                                <TouchableOpacity
+                                    style={styles.btnChoose}
+                                    activeOpacity={1}
+                                    disabled={activeSubmit}
+                                    onPress={() => {
+                                        var newUserAnswer = [...userAnswer]
+                                        if (!newUserAnswer.includes(option)) {
+                                            newUserAnswer.push(option);
+                                        } else {
+                                            newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
+                                        }
+                                        setUserAnswer(newUserAnswer)
+                                        refUserAnswer.current = newUserAnswer
+
+
+                                        var newIndexUserAnswer = [...indexUserAnswer.current]
+                                        if (!newIndexUserAnswer.includes(indexOption)) {
+                                            newIndexUserAnswer.push(indexOption)
+                                        } else {
+                                            newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
+                                        }
+                                        indexUserAnswer.current = newIndexUserAnswer
+                                    }}>
+                                    <View style={styles.areaChooseOption}>
+                                        {
+                                            userAnswer.includes(option) &&
                                             <Icon
-                                                name={"check-square"}
-                                                size={14}
-                                                color={COLORS.white} />
-                                        </View>
-                                        :
-                                        <></>
-                                }
-                            </TouchableOpacity>
+                                                name={"check"}
+                                                size={12}
+                                                color={COLORS.black} />
+                                        }
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
                         ))
                     }
                 </View>
             )
         } else {
             return (
-                < View style={styles.containerOptionOnlyText}>
+                <View style={styles.containerOptionOnlyText}>
                     {
                         question.answerList.map((option, indexOption) => (
-                            <TouchableOpacity
+                            <View
                                 key={indexOption}
-                                activeOpacity={0.8}
-                                disabled={activeSubmit}
                                 style={[styles.btnOptionOnlyText, {
                                     backgroundColor: getOptionBgColor(option, indexOption),
                                 }]}
-                                onPress={() => {
-                                    var newUserAnswer = [...userAnswer]
-                                    if (!newUserAnswer.includes(option)) {
-                                        newUserAnswer.push(option);
-                                    } else {
-                                        newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
-                                    }
-                                    setUserAnswer(newUserAnswer)
-                                    refUserAnswer.current = newUserAnswer
+                            >
+                                <ScrollView>
+                                    <View style={{ alignItems: "center", justifyContent: "center" }}>
+                                        <Text style={styles.txtOption}>{option.answer}</Text>
+                                    </View>
+                                </ScrollView>
 
+                                <TouchableOpacity
+                                    style={styles.btnChoose}
+                                    activeOpacity={1}
+                                    disabled={activeSubmit}
+                                    onPress={() => {
+                                        var newUserAnswer = [...userAnswer]
+                                        if (!newUserAnswer.includes(option)) {
+                                            newUserAnswer.push(option);
+                                        } else {
+                                            newUserAnswer.splice(newUserAnswer.indexOf(option), 1);
+                                        }
+                                        setUserAnswer(newUserAnswer)
+                                        refUserAnswer.current = newUserAnswer
 
-                                    var newIndexUserAnswer = [...indexUserAnswer.current]
-                                    if (!newIndexUserAnswer.includes(indexOption)) {
-                                        newIndexUserAnswer.push(indexOption)
-                                    } else {
-                                        newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
-                                    }
-                                    indexUserAnswer.current = newIndexUserAnswer
-                                }}>
-                                <Text style={styles.txtOption}>{option.answer}</Text>
-                                {
-                                    userAnswer.includes(option) ?
-                                        <View style={styles.iconChoose}>
+                                        var newIndexUserAnswer = [...indexUserAnswer.current]
+                                        if (!newIndexUserAnswer.includes(indexOption)) {
+                                            newIndexUserAnswer.push(indexOption)
+                                        } else {
+                                            newIndexUserAnswer.splice(newIndexUserAnswer.indexOf(indexOption), 1);
+                                        }
+                                        indexUserAnswer.current = newIndexUserAnswer
+                                    }}>
+                                    <View style={styles.areaChooseOption}>
+                                        {
+                                            userAnswer.includes(option) &&
                                             <Icon
-                                                name={"check-square"}
-                                                size={20}
-                                                color={COLORS.white} />
-                                        </View>
-                                        :
-                                        <></>
-                                }
-                            </TouchableOpacity>
+                                                name={"check"}
+                                                size={12}
+                                                color={COLORS.black} />
+                                        }
+                                    </View>
+                                </TouchableOpacity>
+
+                            </View>
                         ))
                     }
                 </View>
@@ -264,36 +276,38 @@ const AnswerCheckBox = ({ question }) => {
                 />
                 {/* Container Question */}
                 <View style={styles.containerQuestion}>
-                    <Text style={styles.txtQuestion}>{question.question}</Text>
-                    {
-                        question.backgroundImage != '' &&
-                        <Image
-                            source={{ uri: question.backgroundImage }}
-                            resizeMode={"stretch"}
-                            style={styles.imgQuestion}
-                        />
-                    }
-                    {
-                        question.video != "" &&
-                        <View style={{ flex: 1, width: "100%", marginBottom: 5 }}>
-                            <WebView
-                                allowsFullscreenVideo={true}
-                                source={{ uri: question.video }} />
-                        </View>
-                    }
-                    {
-                        question.youtube != "" &&
-                        <View style={{ flex: 1, aspectRatio: 16 / 9, marginBottom: 5 }} pointerEvents='none'>
-                            <YoutubePlayer
-                                height={"100%"}
-                                width={"100%"}
-                                initialPlayerParams={{ start: question.startTime, end: question.endTime, controls: false, iv_load_policy: 3 }}
-                                play={true}
-                                allowWebViewZoom={true}
-                                videoId={question.youtube}
+                    <ScrollView>
+                        <Text style={styles.txtQuestion}>{question.question}</Text>
+                        {
+                            question.backgroundImage != '' &&
+                            <Image
+                                source={{ uri: question.backgroundImage }}
+                                resizeMode={"stretch"}
+                                style={styles.imgQuestion}
                             />
-                        </View>
-                    }
+                        }
+                        {
+                            question.video != "" &&
+                            <View style={styles.video}>
+                                <WebView
+                                    allowsFullscreenVideo={true}
+                                    source={{ uri: question.video }} />
+                            </View>
+                        }
+                        {
+                            question.youtube != "" &&
+                            <View style={styles.videoYoutube} pointerEvents='none'>
+                                <YoutubePlayer
+                                    height={"100%"}
+                                    width={"100%"}
+                                    initialPlayerParams={{ start: question.startTime, end: question.endTime, iv_load_policy: 3, controls: false }}
+                                    play={true}
+                                    allowWebViewZoom={true}
+                                    videoId={question.youtube}
+                                />
+                            </View>
+                        }
+                    </ScrollView>
                 </View>
                 {/* Render answer/option */}
                 {
@@ -326,7 +340,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
-        paddingTop: 3
+        paddingVertical: 3
     },
     containerOptionOnlyText: {
         flex: 1.5,
@@ -338,15 +352,35 @@ const styles = StyleSheet.create({
         alignContent: "space-around",
         justifyContent: "space-between",
     },
-    iconChoose: {
+    areaChooseOption: {
+        backgroundColor: COLORS.white,
+        height: 13,
+        width: 13,
+        borderRadius: 3,
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    btnChoose: {
         position: "absolute",
-        bottom: 3,
-        right: 3
+        bottom: -13,
+        right: -13,
+        padding: 15,
+    },
+    video: {
+        // width: SIZES.windowWidth,
+        // height: 230,
+        alignSelf: "center",
+        marginBottom: 5
+    },
+    videoYoutube: {
+        width: SIZES.windowWidth * 0.9,
+        height: 200,
+        alignSelf: "center",
+        marginBottom: 5
     },
     imgQuestion: {
-        flex: 1,
-        height: "100%",
-        width: "75%",
+        height: 200,
+        width: "80%",
         marginTop: 5,
         alignSelf: "center",
         borderRadius: 5,
@@ -358,8 +392,7 @@ const styles = StyleSheet.create({
     },
     btnOptionOnlyText: {
         flex: 1,
-        paddingVertical: 10,
-        paddingHorizontal: 15,
+        padding: 15,
         borderRadius: 5,
         marginBottom: 5,
         borderColor: COLORS.border,

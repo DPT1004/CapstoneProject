@@ -7,7 +7,7 @@ import { BottomSheetModal } from '@gorhom/bottom-sheet'
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import Icon1 from "react-native-vector-icons/MaterialIcons"
 import FormButton from '../../../../../components/FormButton'
-import ModalOptionAddQuestion from './ModalOptionAddQuestion'
+import ModalOptionAddQuestion from '../../../../../components/ModalOptionAddQuestion'
 
 const BottomSheetAddQuestion = ({ bottomSheetModalRef }) => {
 

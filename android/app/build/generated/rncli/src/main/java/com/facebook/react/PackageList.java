@@ -25,6 +25,8 @@ import com.reactnativegooglesignin.RNGoogleSigninPackage;
 import com.reactnativecommunity.picker.RNCPickerPackage;
 // lottie-react-native
 import com.airbnb.android.react.lottie.LottiePackage;
+// react-native-document-picker
+import com.reactnativedocumentpicker.RNDocumentPickerPackage;
 // react-native-fbsdk-next
 import com.facebook.reactnative.androidsdk.FBSDKPackage;
 // react-native-gesture-handler
@@ -99,6 +101,7 @@ public class PackageList {
       new RNGoogleSigninPackage(),
       new RNCPickerPackage(),
       new LottiePackage(),
+      new RNDocumentPickerPackage(),
       new FBSDKPackage(),
       new RNGestureHandlerPackage(),
       new PickerPackage(),

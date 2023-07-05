@@ -97,7 +97,7 @@ const SignUp = () => {
             onPress={() => { Keyboard.dismiss() }}
             accessible={false}>
             <ScrollView
-                style={{ width: "100%" }}
+                style={{ width: "100%", backgroundColor: COLORS.white }}
                 showsVerticalScrollIndicator={false}
             >
                 <StatusBar backgroundColor={COLORS.primary} barStyle={"light-content"} />
@@ -105,7 +105,7 @@ const SignUp = () => {
                     <Image
                         style={styles.quizLogo}
                         source={img.quizLogo}
-                        resizeMode='contain'
+                        resizeMode='stretch'
                     />
                     <Text style={styles.txtWarning}>If you register like this, you will not be able to create your own Quiz</Text>
                     <FormInput
@@ -207,9 +207,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 8
     },
     quizLogo: {
-        height: SIZES.windowWidth * 0.3,
-        width: SIZES.windowWidth * 0.6,
-        alignSelf: "center"
+        height: SIZES.windowWidth * 0.25,
+        aspectRatio: 1,
+        alignSelf: "center",
     },
     txtRegister: {
         color: COLORS.primary,

@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import storage from '@react-native-firebase/storage'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNewQuestion, updateQuestionList } from '../../../redux/Slice/newQuizSlice'
+import { addNewQuestion, updateQuestionList, addNewQuestionInLastArray } from '../../../redux/Slice/newQuizSlice'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { screenName } from '../../../navigator/screens-name'
 import { COLORS } from '../../../common/theme'
@@ -32,6 +32,7 @@ const FillInTheBlank = () => {
     const navigation = useNavigation()
     const newQuiz = useSelector((state) => state.newQuiz)
     const internet = useSelector((state) => state.internet)
+    const pushOrUnshiftNewQuestion = useSelector((state) => state.whenToFetchApi.pushOrUnshiftNewQuestion)
 
     const [question, setQuestion] = React.useState('')
     const [fileUri, setFileUri] = React.useState({
@@ -191,7 +192,7 @@ const FillInTheBlank = () => {
                     } else {
 
                         //Add new Question
-                        dispatch(addNewQuestion({
+                        var newQuestion = {
                             questionType: "Fill-In-The-Blank",
                             question: question,
                             time: timeAnswer,
@@ -204,7 +205,14 @@ const FillInTheBlank = () => {
                             difficulty: difficulty,
                             category: newQuiz.categories[0],
                             tempQuestionId: "question" + newQuiz.numberOfQuestionsOrigin
-                        }))
+                        }
+
+                        if (pushOrUnshiftNewQuestion == "unshift") {
+                            dispatch(addNewQuestion(newQuestion))
+                        } else if (pushOrUnshiftNewQuestion == "push") {
+                            dispatch(addNewQuestionInLastArray(newQuestion))
+                        }
+
                         ToastAndroid.show('Add success', ToastAndroid.SHORT)
                         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                         handleNavigation()

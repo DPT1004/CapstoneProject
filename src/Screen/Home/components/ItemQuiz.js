@@ -16,6 +16,7 @@ import { TouchableOpacity, FlatList } from 'react-native-gesture-handler'
 const spaceBetweenItem = 10
 const widthItem = (SIZES.windowWidth - 10 * 2 - spaceBetweenItem) / 2
 const heightItem = widthItem * 1.5
+const spaceBetweenItemQuestsion = 10
 
 const ItemQuiz = ({ item, index }) => {
 
@@ -25,7 +26,7 @@ const ItemQuiz = ({ item, index }) => {
     const imgQuiz = item.backgroundImage !== "" ? item.backgroundImage : uriImgQuiz
 
     const bottomSheetModalRef = React.useRef(null)
-    const snapPoints = React.useMemo(() => ["50%", "100%"], [])
+    const snapPoints = React.useMemo(() => ["100%", "100%"], [])
 
     return (
         <>
@@ -41,16 +42,14 @@ const ItemQuiz = ({ item, index }) => {
                     source={{ uri: imgQuiz }}
                 >
                     <View style={styles.viewNumQuestion}>
-                        <Text style={[styles.txt, { fontWeight: "bold" }]}>{item.numberOfQuestions + " Qs"}</Text>
+                        <Text style={styles.txt}>{item.numberOfQuestions + " Qs"}</Text>
                     </View>
                 </ImageBackground>
                 <View style={styles.containerQuizNameAndDesc}>
-                    <Text numberOfLines={2} style={[styles.txt, { fontSize: 18 }]}>{item.name}</Text>
+                    <Text numberOfLines={2} style={[styles.txt, { fontWeight: "600", fontSize: 18 }]}>{item.name}</Text>
                     {
-                        item.description != '' ?
-                            <Text numberOfLines={1} style={{ opacity: 0.5 }}>{item.description}</Text>
-                            :
-                            <></>
+                        item.description != '' &&
+                        <Text numberOfLines={1}>{item.description}</Text>
                     }
                 </View>
             </TouchableOpacity>
@@ -61,36 +60,29 @@ const ItemQuiz = ({ item, index }) => {
             >
                 <View style={styles.bottomSheet}>
                     <Image
-                        style={{ height: "50%", width: "100%", backgroundColor: "pink" }}
+                        style={styles.quizBgrBottomSheet}
                         borderTopRightRadius={5}
                         borderTopLeftRadius={5}
                         resizeMode='stretch'
                         source={{ uri: imgQuiz }}
                     />
-                    <View style={{
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        paddingVertical: 10,
-                        flex: 1
-                    }}>
-                        <Text style={{ fontSize: 20, color: COLORS.black }}>{item.name}</Text>
+                    <View style={{ alignItems: "center" }}>
+                        <Text style={[styles.txt, { fontSize: 18 }]}>{item.name}</Text>
                         {
-                            item.description != '' ?
-                                <Text numberOfLines={1} style={{ opacity: 0.5, fontSize: 16 }}>{item.description}</Text>
-                                :
-                                <></>
+                            item.description != '' &&
+                            <Text numberOfLines={2} style={{ fontSize: 16, fontWeight: "700" }}>{item.description}</Text>
                         }
                         <View style={{ alignItems: "flex-start" }}>
-                            <Text>Number of questions: <Text style={[styles.txt, { fontWeight: "bold" }]}>{item.numberOfQuestions}</Text></Text>
-                            <View style={{ flexDirection: "row" }}>
-                                <Text>Categories: </Text>
+                            <Text>- Number of questions: <Text style={styles.txt}>{item.numberOfQuestions}</Text></Text>
+                            <View style={{ flexDirection: "row", alignItems: "center" }}>
+                                <Text style={{ marginVertical: 10 }}>- Categories: </Text>
                                 <FlatList
                                     data={item.categories}
                                     showsHorizontalScrollIndicator={false}
                                     horizontal
                                     renderItem={({ item, index }) =>
                                         <View key={index} style={styles.category}>
-                                            <Text style={styles.txtCategory}>{item}</Text>
+                                            <Text style={styles.txt}>{item}</Text>
                                         </View>
                                     }
                                 />
@@ -98,6 +90,29 @@ const ItemQuiz = ({ item, index }) => {
                         </View>
                     </View>
 
+                    <View style={{ flex: 1 }}>
+                        <Text>- Sample Question: </Text>
+                        <FlatList
+                            data={item.questionList}
+                            showsVerticalScrollIndicator={false}
+                            renderItem={({ item, index }) =>
+                                <>
+                                    {
+                                        index < 10 &&
+                                        <View key={index} style={styles.itemQuestionSample}>
+                                            <Text style={styles.txt}>{item.question}</Text>
+                                        </View>
+                                    }
+                                </>
+                            }
+                            ItemSeparatorComponent={
+                                <View style={{ height: spaceBetweenItemQuestsion }} />
+                            }
+                            ListFooterComponent={
+                                <View style={{ height: spaceBetweenItemQuestsion }} />
+                            }
+                        />
+                    </View>
 
                     <View style={{ flexDirection: "row" }}>
                         <FormButton
@@ -121,7 +136,6 @@ const ItemQuiz = ({ item, index }) => {
                                     isLive: false,
                                     playerList: []
                                 }
-
                                 const onPress = () => {
                                     bottomSheetModalRef.current?.close()
                                     navigation.navigate(screenName.WaitingRoom)
@@ -136,7 +150,6 @@ const ItemQuiz = ({ item, index }) => {
                             handleOnPress={() => bottomSheetModalRef.current?.close()}
                         />
                     </View>
-
                 </View>
             </BottomSheetModal>
         </>
@@ -165,6 +178,12 @@ const styles = StyleSheet.create({
         width: "100%",
         alignSelf: "center",
     },
+    quizBgrBottomSheet: {
+        height: "35%",
+        width: "100%",
+        alignSelf: "center",
+        borderRadius: 3
+    },
     viewNumQuestion: {
         backgroundColor: COLORS.gray,
         paddingVertical: 2,
@@ -186,23 +205,25 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.gray,
         alignItems: "center",
         justifyContent: "center",
-        borderRadius: 5,
+        borderRadius: 3,
         paddingVertical: 5,
         marginLeft: 10,
         paddingHorizontal: 10,
+    },
+    itemQuestionSample: {
+        backgroundColor: COLORS.gray,
+        borderRadius: 3,
+        padding: 5,
+        alignItems: "center"
     },
     bottomSheet: {
         flex: 1,
         padding: 10,
     },
     txt: {
-        fontSize: 15,
-        color: COLORS.black
-    },
-    txtCategory: {
-        fontSize: 12,
-        fontWeight: "bold",
-        color: COLORS.white,
+        fontSize: 14,
+        color: COLORS.black,
+        fontWeight: "700",
     },
 })
 export default ItemQuiz

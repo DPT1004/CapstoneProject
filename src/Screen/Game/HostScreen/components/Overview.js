@@ -21,6 +21,26 @@ const Overview = () => {
     const [isLoading, setIsLoading] = React.useState(true)
     const [modalVisible, setModalVisible] = React.useState(false)
 
+    React.useEffect(() => {
+
+        socketServcies.on("players-get-finalLeaderBoard", ({ leaderBoard }) => {
+            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
+            setLeaderBoard(leaderBoard)
+
+            if (leaderBoard.every(player => player.currentIndexQuestion + 1 == quiz.numberOfQuestions)) {
+                setIsLoading(false)
+            }
+        })
+
+        socketServcies.on("player-quited-when-game-isPlaying", ({ leaderBoard }) => {
+            setLeaderBoard(leaderBoard)
+            if (leaderBoard.every(player => player.currentIndexQuestion + 1 == quiz.numberOfQuestions)) {
+                setIsLoading(false)
+            }
+        })
+
+    }, [])
+
     const closeModal = () => {
         setModalVisible(false)
     }
@@ -69,19 +89,6 @@ const Overview = () => {
             </>
         )
     }
-
-    React.useEffect(() => {
-
-        socketServcies.on("players-get-finalLeaderBoard", ({ leaderBoard }) => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring)
-            setLeaderBoard(leaderBoard)
-
-            if (leaderBoard.every(player => player.currentIndexQuestion + 1 == quiz.numberOfQuestions)) {
-                setIsLoading(false)
-            }
-        })
-
-    }, [])
 
     return (
         <View style={styles.container}>
@@ -136,6 +143,10 @@ const Overview = () => {
                     label={"GO HOME"}
                     widthBtn={SIZES.windowWidth * 0.8}
                     onPress={() => {
+                        if (socketServcies.socket.connected) {
+                            var pin = game.pin
+                            socketServcies.emit("player-quit-room-when-game-finish", { pin })
+                        }
                         navigation.navigate(screenName.Home)
                         dispatch(clearInfoCompetitive())
                     }} />

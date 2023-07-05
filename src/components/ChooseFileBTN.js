@@ -8,6 +8,7 @@ import FormButton from "./FormButton"
 import ImagePicker from 'react-native-image-crop-picker'
 import YoutubePlayer from "react-native-youtube-iframe"
 import Video from 'react-native-video'
+import DocumentPicker, { types } from 'react-native-document-picker'
 import RangeSlider from './RangeSlider/RangeSlider'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
@@ -25,10 +26,11 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
     const [showInputUrlYoutube, setShowInputUrlYoutube] = React.useState(false)
     const [urlYoutube, setUrlYoutube] = React.useState("")
     const [duration, setDuration] = React.useState(0)
+
     const handleSliderTouchEnd = React.useCallback((low, high) => {
         youtubeRef.current.seekTo(low, false)
-        setStartTime(Math.round(low))
-        setEndTime(Math.round(high))
+        setStartTime(Math.floor(low))
+        setEndTime(Math.floor(high))
         setFileUri({
             type: "youtube",
             path: urlYoutubeRef.current,
@@ -112,7 +114,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                     start: 0,
                     end: 0
                 }
-
+                console.log(file.path)
                 if (checkValidTypeFile(newFile)) {
                     setFileUri(newFile)
                 } else {
@@ -122,6 +124,29 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
             });
         } catch (error) {
             if (error.code === 'E_PICKER_CANCELLED') {
+                return false;
+            }
+        }
+    }
+
+    const selectAudio = async () => {
+        try {
+            await DocumentPicker.pick({
+                presentationStyle: 'fullScreen',
+                type: [types.audio],
+            }).then(file => {
+                var newFile = {
+                    type: "video",
+                    path: file[0].uri,
+                    start: 0,
+                    end: 0
+                }
+                console.log(file[0].uri)
+                setFileUri(newFile)
+                bottomSheetModalRef.current?.close()
+            })
+        } catch (err) {
+            if (err.code === 'E_PICKER_CANCELLED') {
                 return false;
             }
         }
@@ -186,7 +211,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 })
                             }}
                         >
-                            <Text style={styles.txtVideo}>Delete Video</Text>
+                            <Text style={styles.txtVideo}>Delete File</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -196,7 +221,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 selectVideo()
                             }}
                         >
-                            <Text style={styles.txtVideo}>Change Video</Text>
+                            <Text style={styles.txtVideo}>Change File</Text>
                         </TouchableOpacity>
 
                     </View>
@@ -228,7 +253,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 youtubeRef.current?.getDuration().then(
                                     getDuration => {
                                         if (duration == 0) {
-                                            setDuration(Math.round(getDuration))
+                                            setDuration(Math.floor(getDuration))
                                         }
 
                                         if (getDuration !== 0 && fileUri.start == 0, fileUri.end == 0) {
@@ -284,7 +309,6 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
     }
 
     return (
-
         <>
             {
                 showInputUrlYoutube ?
@@ -414,6 +438,24 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                         }
                         handleOnPress={() => {
                             selectVideo()
+                        }}
+                    />
+
+                    <FormButton
+                        labelText="Choose Audio"
+                        isPrimary={true}
+                        style={{ marginBottom: 20 }}
+                        children={
+                            <View style={styles.viewIcon}>
+                                <Icon
+                                    name={"file-audio-o"}
+                                    size={24}
+                                    color={COLORS.white}
+                                />
+                            </View>
+                        }
+                        handleOnPress={() => {
+                            selectAudio()
                         }}
                     />
 

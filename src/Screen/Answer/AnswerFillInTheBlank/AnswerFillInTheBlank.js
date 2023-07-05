@@ -20,6 +20,7 @@ const AnswerFillInTheBlank = ({ question }) => {
     const [userAnswer, setUserAnswer] = React.useState("")
     const [activeSubmit, setActiveSubmit] = React.useState(false)
     const [time, setTime] = React.useState(question.time)
+    const [isOutOfTime, setIsOutOfTime] = React.useState(false)
     const refUserAnswer = React.useRef("")
     const score = React.useRef()
     const timeUserAnswer = React.useRef(time)
@@ -72,6 +73,7 @@ const AnswerFillInTheBlank = ({ question }) => {
     const handleComplete = () => {
         setActiveSubmit(true)
         setUserAnswer("")
+        setIsOutOfTime(true)
         refUserAnswer.current = ""
         handleAfterDone()
     }
@@ -85,7 +87,7 @@ const AnswerFillInTheBlank = ({ question }) => {
 
 
     React.useEffect(() => {
-        if (activeSubmit === true) {
+        if (activeSubmit === true && isOutOfTime == false) {
             handleAfterDone()
         }
     }, [activeSubmit])

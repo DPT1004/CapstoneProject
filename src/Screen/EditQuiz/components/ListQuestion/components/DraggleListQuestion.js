@@ -5,6 +5,7 @@ import DraggableFlatList, {
 } from "react-native-draggable-flatlist"
 import { useSelector, useDispatch } from 'react-redux'
 import { updateQuestionList, deleteQuestionByIndex } from '../../../../../redux/Slice/newQuizSlice'
+import { setPushOrUnshiftNewQuestion } from '../../../../../redux/Slice/whenToFetchApiSlice'
 import { useNavigation } from "@react-navigation/native"
 import { COLORS, SIZES } from '../../../../../common/theme'
 import { screenName } from '../../../../../navigator/screens-name'
@@ -25,7 +26,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
 
     const renderItem = ({ item, getIndex, drag, isActive }) => {
         return (
-            <OpacityDecorator>
+            <OpacityDecorator key={getIndex()}>
                 <View style={styles.rowItem}>
                     <View style={styles.viewTop}>
                         {/*Reorder Question*/}
@@ -124,7 +125,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                     {
                         isShowDetail[getIndex()] &&
                         <View style={styles.viewMiddle}>
-                            <Text style={styles.txt}>{item.question}</Text>
+                            <Text style={styles.txt} numberOfLines={8}>{item.question}</Text>
                             {
                                 item.backgroundImage !== "" ?
                                     <Image
@@ -166,7 +167,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                                         source={{ uri: item.img }}
                                                     />
                                                     :
-                                                    <Text style={styles.txt}>{item.answer}</Text>
+                                                    <Text style={styles.txt} numberOfLines={5}>{item.answer}</Text>
                                             }
                                         </View>
                                     ))
@@ -236,7 +237,10 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         style={{
                             paddingHorizontal: 20,
                         }}
-                        handleOnPress={() => bottomSheetModalRef.current?.present()}
+                        handleOnPress={() => {
+                            dispatch(setPushOrUnshiftNewQuestion("unshift"))
+                            bottomSheetModalRef.current?.present()
+                        }}
                     />
                 </View>
             )}
@@ -261,7 +265,10 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                 style={{
                                     paddingHorizontal: 20,
                                 }}
-                                handleOnPress={() => bottomSheetModalRef.current?.present()}
+                                handleOnPress={() => {
+                                    dispatch(setPushOrUnshiftNewQuestion("push"))
+                                    bottomSheetModalRef.current?.present()
+                                }}
                             />
                         </View>
                     )

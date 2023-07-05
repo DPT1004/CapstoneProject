@@ -226,7 +226,7 @@ const SignIn = () => {
                     <Image
                         style={styles.quizLogo}
                         source={img.quizLogo}
-                        resizeMode='contain'
+                        resizeMode='stretch'
                     />
                     <FormInput
                         labelText="Account"
@@ -354,10 +354,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
     },
     quizLogo: {
-        height: SIZES.windowWidth * 0.3,
-        width: SIZES.windowWidth * 0.6,
-        aspectRatio: 2,
-        alignSelf: "center"
+        height: SIZES.windowWidth * 0.25,
+        aspectRatio: 1,
+        alignSelf: "center",
     },
     txtRegister: {
         color: COLORS.primary,

@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import storage from '@react-native-firebase/storage'
 import { useDispatch, useSelector } from 'react-redux'
-import { addNewQuestion, updateQuestionList } from '../../../redux/Slice/newQuizSlice'
+import { addNewQuestion, updateQuestionList, addNewQuestionInLastArray } from '../../../redux/Slice/newQuizSlice'
 import { useNavigation, useRoute } from "@react-navigation/native"
 import { COLORS } from '../../../common/theme'
 import { img } from '../../../assets/index'
@@ -32,6 +32,7 @@ const CheckBox = () => {
     const navigation = useNavigation()
     const newQuiz = useSelector((state) => state.newQuiz)
     const internet = useSelector((state) => state.internet)
+    const pushOrUnshiftNewQuestion = useSelector((state) => state.whenToFetchApi.pushOrUnshiftNewQuestion)
 
     const [question, setQuestion] = React.useState('')
     const [fileUri, setFileUri] = React.useState({
@@ -166,7 +167,7 @@ const CheckBox = () => {
                         handleNavigation()
                     } else {
                         //Add new Question
-                        dispatch(addNewQuestion({
+                        var newQuestion = {
                             questionType: "CheckBox",
                             question: question,
                             time: timeAnswer,
@@ -179,7 +180,14 @@ const CheckBox = () => {
                             difficulty: difficulty,
                             category: newQuiz.categories[0],
                             tempQuestionId: "question" + newQuiz.numberOfQuestionsOrigin
-                        }))
+                        }
+
+                        if (pushOrUnshiftNewQuestion == "unshift") {
+                            dispatch(addNewQuestion(newQuestion))
+                        } else if (pushOrUnshiftNewQuestion == "push") {
+                            dispatch(addNewQuestionInLastArray(newQuestion))
+                        }
+
                         ToastAndroid.show('Add success', ToastAndroid.SHORT)
                         LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                         handleNavigation()
@@ -295,8 +303,10 @@ const CheckBox = () => {
                         <FormInput
                             labelText="Question"
                             onChangeText={val => setQuestion(val)}
-                            showCharCount={true}
+                            maxLength={1000000}
                             value={question}
+                            style={{ maxHeight: 200 }}
+                            multiline={true}
                         />
 
                         {/* Image/Video/Youtube for Question upload */}
@@ -437,7 +447,9 @@ const CheckBox = () => {
                                                         setArrAnswer(newArrAnswer)
                                                     }}
                                                     value={item.answer}
-                                                    showCharCount={true} />
+                                                    maxLength={1000000}
+                                                    style={{ maxHeight: 200 }}
+                                                    multiline={true} />
                                         }
                                     </View>
                                 ))

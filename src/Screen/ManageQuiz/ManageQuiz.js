@@ -195,7 +195,7 @@ const ManageQuiz = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+            <StatusBar backgroundColor={COLORS.white} barStyle={"light-content"} />
             <View style={styles.topBar}>
                 <Text style={styles.title}>MANAGE QUIZ</Text>
                 {

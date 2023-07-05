@@ -29,7 +29,7 @@ const ItemListQuestion = ({ itemQuestion }) => {
     return (
         <View style={styles.rowItem}>
             <View style={styles.viewTop}>
-                <Text style={[styles.txt, { color: COLORS.error, marginLeft: 5 }]}>{`${itemQuestion.questionType} - ${itemQuestion.time}s - ${itemQuestion.difficulty}`}</Text>
+                <Text style={[styles.txt, { color: COLORS.error, marginLeft: 5, fontSize: 12 }]}>{`${itemQuestion.questionType} - ${itemQuestion.time}s - ${itemQuestion.difficulty}`}</Text>
                 {/*Add Question to your quiz*/}
                 <TouchableOpacity
                     activeOpacity={0.5}
@@ -52,8 +52,8 @@ const ItemListQuestion = ({ itemQuestion }) => {
                     <Icon
                         name={"plus-circle"}
                         size={18}
-                        color={checkIfQuestionHaveAdded() ? "orange" : COLORS.black} />
-                    <Text style={{ color: checkIfQuestionHaveAdded() ? "orange" : COLORS.black }}>{checkIfQuestionHaveAdded() ? "Add again" : "Add question"}</Text>
+                        color={checkIfQuestionHaveAdded() ? COLORS.primary : COLORS.black} />
+                    <Text style={{ color: checkIfQuestionHaveAdded() ? COLORS.primary : COLORS.black, fontSize: 12 }}>{checkIfQuestionHaveAdded() ? "Add again" : "Add question"}</Text>
                 </TouchableOpacity>
             </View>
             {/*Question detail*/}
@@ -64,6 +64,7 @@ const ItemListQuestion = ({ itemQuestion }) => {
                         <Image
                             style={styles.quizBGR}
                             source={{ uri: itemQuestion.backgroundImage }}
+                            resizeMode='stretch'
                         />
                         :
                         null
@@ -96,7 +97,7 @@ const ItemListQuestion = ({ itemQuestion }) => {
                                 {
                                     itemAnswer.img !== "" ?
                                         <Image
-                                            style={styles.quizBGR}
+                                            style={styles.imgAnswer}
                                             source={{ uri: itemAnswer.img }}
                                         />
                                         :
@@ -169,9 +170,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    quizBGR: {
+    imgAnswer: {
         height: 90,
         width: 90,
+        alignSelf: "center",
+        borderRadius: 5
+    },
+    quizBGR: {
+        height: 100,
+        width: 150,
         alignSelf: "center",
         borderRadius: 5
     },

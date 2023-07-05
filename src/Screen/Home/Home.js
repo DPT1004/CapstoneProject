@@ -68,7 +68,7 @@ const HomeScreen = () => {
 
     return (
         <View style={styles.container}>
-            <StatusBar backgroundColor={COLORS.white} barStyle={'dark-content'} />
+            <StatusBar backgroundColor={COLORS.primary} barStyle={'dark-content'} />
             <View style={styles.viewTopBar}>
                 <SearchBarQuiz />
             </View>
@@ -84,7 +84,7 @@ const HomeScreen = () => {
                 }
                 style={{
                     backgroundColor: COLORS.background,
-                    paddingTop: 35,
+                    paddingTop: 30,
                     paddingHorizontal: 10,
                 }}
                 numColumns={2}
@@ -156,8 +156,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.background,
     },
     viewTopBar: {
-        backgroundColor: COLORS.white,
-        paddingHorizontal: 20,
+        backgroundColor: "transparent",
+        paddingTop: 10,
+        paddingHorizontal: 10,
     }
 })
 
