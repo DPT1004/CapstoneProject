@@ -14,6 +14,7 @@ export const screenName = {
     MultipleChoice: "MultipleChoice",
     CheckBox: "CheckBox",
     FillInTheBlank: "FillInTheBlank",
+    DragAndSort: "DragAndSort",
     AnswerMultiChoice: "AnswerMultiChoice",
     AnswerCheckBox: "AnswerCheckBox",
     HostScreen: "HostScreen",

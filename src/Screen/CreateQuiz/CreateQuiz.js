@@ -71,7 +71,7 @@ const CreateQuiz = () => {
   }
 
   const handleContinue = async () => {
-    if (title == "") {
+    if (title.trim().length == 0) {
       ToastAndroid.show("Empty Title", ToastAndroid.SHORT)
     }
     else if (title.length < 3) {
@@ -105,73 +105,8 @@ const CreateQuiz = () => {
           backgroundImage: imageUrl,
           isPublic: display,
           categories: chooseCategory,
-          numberOfQuestions: 2,
-          questionList: [{
-            questionType: "MultipleChoice",
-            question: "Toi la ai trong em ??",
-            time: 10,
-            backgroundImage: "",
-            video: "",
-            youtube: "",
-            answerList: [
-              {
-                answer: "Toi",
-                isCorrect: false,
-                img: ""
-              },
-              {
-                answer: "Em",
-                isCorrect: true,
-                img: ""
-              },
-              {
-                answer: "Em & Toi",
-                isCorrect: false,
-                img: ""
-              },
-              {
-                answer: "Nobody",
-                isCorrect: false,
-                img: ""
-              },
-            ],
-            difficulty: "easy",
-            category: chooseCategory[0],
-            tempQuestionId: "answer0"
-          },
-          {
-            questionType: "CheckBox",
-            question: "B ??",
-            time: 10,
-            backgroundImage: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb",
-            video: "",
-            youtube: "",
-            answerList: [
-              {
-                answer: "",
-                isCorrect: true,
-                img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
-              },
-              {
-                answer: "",
-                isCorrect: true,
-                img: "https://firebasestorage.googleapis.com/v0/b/capstoneproject-754a4.appspot.com/o/IMG_20230417_152346.jpg?alt=media&token=6c9fd59e-5ecf-408c-9d99-7f5530c11ceb"
-              },
-              {
-                answer: "C",
-                isCorrect: false,
-                img: ""
-              },
-              {
-                answer: "D",
-                isCorrect: false,
-                img: ""
-              },
-            ],
-            difficulty: "easy",
-            category: chooseCategory[0],
-            tempQuestionId: "answer1"
-          }]
+          numberOfQuestions: 0,
+          questionList: []
         }))
 
         navigation.navigate(screenName.ManageQuestion)

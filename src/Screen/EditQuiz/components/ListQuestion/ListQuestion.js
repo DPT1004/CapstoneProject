@@ -98,7 +98,6 @@ const ListQuestion = () => {
                                         } else {
                                             Patch_Quiz()
                                         }
-
                                     }}
                                 />
                             </View>

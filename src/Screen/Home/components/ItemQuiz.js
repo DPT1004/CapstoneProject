@@ -100,7 +100,7 @@ const ItemQuiz = ({ item, index }) => {
                                     {
                                         index < 10 &&
                                         <View key={index} style={styles.itemQuestionSample}>
-                                            <Text style={styles.txt}>{item.question}</Text>
+                                            <Text numberOfLines={5} style={styles.txt}>{item.question}</Text>
                                         </View>
                                     }
                                 </>

@@ -11,6 +11,17 @@ const spaceVerticalBetweenItem = 20
 const ModalSummary = ({ modalVisible, onPressVisible, player, isViewForHostScreen = false }) => {
 
     const renderItem = ({ item, index }) => {
+
+        if (item.question.questionType == "DragAndSort") {
+            var newTrueArrAnswer = []
+            item.question.answerList.forEach(answer => {
+                if (answer.isCorrect) {
+                    newTrueArrAnswer.push(answer)
+                }
+            })
+            newTrueArrAnswer.sort((a, b) => a.order - b.order)
+        }
+
         return (
             <View style={styles.viewItem}>
                 <View style={[styles.viewTrueOrWrong, { backgroundColor: item.score !== 0 ? COLORS.success : COLORS.error }]} />
@@ -46,54 +57,80 @@ const ModalSummary = ({ modalVisible, onPressVisible, player, isViewForHostScree
                     <View style={styles.lineHorizon} />
 
                     {
-                        item.question.questionType == "Fill-In-The-Blank" ?
+                        item.question.questionType == "DragAndSort" ?
                             <View>
                                 {/**True answer */}
                                 <View>
                                     <Text>True Answer </Text>
                                     <View key={index} style={styles.containerTrueAnswer}>
                                         {
-                                            item.question.answerList.map((itemAnswer, index) => (
-                                                <View key={index} style={styles.answerFillInTheBlank}>
-                                                    <Text style={styles.txt}>{itemAnswer.answer}</Text>
-                                                </View>
-
+                                            newTrueArrAnswer.map((itemAnswer, index) => (
+                                                <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{itemAnswer.answer}</Text>
                                             ))
                                         }
                                     </View>
                                 </View>
 
-
                                 {/**Player answer */}
                                 <View>
                                     <Text>{isViewForHostScreen ? "Player Answer" : "Your Answer"}  </Text>
-                                    <View key={index} style={styles.answerFillInTheBlank}>
-                                        <Text style={[styles.txt, { flex: 1 }]}>{item.playerAnswer}</Text>
+                                    <View key={index} style={styles.containerTrueAnswer}>
+                                        {
+                                            item.arrPlayerAnswer.map((itemAnswer, index) => (
+                                                <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{itemAnswer}</Text>
+                                            ))
+                                        }
                                     </View>
                                 </View>
                             </View>
                             :
-                            item.question.answerList.map((itemAnswer, index) => (
-                                <View key={index} style={styles.viewItemAnswer}>
-                                    {
-                                        item.indexPlayerAnswer.includes(index) &&
-                                        <View style={styles.viewYourAnswer}>
-                                            <Text style={styles.txtYourAnswer}>{isViewForHostScreen ? "Player Answer" : "Your Answer"}</Text>
-                                        </View>
-                                    }
+                            item.question.questionType == "Fill-In-The-Blank" ?
+                                <View>
+                                    {/**True answer */}
+                                    <View>
+                                        <Text>True Answer </Text>
+                                        <View key={index} style={styles.containerTrueAnswer}>
+                                            {
+                                                item.question.answerList.map((itemAnswer, index) => (
+                                                    <View key={index} style={styles.answerFillInTheBlank}>
+                                                        <Text style={styles.txt}>{itemAnswer.answer}</Text>
+                                                    </View>
 
-                                    <View style={[styles.circleTrueOrWrong, { backgroundColor: itemAnswer.isCorrect ? COLORS.success : COLORS.error }]} />
-                                    {
-                                        itemAnswer.img !== "" ?
-                                            <Image
-                                                style={styles.imgAnswer}
-                                                source={{ uri: itemAnswer.img }}
-                                            />
-                                            :
-                                            <Text style={[styles.txt, { flex: 1 }]}>{itemAnswer.answer}</Text>
-                                    }
+                                                ))
+                                            }
+                                        </View>
+                                    </View>
+
+                                    {/**Player answer */}
+                                    <View>
+                                        <Text>{isViewForHostScreen ? "Player Answer" : "Your Answer"}  </Text>
+                                        <View key={index} style={styles.answerFillInTheBlank}>
+                                            <Text style={[styles.txt, { flex: 1 }]}>{item.playerAnswer}</Text>
+                                        </View>
+                                    </View>
                                 </View>
-                            ))
+                                :
+                                item.question.answerList.map((itemAnswer, index) => (
+                                    <View key={index} style={styles.viewItemAnswer}>
+                                        {
+                                            item.indexPlayerAnswer.includes(index) &&
+                                            <View style={styles.viewYourAnswer}>
+                                                <Text style={styles.txtYourAnswer}>{isViewForHostScreen ? "Player Answer" : "Your Answer"}</Text>
+                                            </View>
+                                        }
+
+                                        <View style={[styles.circleTrueOrWrong, { backgroundColor: itemAnswer.isCorrect ? COLORS.success : COLORS.error }]} />
+                                        {
+                                            itemAnswer.img !== "" ?
+                                                <Image
+                                                    style={styles.imgAnswer}
+                                                    source={{ uri: itemAnswer.img }}
+                                                />
+                                                :
+                                                <Text style={[styles.txt, { flex: 1 }]}>{itemAnswer.answer}</Text>
+                                        }
+                                    </View>
+                                ))
                     }
                     <View style={styles.containerScoreAndTimeAnswer}>
                         {/* Score */}
@@ -328,7 +365,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingVertical: 5,
         margin: 1,
-        backgroundColor: COLORS.bgrForPrimary
+        backgroundColor: COLORS.gray
     },
     imgAnswer: {
         height: 90,
@@ -351,6 +388,16 @@ const styles = StyleSheet.create({
         color: COLORS.black,
         color: COLORS.black,
         fontSize: 15
+    },
+    txtDragAndDrop: {
+        fontSize: 16,
+        marginHorizontal: 3,
+        marginBottom: 5,
+        color: COLORS.black,
+        backgroundColor: COLORS.gray,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 3
     },
     txtScoreAndTimeAnswer: {
         color: COLORS.white,

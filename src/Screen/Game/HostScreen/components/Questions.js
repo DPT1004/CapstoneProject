@@ -20,6 +20,19 @@ const Questions = () => {
     const quiz = useSelector((state) => state.newQuiz)
 
     const renderItem = ({ item, index }) => {
+
+        if (item.questionType == "DragAndSort") {
+            var newTrueArrAnswer = []
+            var newWrongArrAnswer = []
+            item.answerList.forEach(answer => {
+                answer.isCorrect ?
+                    newTrueArrAnswer.push(answer)
+                    :
+                    newWrongArrAnswer.push(answer)
+            })
+            newTrueArrAnswer.sort((a, b) => a.order - b.order)
+        }
+
         return (
             <View key={index} style={styles.rowItem}>
                 <View style={styles.viewTop}>
@@ -71,36 +84,70 @@ const Questions = () => {
 
                     <View style={styles.containerAnswerChoice}>
                         {
-                            item.answerList.map((item, index) => (
-                                <View key={item._id} style={styles.viewItemAnswerChoice}>
+                            item.questionType == "DragAndSort" ?
+                                <View>
+                                    <View style={[styles.viewAnswerDragAndDrop, { marginTop: 10 }]}>
+                                        <Icon
+                                            name={"check-circle-fill"}
+                                            size={20}
+                                            style={{ marginRight: 5 }}
+                                            color={COLORS.success}
+                                        />
+                                        {
+                                            newTrueArrAnswer.map((item, index) => (
+                                                <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{item.answer}</Text>
+                                            ))
+                                        }
+                                    </View>
+
                                     {
-                                        item.isCorrect ?
-                                            <Icon
-                                                name={"check-circle-fill"}
-                                                size={20}
-                                                style={{ marginRight: 5 }}
-                                                color={COLORS.success}
-                                            />
-                                            :
+                                        newWrongArrAnswer.length !== 0 &&
+                                        <View style={styles.viewAnswerDragAndDrop}>
                                             <Icon
                                                 name={"x-circle-fill"}
                                                 size={20}
                                                 style={{ marginRight: 5 }}
                                                 color={COLORS.error}
                                             />
-                                    }
-                                    {
-                                        item.img !== "" ?
-                                            <Image
-                                                style={styles.imgAnswer}
-                                                source={{ uri: item.img }}
-                                                resizeMode='stretch'
-                                            />
-                                            :
-                                            <Text style={styles.txt}>{item.answer}</Text>
+                                            {
+                                                newWrongArrAnswer.map((item, index) => (
+                                                    <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{item.answer}</Text>
+                                                ))
+                                            }
+                                        </View>
                                     }
                                 </View>
-                            ))
+                                :
+                                item.answerList.map((item, index) => (
+                                    <View key={item._id} style={styles.viewItemAnswerChoice}>
+                                        {
+                                            item.isCorrect ?
+                                                <Icon
+                                                    name={"check-circle-fill"}
+                                                    size={20}
+                                                    style={{ marginRight: 5 }}
+                                                    color={COLORS.success}
+                                                />
+                                                :
+                                                <Icon
+                                                    name={"x-circle-fill"}
+                                                    size={20}
+                                                    style={{ marginRight: 5 }}
+                                                    color={COLORS.error}
+                                                />
+                                        }
+                                        {
+                                            item.img !== "" ?
+                                                <Image
+                                                    style={styles.imgAnswer}
+                                                    source={{ uri: item.img }}
+                                                    resizeMode='stretch'
+                                                />
+                                                :
+                                                <Text style={styles.txt}>{item.answer}</Text>
+                                        }
+                                    </View>
+                                ))
                         }
                     </View>
 
@@ -205,6 +252,12 @@ const styles = StyleSheet.create({
         width: sizeViewItemAnswerChoice,
         height: sizeViewItemAnswerChoice * 2 / 3
     },
+    viewAnswerDragAndDrop: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        marginBottom: 10
+    },
     containerLineHorizon: {
         flexDirection: "row",
         alignItems: "center"
@@ -230,6 +283,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         alignSelf: "center",
         borderRadius: 5,
+    },
+    txtDragAndDrop: {
+        fontSize: 16,
+        marginHorizontal: 3,
+        marginBottom: 5,
+        color: COLORS.black,
+        backgroundColor: COLORS.gray,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 3
     },
     txt: {
         color: COLORS.black,

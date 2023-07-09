@@ -134,18 +134,22 @@ const MultipleChoice = () => {
     const handleContinue = async () => {
 
         //Check empty
-        if (question == "") {
+        if (question.trim().length == 0) {
             ToastAndroid.show("Empty Question", ToastAndroid.SHORT)
         }
         else if (arrAnswer.length <= 1) {
             ToastAndroid.show("You need to add at least 2 answer", ToastAndroid.SHORT)
         }
-        else if (arrAnswer.some(element => element.answer == "" && element.img == "")) {
+        else if (arrAnswer.some(element => element.answer.trim().length == 0 && element.img == "")) {
             ToastAndroid.show("Empty answer", ToastAndroid.SHORT)
         }
         else if (arrAnswer.some(element => element.isCorrect == true) == false) {
             ToastAndroid.show("Choose at least 1 correct answer", ToastAndroid.SHORT)
-        } else {
+        }
+        else if (fileUri.type == "youtube" && fileUri.start == 0 && fileUri.end == 0) {
+            ToastAndroid.show("You haven't set start and end time for video youtube. Play video and then set time", ToastAndroid.SHORT)
+        }
+        else {
 
             if (internet.isOnlineStatus) {
                 setIsLoading(true)

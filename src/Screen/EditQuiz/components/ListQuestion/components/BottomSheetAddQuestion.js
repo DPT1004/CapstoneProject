@@ -91,6 +91,26 @@ const BottomSheetAddQuestion = ({ bottomSheetModalRef }) => {
                         }}
                     />
                     <FormButton
+                        labelText="Drag-And-Sort"
+                        isPrimary={true}
+                        style={{ marginBottom: 20 }}
+                        children={
+                            <View style={styles.viewIcon}>
+                                <Icon
+                                    name={"gesture-swipe"}
+                                    size={20}
+                                    color={COLORS.white}
+                                />
+                            </View>
+                        }
+                        handleOnPress={() => {
+                            navigation.navigate(screenName.DragAndSort, {
+                                fromScreen: "EditQuiz"
+                            })
+                            bottomSheetModalRef.current?.close()
+                        }}
+                    />
+                    <FormButton
                         labelText="Auto Add Question"
                         isPrimary={true}
                         style={{ marginBottom: 20 }}

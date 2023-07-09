@@ -25,6 +25,19 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
     const [isShowDetail, setIsShowDetail] = React.useState(Array(quiz.numberOfQuestions).fill(false))
 
     const renderItem = ({ item, getIndex, drag, isActive }) => {
+
+        if (item.questionType == "DragAndSort") {
+            var newTrueArrAnswer = []
+            var newWrongArrAnswer = []
+            item.answerList.forEach(answer => {
+                answer.isCorrect ?
+                    newTrueArrAnswer.push(answer)
+                    :
+                    newWrongArrAnswer.push(answer)
+            })
+            newTrueArrAnswer.sort((a, b) => a.order - b.order)
+        }
+
         return (
             <OpacityDecorator key={getIndex()}>
                 <View style={styles.rowItem}>
@@ -111,6 +124,12 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                             indexQuestion: getIndex(),
                                             fromScreen: "EditQuiz"
                                         })
+                                    case "DragAndSort":
+                                        navigation.navigate(screenName.DragAndSort, {
+                                            question: item,
+                                            indexQuestion: getIndex(),
+                                            fromScreen: "EditQuiz"
+                                        })
                                         break
                                 }
                             }}
@@ -127,13 +146,11 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                         <View style={styles.viewMiddle}>
                             <Text style={styles.txt} numberOfLines={8}>{item.question}</Text>
                             {
-                                item.backgroundImage !== "" ?
-                                    <Image
-                                        style={styles.quizBGR}
-                                        source={{ uri: item.backgroundImage }}
-                                    />
-                                    :
-                                    null
+                                item.backgroundImage !== "" &&
+                                <Image
+                                    style={styles.quizBGR}
+                                    source={{ uri: item.backgroundImage }}
+                                />
                             }
                             <View style={styles.containerLineHorizon}>
                                 <View style={[styles.lineHorizon, { marginRight: 5, flex: 1 }]} />
@@ -142,35 +159,69 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                             </View>
                             <View style={styles.containerAnswerChoice}>
                                 {
-                                    item.answerList.map((item, index) => (
-                                        <View key={item._id} style={styles.viewItemAnswerChoice}>
+                                    item.questionType == "DragAndSort" ?
+                                        <View>
+                                            <View style={[styles.viewAnswerDragAndDrop, { marginTop: 10 }]}>
+                                                <Icon
+                                                    name={"check-circle-fill"}
+                                                    size={20}
+                                                    style={{ marginRight: 5 }}
+                                                    color={COLORS.success}
+                                                />
+                                                {
+                                                    newTrueArrAnswer.map((item, index) => (
+                                                        <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{item.answer}</Text>
+                                                    ))
+                                                }
+                                            </View>
+
                                             {
-                                                item.isCorrect ?
-                                                    <Icon
-                                                        name={"check-circle-fill"}
-                                                        size={20}
-                                                        style={{ marginRight: 5 }}
-                                                        color={COLORS.success}
-                                                    />
-                                                    :
+                                                newWrongArrAnswer.length !== 0 &&
+                                                <View style={styles.viewAnswerDragAndDrop}>
                                                     <Icon
                                                         name={"x-circle-fill"}
                                                         size={20}
                                                         style={{ marginRight: 5 }}
                                                         color={COLORS.error}
                                                     />
-                                            }
-                                            {
-                                                item.img !== "" ?
-                                                    <Image
-                                                        style={styles.quizBGR}
-                                                        source={{ uri: item.img }}
-                                                    />
-                                                    :
-                                                    <Text style={styles.txt} numberOfLines={5}>{item.answer}</Text>
+                                                    {
+                                                        newWrongArrAnswer.map((item, index) => (
+                                                            <Text key={index} style={styles.txtDragAndDrop} numberOfLines={1}>{item.answer}</Text>
+                                                        ))
+                                                    }
+                                                </View>
                                             }
                                         </View>
-                                    ))
+                                        :
+                                        item.answerList.map((item) => (
+                                            <View key={item._id} style={styles.viewItemAnswerChoice}>
+                                                {
+                                                    item.isCorrect ?
+                                                        <Icon
+                                                            name={"check-circle-fill"}
+                                                            size={20}
+                                                            style={{ marginRight: 5 }}
+                                                            color={COLORS.success}
+                                                        />
+                                                        :
+                                                        <Icon
+                                                            name={"x-circle-fill"}
+                                                            size={20}
+                                                            style={{ marginRight: 5 }}
+                                                            color={COLORS.error}
+                                                        />
+                                                }
+                                                {
+                                                    item.img !== "" ?
+                                                        <Image
+                                                            style={styles.quizBGR}
+                                                            source={{ uri: item.img }}
+                                                        />
+                                                        :
+                                                        <Text style={styles.txt} numberOfLines={5}>{item.answer}</Text>
+                                                }
+                                            </View>
+                                        ))
                                 }
                             </View>
 
@@ -314,6 +365,12 @@ const styles = StyleSheet.create({
         width: sizeViewItemAnswerChoice,
         height: sizeViewItemAnswerChoice * 2 / 3
     },
+    viewAnswerDragAndDrop: {
+        flexDirection: "row",
+        flexWrap: "wrap",
+        alignItems: "center",
+        marginBottom: 10
+    },
     containerHeaderOrFooter: {
         flexDirection: "row",
         backgroundColor: COLORS.white,
@@ -350,6 +407,16 @@ const styles = StyleSheet.create({
         width: 90,
         alignSelf: "center",
         borderRadius: 5
+    },
+    txtDragAndDrop: {
+        fontSize: 16,
+        marginHorizontal: 3,
+        marginBottom: 5,
+        color: COLORS.black,
+        backgroundColor: COLORS.gray,
+        paddingHorizontal: 8,
+        paddingVertical: 4,
+        borderRadius: 3
     },
     txt: {
         color: COLORS.black,

@@ -367,8 +367,8 @@ const styles = StyleSheet.create({
         padding: 15,
     },
     video: {
-        // width: SIZES.windowWidth,
-        // height: 230,
+        width: SIZES.windowWidth,
+        height: 230,
         alignSelf: "center",
         marginBottom: 5
     },
@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
     },
     imgQuestion: {
         height: 200,
-        width: "80%",
+        width: SIZES.windowWidth * 0.8,
         marginTop: 5,
         alignSelf: "center",
         borderRadius: 5,

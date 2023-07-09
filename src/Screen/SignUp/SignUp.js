@@ -22,7 +22,7 @@ const SignUp = () => {
     const [isSecure1, setIsSecure1] = React.useState(false)
 
     const handleRegister = () => {
-        if (email == '' || password == '' || confirmPassword == '' || userName == '') {
+        if (email.trim().length == 0 || password.trim().length == 0 || confirmPassword.trim().length == 0 || userName.trim().length == 0) {
             ToastAndroid.show("Empty Email or Password or ConfirmPassword or UserName", ToastAndroid.SHORT)
         } else if (email.includes("@")) {
             ToastAndroid.show(`Please no char "@" in Account`, ToastAndroid.SHORT)

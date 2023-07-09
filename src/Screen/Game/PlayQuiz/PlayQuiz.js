@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux'
 import AnswerCheckBox from '../../Answer/AnswerCheckBox/AnswerCheckBox'
 import AnswerMultiChoice from '../../Answer/AnswerMultiChoice/AnswerMultiChoice'
 import AnswerFillInTheBlank from '../../Answer/AnswerFillInTheBlank/AnswerFillInTheBlank'
+import AnswerDragAndSort from '../../Answer/AnswerDragAndSort/AnswerDragAndSort'
 import PreviewAndLeaderBoard from '../PreviewAndLeaderBoard/PreviewAndLeaderBoard'
 import HostScreen from '../HostScreen/HostScreen'
 
@@ -55,6 +56,13 @@ const PlayQuiz = () => {
         else if (questions[currentIndexQuestion].questionType === "Fill-In-The-Blank") {
             return (
                 <AnswerFillInTheBlank
+                    question={questions[currentIndexQuestion]}
+                />
+            )
+        }
+        else if (questions[currentIndexQuestion].questionType === "DragAndSort") {
+            return (
+                <AnswerDragAndSort
                     question={questions[currentIndexQuestion]}
                 />
             )

@@ -8,10 +8,9 @@ import FormButton from "./FormButton"
 import ImagePicker from 'react-native-image-crop-picker'
 import YoutubePlayer from "react-native-youtube-iframe"
 import Video from 'react-native-video'
-import DocumentPicker, { types } from 'react-native-document-picker'
+import DocumentPicker, { types, isCancel, isInProgress, } from 'react-native-document-picker'
 import RangeSlider from './RangeSlider/RangeSlider'
 import Icon from 'react-native-vector-icons/FontAwesome'
-
 
 const ChooseFileBTN = ({ setFileUri, fileUri }) => {
     const internet = useSelector((state) => state.internet)
@@ -114,7 +113,6 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                     start: 0,
                     end: 0
                 }
-                console.log(file.path)
                 if (checkValidTypeFile(newFile)) {
                     setFileUri(newFile)
                 } else {
@@ -130,26 +128,30 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
     }
 
     const selectAudio = async () => {
-        try {
-            await DocumentPicker.pick({
-                presentationStyle: 'fullScreen',
-                type: [types.audio],
-            }).then(file => {
-                var newFile = {
-                    type: "video",
-                    path: file[0].uri,
-                    start: 0,
-                    end: 0
-                }
-                console.log(file[0].uri)
-                setFileUri(newFile)
-                bottomSheetModalRef.current?.close()
-            })
-        } catch (err) {
-            if (err.code === 'E_PICKER_CANCELLED') {
-                return false;
+        await DocumentPicker.pick({
+            presentationStyle: 'fullScreen',
+            type: [types.audio],
+        }).then(file => {
+            var newFile = {
+                type: "video",
+                path: file[0].uri,
+                start: 0,
+                end: 0
             }
-        }
+            setFileUri(newFile)
+            bottomSheetModalRef.current?.close()
+        }).catch(err => {
+            {
+                if (isCancel(err)) {
+                    return false
+                } else if (isInProgress(err)) {
+                    return false
+                } else {
+                    throw err
+                }
+            }
+        })
+
     }
 
     const renderFile = () => {
@@ -204,7 +206,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                             onPress={() => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                 setFileUri({
-                                    type: "video",
+                                    type: "image",
                                     path: "",
                                     start: 0,
                                     end: 0
@@ -270,7 +272,15 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 )
                             }
                         }}
-                        onError={error => console.log("youtube error", error)}
+                        onError={error => {
+                            setFileUri({
+                                type: "image",
+                                path: "",
+                                start: 0,
+                                end: 0
+                            })
+                            ToastAndroid.show("Video Youtube is not existed", ToastAndroid.SHORT)
+                        }}
                     />
 
                     <View style={styles.containerBtnVideo}>
@@ -281,7 +291,7 @@ const ChooseFileBTN = ({ setFileUri, fileUri }) => {
                                 LayoutAnimation.configureNext(LayoutAnimation.Presets.linear)
                                 setDuration(0)
                                 setFileUri({
-                                    type: "youtube",
+                                    type: "image",
                                     path: "",
                                     start: 0,
                                     end: 0
@@ -545,6 +555,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         padding: 28,
         backgroundColor: COLORS.primary + '20',
+        marginTop: 10
     },
     img: {
         width: '100%',

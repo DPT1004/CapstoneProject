@@ -73,7 +73,7 @@ const EditQuiz = () => {
     }
 
     const handleContinue = async () => {
-        if (title == "") {
+        if (title.trim().length == 0) {
             ToastAndroid.show("Empty Title", ToastAndroid.SHORT)
         }
         else if (title.length < 3) {
