@@ -123,6 +123,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                             question: item,
                                             indexQuestion: getIndex()
                                         })
+                                        break
                                     case "DragAndSort":
                                         navigation.navigate(screenName.DragAndSort, {
                                             question: item,

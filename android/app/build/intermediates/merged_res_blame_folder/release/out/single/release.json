@@ -1,0 +1,106 @@
+[
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher_foreground.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xhdpi/ic_launcher_foreground.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher_foreground.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxhdpi/ic_launcher_foreground.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_foreground.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxxhdpi/ic_launcher_foreground.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-xxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-xxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xhdpi/ic_launcher.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_src_assets_image_noresult.jpg.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/src_assets_image_noresult.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-hdpi_ic_launcher_foreground.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-hdpi/ic_launcher_foreground.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-mdpi_ic_launcher.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-mdpi/ic_launcher.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_src_assets_image_no_data.jpg.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/src_assets_image_no_data.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backiconmask.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backiconmask.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable_rn_edit_text_material.xml.flat",
+        "source": "com.mobilecapstone.app-main-45:/drawable/rn_edit_text_material.xml"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_src_assets_image_quiz_logo.jpg.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/src_assets_image_quiz_logo.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-mdpi_ic_launcher_foreground.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-mdpi/ic_launcher_foreground.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxxhdpi/ic_launcher.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xhdpi_ic_launcher_round.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xhdpi/ic_launcher_round.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxhdpi/ic_launcher.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-xhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-xhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-mdpi_ic_launcher_round.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-mdpi/ic_launcher_round.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-mdpi_src_assets_image_quizbgr.jpg.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-mdpi/src_assets_image_quizbgr.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-hdpi_ic_launcher.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-hdpi/ic_launcher.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxhdpi_ic_launcher_round.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxhdpi/ic_launcher_round.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-hdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-hdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/drawable-xxxhdpi_node_modules_reactnavigation_elements_src_assets_backicon.png.flat",
+        "source": "com.mobilecapstone.app-react-39:/drawable-xxxhdpi/node_modules_reactnavigation_elements_src_assets_backicon.png"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-xxxhdpi_ic_launcher_round.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-xxxhdpi/ic_launcher_round.jpg"
+    },
+    {
+        "merged": "com.mobilecapstone.app-merged_res-44:/mipmap-hdpi_ic_launcher_round.jpg.flat",
+        "source": "com.mobilecapstone.app-main-45:/mipmap-hdpi/ic_launcher_round.jpg"
+    }
+]

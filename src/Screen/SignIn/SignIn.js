@@ -67,7 +67,7 @@ const SignIn = () => {
     }
 
     const handleLogin = () => {
-        if (email == '' || password == '') {
+        if (email.trim().length == 0 || password.trim().length == 0) {
             ToastAndroid.show("Empty Email or Password", ToastAndroid.SHORT)
         }
         else {

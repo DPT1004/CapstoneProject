@@ -21,7 +21,7 @@ const RangeSlide = ({ duration, handleSliderTouchEnd, low, high }) => {
                 max={duration}
                 floatingLabel
                 step={1}
-                minRange={5}
+                minRange={1}
                 low={low}
                 high={high}
                 renderThumb={renderThumb}

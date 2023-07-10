@@ -98,6 +98,9 @@ const ModalOptionAddQuestion = ({ modalVisible, onPressVisible }) => {
                                     else if (data.length < quantityQuestion) {
                                         ToastAndroid.show(`Only found ${data.length} question`, ToastAndroid.SHORT)
                                     }
+                                    else {
+                                        ToastAndroid.show("Add question success", ToastAndroid.SHORT)
+                                    }
                                 })
                         }
                     }

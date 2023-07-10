@@ -805,7 +805,7 @@ const styles = StyleSheet.create({
         textAlign: "center"
     },
     txtInputWrongOption: {
-        height: 35,
+        height: 45,
         color: COLORS.black,
         textAlign: "center"
     },

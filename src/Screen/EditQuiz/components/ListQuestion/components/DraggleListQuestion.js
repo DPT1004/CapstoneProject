@@ -124,6 +124,7 @@ const DraggleListQuestion = ({ bottomSheetModalRef }) => {
                                             indexQuestion: getIndex(),
                                             fromScreen: "EditQuiz"
                                         })
+                                        break
                                     case "DragAndSort":
                                         navigation.navigate(screenName.DragAndSort, {
                                             question: item,
